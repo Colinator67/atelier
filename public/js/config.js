@@ -6,7 +6,7 @@ window.SITE_CONFIG = {
   // ---- Identité --------------------------------------------------------
   brand: "impression_ant",              // nom affiché en haut à gauche
   tagline: "Impression 3D & découpe laser sur mesure",
-  contactEmail: "",                     // ex. "contact@mondomaine.fr" — affiché si l'envoi automatique échoue
+  contactEmail: "impression.ant.laser@gmail.com",                     // ex. "contact@mondomaine.fr" — affiché si l'envoi automatique échoue
   // Point d'envoi des demandes (fonction Cloudflare Pages fournie dans /functions/api/demande.js)
   requestEndpoint: "/api/demande",
   // Anti-spam Cloudflare Turnstile (facultatif) : colle ta "site key" ici pour l'activer
@@ -100,7 +100,7 @@ window.SITE_CONFIG = {
     rne: "Immatriculé au Registre national des entreprises (RNE) depuis le 25 mars 2025",
     ape: "7410Z — Activités spécialisées de design",
     address: "27 B route de Brumath, 67670 Mommenheim, France",
-    email: "[email de contact]",              // ← à compléter
+    email: "impression.ant.laser@gmail.com",
     vatMention: "[à compléter : « TVA non applicable, art. 293 B du CGI » si tu es en franchise de TVA, sinon ton n° de TVA]",
     mediator: { name: "Société Médiation Professionnelle", url: "http://www.mediateur-consommation-smp.fr", address: "Alteritae, 5 rue Salvaing, 12000 Rodez" },
     host: "Cloudflare, Inc., 101 Townsend St, San Francisco, CA 94107, États-Unis — pages.cloudflare.com"
