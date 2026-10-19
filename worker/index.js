@@ -106,7 +106,7 @@ export default {
     if (url.pathname === "/api/demande") {
       if (request.method === "GET") {
         // diagnostic : indique seulement si chaque canal est configuré (aucune valeur secrète)
-        return json({ ok: true, discord: !!env.DISCORD_WEBHOOK_URL, email: !!(env.RESEND_API_KEY && env.NOTIFY_EMAIL), vars: Object.keys(env).filter(k => k !== "ASSETS") });
+        return json({ ok: true, discord: !!env.DISCORD_WEBHOOK_URL, email: !!(env.RESEND_API_KEY && env.NOTIFY_EMAIL) });
       }
       if (request.method !== "POST") return json({ ok: false, error: "Méthode non autorisée." }, 405);
       return handleRequest(request, env);
