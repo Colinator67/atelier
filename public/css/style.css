@@ -103,7 +103,9 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
 .nav a[aria-current="page"] { background: var(--pick-bg); color: var(--pick-fg); }
 @media (max-width: 640px) {
   .brand-name { display: none; }
-  .nav a { padding: 6px 8px; font-size: 0.86rem; gap: 5px; }
+  .nav { flex-wrap: nowrap; }
+  .nav a { padding: 6px 7px; font-size: 0.8rem; gap: 5px; white-space: nowrap; }
+  .brand-coins img { width: 28px; height: 28px; }
   .nav a img { display: none; }
 }
 
