@@ -85,7 +85,7 @@
   function update3d() {
     const m = s3.metrics, lines = $("#lines3d"), warn = $("#warn3d");
     if (!m) {
-      setLines(lines, { size: "—", vol: "—", grams: "—", time: "—", matcost: "—", machcost: "—", unit: "—", setup: "—" });
+      setLines(lines, { size: "—", vol: "—", grams: "—", time: "—", unit: "—", setup: "—" });
       $("#total3d").textContent = "—"; warn.hidden = true; $("#ask3d").disabled = true; return;
     }
     const qty = clampQty($("#qty3d"));
@@ -97,8 +97,6 @@
       vol: nf(1).format(m.volume / 1000) + " cm³",
       grams: nf(0).format(e.grams) + " g",
       time: fmtDuration(e.hours),
-      matcost: eur(e.materialCost),
-      machcost: eur(e.machineCost),
       unit: eur(e.unitPrice),
       setup: eur(P.setupFee || 0)
     });

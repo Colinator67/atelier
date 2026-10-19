@@ -174,7 +174,7 @@ HOME = """  <section class="hero" aria-labelledby="hero-title">
             <p>Pièces fonctionnelles, prototypes, objets déco. Fichiers STL, 3MF ou STEP, ou modélisation sur mesure.</p>
             <ul class="specs">
               <li><span>PLA</span><span>PETG</span><span>TPU</span></li>
-              <li class="mono">17 €/kg + 7 €/h machine</li>
+              <li class="mono">Devis instantané depuis votre fichier</li>
             </ul>
             <span class="cta">Estimer une impression <span aria-hidden="true">→</span></span>
           </div>
@@ -318,9 +318,7 @@ QUOTE_3D = """  <section id="devis" class="section" aria-labelledby="d3-title">
             <div><dt>Volume de la pièce</dt><dd class="mono" data-k="vol">—</dd></div>
             <div><dt>Matière estimée</dt><dd class="mono" data-k="grams">—</dd></div>
             <div><dt>Temps d'impression</dt><dd class="mono" data-k="time">—</dd></div>
-            <div class="sep"><dt>Matière</dt><dd class="mono" data-k="matcost">—</dd></div>
-            <div><dt>Machine</dt><dd class="mono" data-k="machcost">—</dd></div>
-            <div><dt>Prix unitaire</dt><dd class="mono" data-k="unit">—</dd></div>
+            <div class="sep"><dt>Prix unitaire</dt><dd class="mono" data-k="unit">—</dd></div>
             <div><dt>Frais de préparation</dt><dd class="mono" data-k="setup">—</dd></div>
           </dl>
           <div class="total"><span>Total estimé</span><strong class="mono" id="total3d">—</strong></div>
