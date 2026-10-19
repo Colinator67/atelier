@@ -7,12 +7,17 @@
   const who = `${esc(lg.name)}, ${esc(lg.status)}, exerçant sous le nom commercial ${esc(lg.tradeName)}`;
   const ids = `SIREN ${esc(lg.siren)} · SIRET ${esc(lg.siret)}<br>${esc(lg.rne)}<br>Code APE ${esc(lg.ape)}<br>${esc(lg.address)}`;
 
+  const m = lg.mediator || {};
+  const med = `${esc(m.name || "")}<br><a href="${esc(m.url || "#")}" rel="noopener">${esc((m.url || "").replace(/^https?:\/\//, ""))}</a><br>${esc(m.address || "")}`;
+
   if ($("#legal")) {
     $("#legal").innerHTML = `
     <h3>Éditeur du site</h3>
     <p>${who}.<br>${ids}<br>${esc(lg.vatMention)}<br>Contact : ${esc(lg.email)}</p>
     <h3>Directeur de la publication</h3>
     <p>${esc(lg.name)}</p>
+    <h3>Médiation de la consommation</h3>
+    <p>${med}</p>
     <h3>Hébergement</h3>
     <p>${esc(lg.host)}</p>
     <h3>Devis</h3>
@@ -63,8 +68,9 @@
     <h3>12. Responsabilité</h3>
     <p>Les pièces sont destinées à l'usage décrit dans la demande. Le vendeur ne peut être tenu responsable d'une utilisation non prévue (contact alimentaire, charge mécanique, exposition à la chaleur) qui n'aurait pas été signalée lors de la demande.</p>
 
-    <h3>13. Réclamations et médiation</h3>
-    <p>Toute réclamation est à adresser à ${esc(lg.email)}. Si aucune solution n'est trouvée, le client particulier peut recourir gratuitement au médiateur de la consommation : ${esc(lg.mediator)}.</p>
+    <h3>13. Litige – Médiation de la consommation</h3>
+    <p>En cas de litige entre le client et l'entreprise, ceux-ci s'efforceront de le résoudre à l'amiable : le client adresse une réclamation écrite à ${esc(lg.email)}.</p>
+    <p>À défaut d'accord amiable ou en l'absence de réponse du professionnel dans un délai raisonnable d'un (1) mois, le client consommateur au sens de l'article L.612-2 du Code de la consommation a la possibilité de saisir gratuitement, si un désaccord subsiste, le médiateur compétent inscrit sur la liste des médiateurs établie par la Commission d'évaluation et de contrôle de la médiation de la consommation en application de l'article L.615-1 du Code de la consommation, à savoir :<br>${med}</p>
 
     <h3>14. Données personnelles</h3>
     <p>Le traitement des données est décrit dans les <a href="mentions-legales.html">mentions légales</a>.</p>

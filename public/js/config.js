@@ -102,7 +102,7 @@ window.SITE_CONFIG = {
     address: "27 B route de Brumath, 67670 Mommenheim, France",
     email: "[email de contact]",              // ← à compléter
     vatMention: "[à compléter : « TVA non applicable, art. 293 B du CGI » si tu es en franchise de TVA, sinon ton n° de TVA]",
-    mediator: "[à compléter : nom, site web et adresse du médiateur de la consommation choisi]",
+    mediator: { name: "Société Médiation Professionnelle", url: "http://www.mediateur-consommation-smp.fr", address: "Alteritae, 5 rue Salvaing, 12000 Rodez" },
     host: "Cloudflare, Inc., 101 Townsend St, San Francisco, CA 94107, États-Unis — pages.cloudflare.com"
   }
 };
