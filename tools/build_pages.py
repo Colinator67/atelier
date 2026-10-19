@@ -62,6 +62,7 @@ FOOTER = f"""<footer class="footer">
       <a href="impression-3d.html">Impression 3D</a>
       <a href="decoupe-laser.html">Découpe laser</a>
       <a href="portfolio.html">Portfolio</a>
+      <a href="cgv.html">Conditions de vente</a>
       <a href="mentions-legales.html">Mentions légales</a>
     </nav>
   </div>
@@ -633,6 +634,13 @@ LEGAL = """  <section class="section">
     </div>
   </section>"""
 
+CGV = """  <section class="section">
+    <div class="wrap narrow legal">
+      <h1>Conditions générales de vente</h1>
+      <div id="cgv"></div>
+    </div>
+  </section>"""
+
 if __name__ == "__main__":
     page("index.html", f"{BRAND} · Impression 3D & découpe laser",
          "Impression 3D, modélisation et découpe laser sur mesure. Devis instantané depuis votre fichier.",
@@ -657,3 +665,6 @@ if __name__ == "__main__":
     page("mentions-legales.html", f"Mentions légales · {BRAND}",
          "Mentions légales et politique de données personnelles.",
          None, "", LEGAL, js=scripts("config.js", "layout.js", "legal.js"))
+    page("cgv.html", f"Conditions de vente · {BRAND}",
+         "Conditions générales de vente : devis, commande, fabrication, livraison et garanties.",
+         None, "", CGV, js=scripts("config.js", "layout.js", "legal.js"))

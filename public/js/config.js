@@ -92,11 +92,17 @@ window.SITE_CONFIG = {
 
   // ---- Mentions légales (obligatoires en France) ----------------------
   legal: {
-    name: "[Prénom Nom]",
-    status: "Entrepreneur individuel",
-    siret: "[SIRET]",
-    address: "[Adresse ou domiciliation]",
-    email: "[email de contact]",
+    name: "Colin Ehret",                       // dénomination : MONSIEUR COLIN EHRET
+    tradeName: "impression_ant (IMPRESSION ANT)",
+    status: "Entrepreneur individuel (EI)",
+    siren: "941 785 453",
+    siret: "941 785 453 00015",
+    rne: "Immatriculé au Registre national des entreprises (RNE) depuis le 25 mars 2025",
+    ape: "7410Z — Activités spécialisées de design",
+    address: "27 B route de Brumath, 67670 Mommenheim, France",
+    email: "[email de contact]",              // ← à compléter
+    vatMention: "[à compléter : « TVA non applicable, art. 293 B du CGI » si tu es en franchise de TVA, sinon ton n° de TVA]",
+    mediator: "[à compléter : nom, site web et adresse du médiateur de la consommation choisi]",
     host: "Cloudflare, Inc., 101 Townsend St, San Francisco, CA 94107, États-Unis — pages.cloudflare.com"
   }
 };
