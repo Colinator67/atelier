@@ -4,7 +4,7 @@
    ========================================================================= */
 window.SITE_CONFIG = {
   // ---- Identité --------------------------------------------------------
-  brand: "Colin",                       // nom affiché en haut à gauche
+  brand: "impression_ant",              // nom affiché en haut à gauche
   tagline: "Impression 3D & découpe laser sur mesure",
   contactEmail: "",                     // ex. "contact@mondomaine.fr" — affiché si l'envoi automatique échoue
   // Point d'envoi des demandes (fonction Cloudflare Pages fournie dans /functions/api/demande.js)
