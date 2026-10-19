@@ -8,5 +8,7 @@
     "binding": "ASSETS",
     "run_worker_first": ["/api/*"]
   },
-  "observability": { "enabled": true }
+  "observability": { "enabled": true },
+  // garde les variables ajoutées dans le tableau de bord Cloudflare lors des déploiements
+  "keep_vars": true
 }
