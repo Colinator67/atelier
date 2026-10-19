@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Impression 3D · impression_ant</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Impression 3D PLA, PETG et TPU et modélisation sur mesure. Devis instantané depuis votre fichier STL, 3MF ou STEP.">
+<link rel="icon" href="img/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@112,600;112,800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body class="theme-3d">
+
+<header class="topbar">
+  <div class="wrap topbar-in">
+    <a class="brand" href="index.html" aria-label="Accueil impression_ant">
+      <span class="brand-coins" aria-hidden="true">
+        <img src="img/logo-3d.png" alt="" width="32" height="32">
+        <img src="img/logo-laser.png" alt="" width="32" height="32">
+      </span>
+      <span class="brand-name" data-brand>impression_ant</span>
+    </a>
+    <nav class="nav" aria-label="Pages du site">
+      <a href="impression-3d.html" aria-current="page"><img src="img/logo-3d.png" alt="" width="18" height="18">Impression 3D</a>
+      <a href="decoupe-laser.html"><img src="img/logo-laser.png" alt="" width="18" height="18">Découpe laser</a>
+      <a href="portfolio.html">Portfolio</a>
+    </nav>
+  </div>
+</header>
+
+<main id="contenu">
+  <section class="page-hero">
+    <div class="wrap page-hero-in">
+      <img src="img/logo-3d.png" alt="" width="140" height="140">
+      <div>
+        <p class="eyebrow">Atelier impression 3D</p>
+        <h1>Impression & modélisation 3D</h1>
+        <p>Pièces fonctionnelles, prototypes, objets déco ou pièces de rechange, en PLA, PETG ou TPU. Vous avez un fichier ? Le simulateur vous donne un prix tout de suite. Sinon, je modélise la pièce pour vous.</p>
+      </div>
+    </div>
+  </section>
+  <section class="section" aria-labelledby="flow3-title">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">Comment ça marche</p>
+          <h2 id="flow3-title">De votre idée à la pièce livrée</h2>
+        </div>
+      </div>
+      <div class="flow">
+        <div class="flow-q">Vous avez déjà un fichier 3D ?</div>
+        <div class="flow-branches">
+          <div class="lane">
+            <span class="lane-label">Oui, j'ai mon fichier</span>
+            <div class="lane-steps">
+              <div class="step" data-n="1"><strong>Déposez-le dans le simulateur</strong><span>STL, 3MF ou STEP, matière et couleur au choix</span></div>
+              <div class="step" data-n="2"><strong>Le devis estimé m'est envoyé</strong><span>en un clic, avec votre fichier</span></div>
+            </div>
+            <a class="btn btn-small lane-cta" href="#devis">Ouvrir le simulateur</a>
+          </div>
+          <div class="lane lane-hl">
+            <span class="lane-label">Non, j'ai une idée</span>
+            <div class="lane-steps">
+              <div class="step" data-n="1"><strong>Décrivez votre projet</strong><span>photo, croquis, dimensions, usage</span></div>
+              <div class="step" data-n="2"><strong>Je modélise la pièce</strong><span>conception pensée pour l'impression 3D, devis de modélisation</span></div>
+            </div>
+            <button class="btn btn-small lane-cta" type="button" data-project="3d">Décrire mon projet</button>
+          </div>
+        </div>
+        <div class="flow-join">
+          <div class="flow-end">
+            <div class="step" data-n="3"><strong>On valide ensemble par email</strong><span>prix exact, couleur, délai</span><i class="arrow" aria-hidden="true"></i></div>
+            <div class="step" data-n="4"><strong>Je fabrique la pièce</strong><span>sur mon parc d'imprimantes FDM</span><i class="arrow" aria-hidden="true"></i></div>
+            <div class="step" data-n="5"><strong>La pièce vous est envoyée</strong><i class="arrow" aria-hidden="true"></i></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section id="devis" class="section" aria-labelledby="d3-title">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">Simulateur</p>
+          <h2 id="d3-title">Devis impression 3D</h2>
+        </div>
+        <p class="formats mono">STL · 3MF · STEP</p>
+      </div>
+
+      <div class="quote">
+        <div class="quote-main">
+          <label class="drop" id="drop3d" for="file3d">
+            <input type="file" id="file3d" accept=".stl,.3mf,.step,.stp" hidden>
+            <span class="drop-title">Déposez votre fichier 3D</span>
+            <span class="drop-sub">ou cliquez pour le choisir · unités en millimètres</span>
+          </label>
+          <div class="viewer" id="viewer3d" hidden>
+            <canvas id="canvas3d" aria-label="Aperçu 3D de la pièce"></canvas>
+            <div class="viewer-bar">
+              <span class="mono" id="fname3d"></span>
+              <button class="link-btn" type="button" id="reset3d">Changer de fichier</button>
+            </div>
+          </div>
+          <p class="msg" id="msg3d" role="status" hidden></p>
+
+          <div class="options">
+            <fieldset class="opt">
+              <legend>Matière</legend>
+              <div class="seg" id="mat3d"></div>
+              <p class="hint" id="matnote3d"></p>
+            </fieldset>
+            <fieldset class="opt">
+              <legend>Couleur / effet</legend>
+              <div id="colors3d"></div>
+            </fieldset>
+            <div class="opt-row">
+              <div class="opt">
+                <label for="infill3d">Solidité</label>
+                <select id="infill3d"></select>
+              </div>
+              <div class="opt">
+                <label for="qty3d">Quantité</label>
+                <input type="number" id="qty3d" min="1" max="500" value="1" inputmode="numeric">
+              </div>
+              <div class="opt opt-check">
+                <input type="checkbox" id="sup3d" checked>
+                <label for="sup3d">Supports si nécessaire</label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <aside class="ticket" aria-labelledby="t3-title">
+          <h3 id="t3-title">Estimation</h3>
+          <dl class="lines" id="lines3d">
+            <div><dt>Dimensions</dt><dd class="mono" data-k="size">—</dd></div>
+            <div><dt>Volume de la pièce</dt><dd class="mono" data-k="vol">—</dd></div>
+            <div><dt>Matière estimée</dt><dd class="mono" data-k="grams">—</dd></div>
+            <div><dt>Temps d'impression</dt><dd class="mono" data-k="time">—</dd></div>
+            <div class="sep"><dt>Matière</dt><dd class="mono" data-k="matcost">—</dd></div>
+            <div><dt>Machine</dt><dd class="mono" data-k="machcost">—</dd></div>
+            <div><dt>Prix unitaire</dt><dd class="mono" data-k="unit">—</dd></div>
+          </dl>
+          <div class="total"><span>Total estimé</span><strong class="mono" id="total3d">—</strong></div>
+          <p class="warn" id="warn3d" hidden></p>
+          <button class="btn" type="button" id="ask3d" disabled>Demander ce devis</button>
+          <p class="fine">Estimation indicative, sans valeur contractuelle. Je confirme le prix exact après vérification du fichier.</p>
+        </aside>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="wrap footer-in">
+    <span data-brand>impression_ant</span>
+    <nav aria-label="Pied de page">
+      <a href="impression-3d.html">Impression 3D</a>
+      <a href="decoupe-laser.html">Découpe laser</a>
+      <a href="portfolio.html">Portfolio</a>
+      <a href="mentions-legales.html">Mentions légales</a>
+    </nav>
+  </div>
+</footer>
+<dialog class="modal" id="modal" aria-labelledby="modal-title">
+  <form id="reqForm" novalidate>
+    <div class="modal-head">
+      <h2 id="modal-title">Envoyer ma demande</h2>
+      <button class="icon-btn" type="button" id="closeModal" aria-label="Fermer">×</button>
+    </div>
+    <div class="summary" id="reqSummary"></div>
+    <div class="field">
+      <label for="reqEmail">Votre email</label>
+      <input type="email" id="reqEmail" name="email" required autocomplete="email" placeholder="vous@exemple.fr">
+    </div>
+    <div class="field">
+      <label for="reqMsg" id="reqMsgLabel">Précisions <span class="opt-label">(facultatif)</span></label>
+      <textarea id="reqMsg" name="message" rows="4" placeholder="Délai souhaité, usage de la pièce, teintes du bi-color, finitions…"></textarea>
+    </div>
+    <div class="field" id="reqFileWrap" hidden>
+      <label for="reqFile">Photo, croquis ou fichier <span class="opt-label">(facultatif, 8 Mo max)</span></label>
+      <input type="file" id="reqFile">
+    </div>
+    <div class="hp" aria-hidden="true"><label for="reqWebsite">Site web</label><input type="text" id="reqWebsite" name="website" tabindex="-1" autocomplete="off"></div>
+    <div class="field-check">
+      <input type="checkbox" id="reqConsent" required>
+      <label for="reqConsent">J'accepte que mon email, mon message et mon fichier soient utilisés uniquement pour répondre à ma demande.</label>
+    </div>
+    <div id="turnstile"></div>
+    <p class="msg" id="reqMsgBox" role="status" hidden></p>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" type="button" id="cancelModal">Annuler</button>
+      <button class="btn" type="submit" id="sendReq">Envoyer</button>
+    </div>
+  </form>
+  <div class="sent" id="reqSent" hidden>
+    <h2>Demande envoyée</h2>
+    <p>Merci ! J'ai bien reçu votre demande et je vous réponds par email dès que possible.</p>
+    <button class="btn" type="button" id="closeSent">Fermer</button>
+  </div>
+  <div class="sent" id="reqFallback" hidden>
+    <h2>L'envoi automatique n'a pas fonctionné</h2>
+    <p>Copiez le récapitulatif ci-dessous et envoyez-le par email<span id="fbEmailWrap"> à <strong class="mono" id="fbEmail"></strong></span>, avec votre fichier en pièce jointe.</p>
+    <textarea id="fbText" rows="8" readonly></textarea>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" type="button" id="copyFb">Copier le récapitulatif</button>
+      <button class="btn" type="button" id="closeFb">Fermer</button>
+    </div>
+  </div>
+</dialog>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="js/config.js"></script>
+<script src="js/layout.js"></script>
+<script src="js/geometry.js"></script>
+<script src="js/request.js"></script>
+<script src="js/quote3d.js"></script>
+</body>
+</html>

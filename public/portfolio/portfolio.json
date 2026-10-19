@@ -1,0 +1,266 @@
+{
+  "filtres": [
+    {
+      "id": "mecanisme",
+      "label": "Mécanismes"
+    },
+    {
+      "id": "commande",
+      "label": "Sur commande & événements"
+    },
+    {
+      "id": "deco",
+      "label": "Déco & objets"
+    },
+    {
+      "id": "parametrique",
+      "label": "Paramétrique"
+    },
+    {
+      "id": "laser",
+      "label": "Découpe laser"
+    }
+  ],
+  "projets": [
+    {
+      "id": "machine-a-vagues",
+      "titre": "Machine à vagues",
+      "themes": [
+        "mecanisme"
+      ],
+      "resume": "Machine à vagues mécanique actionnée par une manivelle.",
+      "description": "Une impression en mouvement : en tournant la manivelle, l'utilisateur fait onduler les vagues de façon périodique. L'assemblage ne demande ni colle ni support à l'impression, tout tient par la friction des pièces entre elles.",
+      "tags": [
+        "SolidWorks",
+        "PLA",
+        "Sans support"
+      ],
+      "images": [
+        "portfolio/img/machine-a-vagues-1.jpg"
+      ]
+    },
+    {
+      "id": "spookslot",
+      "titre": "Spookslot",
+      "themes": [
+        "mecanisme",
+        "commande"
+      ],
+      "resume": "Figurine commémorative dont l'archet du violon bouge comme mû par une force invisible.",
+      "description": "Statuette réalisée à l'occasion d'un reportage sur Spookslot, une attraction du parc hollandais Efteling, pour être offerte à l'équipe technique. Un mécanisme interactif met en mouvement l'archet du violon.",
+      "tags": [
+        "Mécanisme interactif",
+        "Figurine",
+        "Pièce offerte"
+      ],
+      "images": [
+        "portfolio/img/spookslot-1.jpg",
+        "portfolio/img/spookslot-2.jpg",
+        "portfolio/img/spookslot-3.jpg"
+      ]
+    },
+    {
+      "id": "attaque-de-requin",
+      "titre": "Attaque de requin",
+      "themes": [
+        "mecanisme"
+      ],
+      "resume": "Des ailerons de requin tournent autour du célèbre Benchy.",
+      "description": "Modèle mécanique simple : sous l'action de la roue dentée visible, les ailerons encerclent le Benchy, le modèle incontournable de l'impression 3D.",
+      "tags": [
+        "Engrenages",
+        "PLA multicolore"
+      ],
+      "images": [
+        "portfolio/img/attaque-de-requin-1.jpg",
+        "portfolio/img/attaque-de-requin-2.jpg",
+        "portfolio/img/attaque-de-requin-3.jpg"
+      ]
+    },
+    {
+      "id": "let-it-snow",
+      "titre": "Let it snow !",
+      "themes": [
+        "mecanisme",
+        "deco"
+      ],
+      "resume": "Variante de Noël : les cadeaux tournent autour du sapin.",
+      "description": "Variation du modèle « Attaque de requin » sur le thème de Noël, où ce sont les cadeaux qui tournent autour du sapin.",
+      "tags": [
+        "Engrenages",
+        "Noël",
+        "PLA multicolore"
+      ],
+      "images": [
+        "portfolio/img/let-it-snow-1.jpg",
+        "portfolio/img/let-it-snow-2.jpg",
+        "portfolio/img/let-it-snow-3.jpg"
+      ]
+    },
+    {
+      "id": "cadenas-escape-room",
+      "titre": "Cadenas escape room",
+      "themes": [
+        "commande"
+      ],
+      "resume": "Roues de cadenas à symboles mayas pour une escape room.",
+      "description": "Projet mené pendant un stage chez Protos Additive Technologies : remplacer les chiffres d'un cadenas à roues par des symboles évoquant la civilisation maya. Prototype imprimé en résine SLA, puis pièces produites professionnellement en SLS.",
+      "tags": [
+        "SLA",
+        "SLS",
+        "Escape game",
+        "Stage"
+      ],
+      "images": [
+        "portfolio/img/cadenas-escape-room-1.jpg"
+      ]
+    },
+    {
+      "id": "sous-bock-mecanique",
+      "titre": "Sous-bock mécanique",
+      "themes": [
+        "mecanisme",
+        "parametrique"
+      ],
+      "resume": "Sous-bock à engrenages fonctionnels sous une plaque de plexiglas.",
+      "description": "Projet de classe : les engrenages s'actionnent par une roue dentée sur le côté, et une plaque de plexiglas protège le mécanisme de la poussière et des éclaboussures. Les 6 pièces sont imprimées en PLA (hors plexiglas et roulements). Modélisation entièrement paramétrique.",
+      "tags": [
+        "Rhinoceros 3D",
+        "Grasshopper",
+        "PLA",
+        "Roulements"
+      ],
+      "images": [
+        "portfolio/img/sous-bock-mecanique-1.jpg"
+      ]
+    },
+    {
+      "id": "harley-davidson",
+      "titre": "Moto miniature",
+      "themes": [
+        "deco"
+      ],
+      "resume": "Pot à crayons inspiré d'une moto américaine, roues fonctionnelles.",
+      "description": "Modèle miniature servant de pot à crayons, inspiré des motos Harley-Davidson. 23 pièces imprimées séparément puis assemblées, avec des roues qui tournent.",
+      "tags": [
+        "SolidWorks",
+        "PLA",
+        "23 pièces"
+      ],
+      "images": [
+        "portfolio/img/harley-davidson-1.jpg",
+        "portfolio/img/harley-davidson-2.jpg"
+      ]
+    },
+    {
+      "id": "cali-bot",
+      "titre": "Cali-bot",
+      "themes": [
+        "deco"
+      ],
+      "resume": "Robot articulé servant de modèle test pour imprimante 3D.",
+      "description": "La tête et les pieds sont articulés par des liaisons rotules. La pièce s'imprime assise, en une fois et sans support, et sollicite toutes les capacités d'une imprimante pour diagnostiquer d'éventuels défauts.",
+      "tags": [
+        "Print-in-place",
+        "Sans support",
+        "Modèle test"
+      ],
+      "images": [
+        "portfolio/img/cali-bot-1.jpg",
+        "portfolio/img/cali-bot-2.jpg"
+      ]
+    },
+    {
+      "id": "glaces-usb",
+      "titre": "Glaces USB",
+      "themes": [
+        "deco"
+      ],
+      "resume": "Mon modèle le plus populaire : des glaces qui rangent clés USB et cartes SD.",
+      "description": "Objet de décoration qui permet de ranger une clé USB ou une carte SD dans un esquimau fondu.",
+      "tags": [
+        "Déco",
+        "PLA",
+        "Le plus populaire"
+      ],
+      "images": [
+        "portfolio/img/glaces-usb-1.jpg",
+        "portfolio/img/glaces-usb-2.jpg",
+        "portfolio/img/glaces-usb-3.jpg"
+      ]
+    },
+    {
+      "id": "trophee-sportif",
+      "titre": "Trophée sportif",
+      "themes": [
+        "commande"
+      ],
+      "resume": "Trophée conçu pour l'INS'AS CUP de l'INSA Strasbourg.",
+      "description": "Conception et réalisation du trophée de l'INS'AS CUP, un événement sportif de l'INSA Strasbourg. Modélisé sous SolidWorks, imprimé en PLA sur une imprimante FDM, puis peint.",
+      "tags": [
+        "SolidWorks",
+        "FDM",
+        "Peinture"
+      ],
+      "images": [
+        "portfolio/img/trophee-sportif-1.jpg",
+        "portfolio/img/trophee-sportif-2.jpg"
+      ]
+    },
+    {
+      "id": "medailles",
+      "titre": "Médailles",
+      "themes": [
+        "commande"
+      ],
+      "resume": "Médailles 2023 de l'INS'AS CUP en résine bicolore.",
+      "description": "Médailles modélisées sous SolidWorks pour l'INS'AS CUP 2023, imprimées en résine SLA en deux couleurs. La résine violette est pigmentée à la main.",
+      "tags": [
+        "SolidWorks",
+        "SLA",
+        "Résine pigmentée"
+      ],
+      "images": [
+        "portfolio/img/medailles-1.jpg",
+        "portfolio/img/medailles-2.jpg",
+        "portfolio/img/medailles-3.jpg"
+      ]
+    },
+    {
+      "id": "portail-zaap",
+      "titre": "Portail décoratif",
+      "themes": [
+        "commande",
+        "deco"
+      ],
+      "resume": "Objet décoratif réalisé sur commande, inspiré du jeu Dofus.",
+      "description": "Réalisation sur commande d'un portail Zaap, modélisé à partir de références tirées du jeu. Assemblage de 5 pièces imprimées en PLA, sans peinture.",
+      "tags": [
+        "SolidWorks",
+        "Blender",
+        "PLA",
+        "Commande"
+      ],
+      "images": [
+        "portfolio/img/portail-zaap-1.jpg"
+      ]
+    },
+    {
+      "id": "ville-parametrique",
+      "titre": "Ville paramétrique",
+      "themes": [
+        "parametrique"
+      ],
+      "resume": "Ville dont la hauteur des immeubles suit des points attracteurs.",
+      "description": "Représentation de ville générée sous Rhinoceros 3D et Grasshopper : l'élévation des bâtiments est pilotée par des « points attracteurs » répartis sur la surface. Imprimée en résine bleue semi-transparente.",
+      "tags": [
+        "Rhinoceros 3D",
+        "Grasshopper",
+        "Résine"
+      ],
+      "images": [
+        "portfolio/img/ville-parametrique-1.jpg"
+      ]
+    }
+  ]
+}

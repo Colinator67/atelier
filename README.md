@@ -7,14 +7,19 @@ Site statique (HTML/CSS/JS) hébergé gratuitement sur un **Worker Cloudflare** 
 ```
 wrangler.jsonc                    configuration Cloudflare (ne pas toucher)
 worker/index.js                   reçoit les demandes et les envoie sur Discord + email
-public/index.html                 la page (vitrine, devis 3D, devis laser, mentions légales)
+public/index.html                 accueil
+public/impression-3d.html         page impression 3D (parcours + simulateur)
+public/decoupe-laser.html         page découpe laser (parcours + simulateur + tampons)
+public/portfolio.html             portfolio
+public/mentions-legales.html      mentions légales
 public/css/style.css              charte graphique
 public/js/config.js               ← TOUT ce qui se règle : prix, matières, couleurs, vitesses laser, mentions légales
 public/js/geometry.js             lecture STL / 3MF / STEP + calcul poids, temps, prix
 public/js/vector.js               lecture SVG / DXF / PDF / AI + longueur de coupe, surface gravée
-public/js/app.js                  interface
-public/creations/creations.json   ← la liste de tes créations (galerie)
-public/creations/                 ← tes photos
+public/js/*.js                    interface (une page = un script)
+public/portfolio/portfolio.json   ← la liste de tes projets (portfolio)
+public/portfolio/img/             ← leurs photos
+tools/build_pages.py              régénère les pages (menu, pied de page communs)
 public/img/                       logos
 ```
 
@@ -42,21 +47,23 @@ Fichiers de plus de 8 Mo : ils ne sont pas joints, la notification te le signale
 ### Anti-spam (facultatif)
 Cloudflare → *Turnstile* → ajoute ton site → colle la *site key* dans `public/js/config.js` (`turnstileSiteKey`) et la *secret key* dans la variable `TURNSTILE_SECRET`.
 
-## 3. Ajouter une création à la galerie
+## 3. Ajouter un projet au portfolio
 
-Dépose la photo dans `public/creations/` (JPG ou WebP, 1200 px de large suffisent) et ajoute une entrée dans `public/creations/creations.json` :
+Dépose les photos dans `public/portfolio/img/` (JPG, 1400 px de large suffisent) et ajoute un bloc dans `public/portfolio/portfolio.json`, dans la liste `projets` :
 
 ```json
 {
+  "id": "mosaique-koi",
   "titre": "Mosaïque koï",
-  "categorie": "3d",
-  "description": "Mosaïque 1,6 × 1,6 m imprimée en PLA multicolore.",
-  "image": "creations/mosaique-koi.jpg",
-  "tags": ["PLA", "Multicolore"]
+  "themes": ["deco"],
+  "resume": "Mosaïque 1,6 × 1,6 m imprimée en PLA multicolore.",
+  "description": "Texte complet affiché dans la visionneuse.",
+  "tags": ["PLA", "Multicolore"],
+  "images": ["portfolio/img/mosaique-koi-1.jpg", "portfolio/img/mosaique-koi-2.jpg"]
 }
 ```
 
-`categorie` vaut `"3d"` ou `"laser"`. Supprime les 4 fiches d'exemple (celles avec `"exemple": true`).
+`themes` reprend les identifiants de la liste `filtres` (mecanisme, commande, deco, parametrique, laser). Un filtre n'apparaît que s'il contient au moins un projet : le filtre « Découpe laser » s'affichera dès ton premier projet laser.
 
 ## 4. Recaler l'estimation sur Orca Slicer
 

@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>impression_ant · Impression 3D & laser</title>
+<title>impression_ant · Impression 3D & découpe laser</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<meta name="description" content="Pièces imprimées en 3D et découpes laser sur mesure. Devis instantané depuis votre fichier STL, 3MF, STEP, SVG, DXF, PDF ou AI.">
+<meta name="description" content="Impression 3D, modélisation et découpe laser sur mesure. Devis instantané depuis votre fichier.">
 <link rel="icon" href="img/favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -16,37 +16,35 @@
 
 <header class="topbar">
   <div class="wrap topbar-in">
-    <a class="brand" href="#accueil" aria-label="Accueil">
+    <a class="brand" href="index.html" aria-label="Accueil impression_ant">
       <span class="brand-coins" aria-hidden="true">
         <img src="img/logo-3d.png" alt="" width="32" height="32">
         <img src="img/logo-laser.png" alt="" width="32" height="32">
       </span>
       <span class="brand-name" data-brand>impression_ant</span>
     </a>
-    <nav class="nav" aria-label="Navigation principale">
-      <a href="#creations">Créations</a>
-      <a href="#devis-3d">Devis 3D</a>
-      <a href="#devis-laser">Devis laser</a>
+    <nav class="nav" aria-label="Pages du site">
+      <a href="impression-3d.html"><img src="img/logo-3d.png" alt="" width="18" height="18">Impression 3D</a>
+      <a href="decoupe-laser.html"><img src="img/logo-laser.png" alt="" width="18" height="18">Découpe laser</a>
+      <a href="portfolio.html">Portfolio</a>
     </nav>
   </div>
 </header>
 
-<main id="accueil">
-
-  <!-- ============================== HERO ============================== -->
+<main id="contenu">
   <section class="hero" aria-labelledby="hero-title">
     <div class="wrap hero-head">
       <h1 id="hero-title">Vos pièces en plastique imprimé ou en bois découpé, chiffrées en quelques secondes.</h1>
-      <p class="lede">Déposez votre fichier, choisissez la matière, obtenez une estimation. Je vous réponds personnellement pour valider et lancer la fabrication.</p>
+      <p class="lede">Déposez votre fichier, choisissez la matière, obtenez une estimation. Pas de fichier ? Je modélise la pièce ou je dessine le fichier de découpe pour vous.</p>
     </div>
     <div class="split">
-      <a class="side side-3d" href="#devis-3d">
+      <a class="side side-3d" href="impression-3d.html">
         <div class="side-in">
           <img class="side-logo" src="img/logo-3d.png" alt="Logo impression 3D" width="160" height="160">
           <div class="side-text">
             <p class="eyebrow">Atelier impression 3D</p>
-            <h2>Impression 3D</h2>
-            <p>Pièces fonctionnelles, prototypes, objets déco. Fichiers STL, 3MF ou STEP.</p>
+            <h2>Impression & modélisation 3D</h2>
+            <p>Pièces fonctionnelles, prototypes, objets déco. Fichiers STL, 3MF ou STEP, ou modélisation sur mesure.</p>
             <ul class="specs">
               <li><span>PLA</span><span>PETG</span><span>TPU</span></li>
               <li class="mono">17 €/kg + 1 €/h machine</li>
@@ -55,13 +53,13 @@
           </div>
         </div>
       </a>
-      <a class="side side-laser" href="#devis-laser">
+      <a class="side side-laser" href="decoupe-laser.html">
         <div class="side-in">
           <img class="side-logo" src="img/logo-laser.png" alt="Logo découpe laser" width="160" height="160">
           <div class="side-text">
             <p class="eyebrow">Atelier découpe laser</p>
-            <h2>Découpe & gravure laser</h2>
-            <p>Découpes multicouches, signalétique, tampons. Fichiers SVG, DXF, PDF ou AI.</p>
+            <h2>Découpe, gravure & création de fichiers</h2>
+            <p>Découpes multicouches, signalétique, tampons. Vos fichiers SVG, DXF, PDF ou AI, ou un fichier dessiné pour vous.</p>
             <ul class="specs">
               <li><span>MDF</span><span>Contreplaqué</span><span>Carton</span><span>Tampons</span></li>
               <li class="mono">Bois 1 €/min · carton 0,50 €/min</li>
@@ -73,207 +71,21 @@
     </div>
   </section>
 
-  <!-- ============================ CRÉATIONS ============================ -->
-  <section id="creations" class="section" aria-labelledby="creations-title">
+  <section class="section" aria-labelledby="teaser-title">
     <div class="wrap">
       <div class="section-head">
         <div>
           <p class="eyebrow">Portfolio</p>
-          <h2 id="creations-title">Créations</h2>
+          <h2 id="teaser-title">Quelques réalisations</h2>
         </div>
-        <div class="chips" role="tablist" aria-label="Filtrer les créations">
-          <button class="chip is-on" role="tab" aria-selected="true" data-filter="all" id="f-all">Tout</button>
-          <button class="chip" role="tab" aria-selected="false" data-filter="3d" id="f-3d">Impression 3D</button>
-          <button class="chip" role="tab" aria-selected="false" data-filter="laser" id="f-laser">Découpe laser</button>
-        </div>
+        <a class="link-more" href="portfolio.html">Voir tout le portfolio <span aria-hidden="true">→</span></a>
       </div>
-      <div class="gallery" id="gallery" aria-live="polite"></div>
-    </div>
-  </section>
-
-  <!-- ============================ DEVIS 3D ============================= -->
-  <section id="devis-3d" class="section section-3d" aria-labelledby="d3-title">
-    <div class="wrap">
-      <div class="section-head">
-        <div>
-          <p class="eyebrow"><img src="img/logo-3d.png" alt="" width="22" height="22"> Impression 3D</p>
-          <h2 id="d3-title">Devis impression 3D</h2>
-        </div>
-        <p class="formats mono">STL · 3MF · STEP</p>
+      <div class="teaser">
+        <a href="portfolio.html#machine-a-vagues"><img src="portfolio/img/machine-a-vagues-1.jpg" alt="Machine à vagues imprimée en 3D" loading="lazy"></a>
+        <a href="portfolio.html#glaces-usb"><img src="portfolio/img/glaces-usb-1.jpg" alt="Glaces porte-clés USB" loading="lazy"></a>
+        <a href="portfolio.html#spookslot"><img src="portfolio/img/spookslot-2.jpg" alt="Figurine Spookslot" loading="lazy"></a>
+        <a href="portfolio.html#let-it-snow"><img src="portfolio/img/let-it-snow-2.jpg" alt="Sapin de Noël mécanique" loading="lazy"></a>
       </div>
-
-      <div class="quote">
-        <div class="quote-main">
-          <label class="drop" id="drop3d" for="file3d">
-            <input type="file" id="file3d" accept=".stl,.3mf,.step,.stp" hidden>
-            <span class="drop-title">Déposez votre fichier 3D</span>
-            <span class="drop-sub">ou cliquez pour le choisir · unités en millimètres</span>
-          </label>
-          <div class="viewer" id="viewer3d" hidden>
-            <canvas id="canvas3d" aria-label="Aperçu 3D de la pièce"></canvas>
-            <div class="viewer-bar">
-              <span class="mono" id="fname3d"></span>
-              <button class="link-btn" type="button" id="reset3d">Changer de fichier</button>
-            </div>
-          </div>
-          <p class="msg" id="msg3d" role="status" hidden></p>
-
-          <div class="options">
-            <fieldset class="opt">
-              <legend>Matière</legend>
-              <div class="seg" id="mat3d"></div>
-              <p class="hint" id="matnote3d"></p>
-            </fieldset>
-            <fieldset class="opt">
-              <legend>Couleur / effet</legend>
-              <div id="colors3d"></div>
-            </fieldset>
-            <div class="opt-row">
-              <div class="opt">
-                <label for="infill3d">Solidité</label>
-                <select id="infill3d"></select>
-              </div>
-              <div class="opt">
-                <label for="qty3d">Quantité</label>
-                <input type="number" id="qty3d" min="1" max="500" value="1" inputmode="numeric">
-              </div>
-              <div class="opt opt-check">
-                <input type="checkbox" id="sup3d" checked>
-                <label for="sup3d">Supports si nécessaire</label>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <aside class="ticket" aria-labelledby="t3-title">
-          <h3 id="t3-title">Estimation</h3>
-          <dl class="lines" id="lines3d">
-            <div><dt>Dimensions</dt><dd class="mono" data-k="size">—</dd></div>
-            <div><dt>Volume de la pièce</dt><dd class="mono" data-k="vol">—</dd></div>
-            <div><dt>Matière estimée</dt><dd class="mono" data-k="grams">—</dd></div>
-            <div><dt>Temps d'impression</dt><dd class="mono" data-k="time">—</dd></div>
-            <div class="sep"><dt>Matière</dt><dd class="mono" data-k="matcost">—</dd></div>
-            <div><dt>Machine</dt><dd class="mono" data-k="machcost">—</dd></div>
-            <div><dt>Prix unitaire</dt><dd class="mono" data-k="unit">—</dd></div>
-          </dl>
-          <div class="total"><span>Total estimé</span><strong class="mono" id="total3d">—</strong></div>
-          <p class="warn" id="warn3d" hidden></p>
-          <button class="btn" type="button" id="ask3d" disabled>Demander ce devis</button>
-          <p class="fine">Estimation indicative, sans valeur contractuelle. Je confirme le prix exact après vérification du fichier.</p>
-        </aside>
-      </div>
-    </div>
-  </section>
-
-  <!-- =========================== DEVIS LASER =========================== -->
-  <section id="devis-laser" class="section section-laser" aria-labelledby="dl-title">
-    <div class="wrap">
-      <div class="section-head">
-        <div>
-          <p class="eyebrow"><img src="img/logo-laser.png" alt="" width="22" height="22"> Découpe laser</p>
-          <h2 id="dl-title">Devis découpe & gravure laser</h2>
-        </div>
-        <div class="chips" role="tablist" aria-label="Type de demande laser">
-          <button class="chip is-on" role="tab" aria-selected="true" data-lmode="cut" id="lm-cut">Découpe / gravure</button>
-          <button class="chip" role="tab" aria-selected="false" data-lmode="stamp" id="lm-stamp">Tampon</button>
-        </div>
-      </div>
-
-      <!-- Découpe / gravure -->
-      <div class="quote" id="laser-cut">
-        <div class="quote-main">
-          <label class="drop" id="dropL" for="fileL">
-            <input type="file" id="fileL" accept=".svg,.dxf,.pdf,.ai,.png,.jpg,.jpeg,.webp,.bmp" hidden>
-            <span class="drop-title">Déposez votre fichier de découpe</span>
-            <span class="drop-sub">SVG, DXF, PDF ou AI · images acceptées sur demande</span>
-          </label>
-          <div class="preview2d" id="previewL" hidden>
-            <div class="preview2d-img" id="imgL"></div>
-            <div class="viewer-bar">
-              <span class="mono" id="fnameL"></span>
-              <button class="link-btn" type="button" id="resetL">Changer de fichier</button>
-            </div>
-          </div>
-          <p class="msg" id="msgL" role="status" hidden></p>
-
-          <div class="options">
-            <fieldset class="opt">
-              <legend>Matériau</legend>
-              <div class="seg seg-wrap" id="matL"></div>
-            </fieldset>
-            <div class="opt-row">
-              <div class="opt">
-                <label for="qtyL">Quantité</label>
-                <input type="number" id="qtyL" min="1" max="500" value="1" inputmode="numeric">
-              </div>
-            </div>
-            <details class="howto">
-              <summary>Préparer votre fichier</summary>
-              <ul>
-                <li><strong>Coupe</strong> : tracés sans remplissage (contour seul).</li>
-                <li><strong>Gravure</strong> : formes remplies et textes.</li>
-                <li>Dessinez à l'échelle réelle, en millimètres. Les textes des PDF/AI doivent être vectorisés.</li>
-                <li>Fichier .ai : enregistrez-le avec « Créer un fichier compatible PDF ».</li>
-              </ul>
-            </details>
-          </div>
-        </div>
-
-        <aside class="ticket" aria-labelledby="tl-title">
-          <h3 id="tl-title">Estimation</h3>
-          <dl class="lines" id="linesL">
-            <div><dt>Dimensions</dt><dd class="mono" data-k="size">—</dd></div>
-            <div><dt>Longueur de coupe</dt><dd class="mono" data-k="cut">—</dd></div>
-            <div><dt>Surface gravée</dt><dd class="mono" data-k="engr">—</dd></div>
-            <div class="sep"><dt>Temps de coupe</dt><dd class="mono" data-k="cutmin">—</dd></div>
-            <div><dt>Temps de gravure</dt><dd class="mono" data-k="engrmin">—</dd></div>
-            <div><dt>Prix unitaire</dt><dd class="mono" data-k="unit">—</dd></div>
-          </dl>
-          <div class="total"><span>Total estimé</span><strong class="mono" id="totalL">—</strong></div>
-          <p class="warn" id="warnL" hidden></p>
-          <button class="btn" type="button" id="askL" disabled>Demander ce devis</button>
-          <p class="fine">Estimation indicative basée sur le temps machine. Je confirme le prix exact après vérification du fichier.</p>
-        </aside>
-      </div>
-
-      <!-- Tampons -->
-      <div class="quote" id="laser-stamp" hidden>
-        <div class="quote-main">
-          <fieldset class="opt">
-            <legend>Taille du tampon</legend>
-            <div class="stamps" id="stamps"></div>
-          </fieldset>
-          <div class="opt-row">
-            <div class="opt">
-              <label for="qtyS">Quantité</label>
-              <input type="number" id="qtyS" min="1" max="200" value="1" inputmode="numeric">
-            </div>
-          </div>
-          <label class="drop drop-small" id="dropS" for="fileS">
-            <input type="file" id="fileS" accept=".svg,.dxf,.pdf,.ai,.png,.jpg,.jpeg,.webp" hidden>
-            <span class="drop-title">Votre motif (facultatif)</span>
-            <span class="drop-sub" id="fnameS">SVG, PDF, AI ou image · vous pourrez aussi le décrire</span>
-          </label>
-        </div>
-        <aside class="ticket" aria-labelledby="ts-title">
-          <h3 id="ts-title">Prix</h3>
-          <dl class="lines" id="linesS">
-            <div><dt>Tampon</dt><dd class="mono" data-k="label">—</dd></div>
-            <div><dt>Prix unitaire</dt><dd class="mono" data-k="unit">—</dd></div>
-          </dl>
-          <div class="total"><span>Total</span><strong class="mono" id="totalS">—</strong></div>
-          <button class="btn" type="button" id="askS">Demander ce tampon</button>
-          <p class="fine">Prix fixe par tampon. Je vous recontacte pour valider le motif.</p>
-        </aside>
-      </div>
-    </div>
-  </section>
-
-  <!-- ========================= MENTIONS LÉGALES ======================== -->
-  <section id="mentions" class="section section-legal" aria-labelledby="legal-title">
-    <div class="wrap narrow">
-      <h2 id="legal-title">Mentions légales & données personnelles</h2>
-      <div id="legal"></div>
     </div>
   </section>
 </main>
@@ -281,61 +93,16 @@
 <footer class="footer">
   <div class="wrap footer-in">
     <span data-brand>impression_ant</span>
-    <span class="mono">Impression 3D · Découpe laser</span>
-    <a href="#mentions">Mentions légales</a>
+    <nav aria-label="Pied de page">
+      <a href="impression-3d.html">Impression 3D</a>
+      <a href="decoupe-laser.html">Découpe laser</a>
+      <a href="portfolio.html">Portfolio</a>
+      <a href="mentions-legales.html">Mentions légales</a>
+    </nav>
   </div>
 </footer>
 
-<!-- ====================== FENÊTRE DE DEMANDE ====================== -->
-<dialog class="modal" id="modal" aria-labelledby="modal-title">
-  <form id="reqForm" novalidate>
-    <div class="modal-head">
-      <h2 id="modal-title">Envoyer ma demande</h2>
-      <button class="icon-btn" type="button" id="closeModal" aria-label="Fermer">×</button>
-    </div>
-    <div class="summary" id="reqSummary"></div>
-    <div class="field">
-      <label for="reqEmail">Votre email</label>
-      <input type="email" id="reqEmail" name="email" required autocomplete="email" placeholder="vous@exemple.fr">
-    </div>
-    <div class="field">
-      <label for="reqMsg">Précisions <span class="opt-label">(facultatif)</span></label>
-      <textarea id="reqMsg" name="message" rows="4" placeholder="Délai souhaité, usage de la pièce, teintes du bi-color, finitions…"></textarea>
-    </div>
-    <div class="hp" aria-hidden="true"><label for="reqWebsite">Site web</label><input type="text" id="reqWebsite" name="website" tabindex="-1" autocomplete="off"></div>
-    <div class="field-check">
-      <input type="checkbox" id="reqConsent" required>
-      <label for="reqConsent">J'accepte que mon email, mon message et mon fichier soient utilisés uniquement pour répondre à ma demande.</label>
-    </div>
-    <div id="turnstile"></div>
-    <p class="msg" id="reqMsgBox" role="status" hidden></p>
-    <div class="modal-actions">
-      <button class="btn btn-ghost" type="button" id="cancelModal">Annuler</button>
-      <button class="btn" type="submit" id="sendReq">Envoyer</button>
-    </div>
-  </form>
-  <div class="sent" id="reqSent" hidden>
-    <h2>Demande envoyée</h2>
-    <p>Merci ! J'ai bien reçu votre demande et je vous réponds par email dès que possible.</p>
-    <button class="btn" type="button" id="closeSent">Fermer</button>
-  </div>
-  <div class="sent" id="reqFallback" hidden>
-    <h2>L'envoi automatique n'a pas fonctionné</h2>
-    <p>Copiez le récapitulatif ci-dessous et envoyez-le par email<span id="fbEmailWrap"> à <strong class="mono" id="fbEmail"></strong></span>, avec votre fichier en pièce jointe.</p>
-    <textarea id="fbText" rows="8" readonly></textarea>
-    <div class="modal-actions">
-      <button class="btn btn-ghost" type="button" id="copyFb">Copier le récapitulatif</button>
-      <button class="btn" type="button" id="closeFb">Fermer</button>
-    </div>
-  </div>
-</dialog>
-
-<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <script src="js/config.js"></script>
-<script src="js/geometry.js"></script>
-<script src="js/vector.js"></script>
-<script src="js/app.js"></script>
+<script src="js/layout.js"></script>
 </body>
 </html>

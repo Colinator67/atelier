@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Portfolio · impression_ant</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Portfolio de Colin Ehret : mécanismes imprimés en 3D, commandes sur mesure et modélisation paramétrique.">
+<link rel="icon" href="img/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@112,600;112,800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="wrap topbar-in">
+    <a class="brand" href="index.html" aria-label="Accueil impression_ant">
+      <span class="brand-coins" aria-hidden="true">
+        <img src="img/logo-3d.png" alt="" width="32" height="32">
+        <img src="img/logo-laser.png" alt="" width="32" height="32">
+      </span>
+      <span class="brand-name" data-brand>impression_ant</span>
+    </a>
+    <nav class="nav" aria-label="Pages du site">
+      <a href="impression-3d.html"><img src="img/logo-3d.png" alt="" width="18" height="18">Impression 3D</a>
+      <a href="decoupe-laser.html"><img src="img/logo-laser.png" alt="" width="18" height="18">Découpe laser</a>
+      <a href="portfolio.html" aria-current="page">Portfolio</a>
+    </nav>
+  </div>
+</header>
+
+<main id="contenu">
+  <section class="wrap pf-hero" aria-labelledby="pf-title">
+    <div>
+      <p class="eyebrow">Portfolio · fabrication additive</p>
+      <h1 id="pf-title">Pièces imaginées, modélisées et imprimées à l'atelier</h1>
+      <p class="lede">Photos, impressions et modélisations entièrement réalisées par Colin Ehret : mécanismes imprimés d'un seul tenant, commandes sur mesure et objets paramétriques.</p>
+    </div>
+    <div class="pf-strip"><img src="portfolio/img/let-it-snow-1.jpg" alt="Sapin de Noël mécanique imprimé en 3D"></div>
+  </section>
+
+  <section class="section" aria-labelledby="projets-title">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow" id="pf-count">Projets</p>
+          <h2 id="projets-title">Réalisations</h2>
+        </div>
+        <div class="chips" id="pf-filters" role="tablist" aria-label="Filtrer les projets"></div>
+      </div>
+      <div class="pf-grid" id="pf-grid" aria-live="polite"></div>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="about-title">
+    <div class="wrap about">
+      <img src="portfolio/img/colin-1.jpg" alt="Portrait de Colin Ehret" loading="lazy">
+      <div>
+        <h3 id="about-title">À propos</h3>
+        <p>Étudiant ingénieur en plasturgie à l'INSA Strasbourg, je suis passionné par l'impression 3D depuis près de 8 ans. Les modèles présentés ici viennent de projets personnels, d'études ou de commandes. Je les vois comme un entraînement permanent : je veux maîtriser parfaitement la modélisation 3D pour devenir chef de projet en fabrication additive, ou contribuer à faire progresser cette technologie par la recherche.</p>
+      </div>
+      <div>
+        <h3>Mes règles de design</h3>
+        <p>Quand je dessine une pièce, elle doit pouvoir être imprimée par n'importe qui, sur n'importe quelle imprimante. Je limite au maximum les supports et j'évite les éléments extérieurs comme les vis, l'adhésif ou les aimants. Pour moi, un objet réussi se fabrique de A à Z par une imprimante 3D : deux personnes, à deux endroits différents, peuvent produire exactement le même objet.</p>
+      </div>
+    </div>
+  </section>
+
+  <dialog class="lightbox" id="lightbox" aria-labelledby="lb-title">
+    <div class="lb-in">
+      <div class="lb-media">
+        <div class="lb-main"><img id="lb-img" src="" alt=""></div>
+        <div class="lb-thumbs" id="lb-thumbs"></div>
+      </div>
+      <div class="lb-text">
+        <button class="icon-btn lb-close" type="button" id="lb-close" aria-label="Fermer">×</button>
+        <h2 id="lb-title"></h2>
+        <p id="lb-desc"></p>
+        <div class="tags" id="lb-tags"></div>
+      </div>
+    </div>
+  </dialog>
+</main>
+
+<footer class="footer">
+  <div class="wrap footer-in">
+    <span data-brand>impression_ant</span>
+    <nav aria-label="Pied de page">
+      <a href="impression-3d.html">Impression 3D</a>
+      <a href="decoupe-laser.html">Découpe laser</a>
+      <a href="portfolio.html">Portfolio</a>
+      <a href="mentions-legales.html">Mentions légales</a>
+    </nav>
+  </div>
+</footer>
+
+<script src="js/config.js"></script>
+<script src="js/layout.js"></script>
+<script src="js/portfolio.js"></script>
+</body>
+</html>
