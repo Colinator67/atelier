@@ -14,7 +14,7 @@
   const L = C.laser;
   const sl = { material: L.materials[0].id, result: null, file: null, estimate: null, raster: false };
   const matL = $("#matL");
-  matL.innerHTML = L.materials.map(m => `<button type="button" data-id="${m.id}" aria-pressed="${m.id === sl.material}">${esc(m.label)}<small>${nf(2).format(m.pricePerMin)} €/min</small></button>`).join("");
+  matL.innerHTML = L.materials.map(m => `<button type="button" data-id="${m.id}" aria-pressed="${m.id === sl.material}">${esc(m.label)}</button>`).join("");
   matL.addEventListener("click", e => {
     const b = e.target.closest("button"); if (!b) return;
     sl.material = b.dataset.id;

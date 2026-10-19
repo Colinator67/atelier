@@ -60,7 +60,7 @@
               <div class="step" data-n="2"><strong>Je dessine le fichier</strong><span>découpe, gravure, multicouche si besoin</span></div>
               <div class="step" data-n="3"><strong>Vous validez l'aperçu</strong><span>je l'ajuste si besoin avant la découpe</span></div>
             </div>
-            <button class="btn btn-small lane-cta" type="button" data-project="laser">Créer mon fichier</button>
+            <a class="btn btn-small lane-cta" href="#creation">Décrire mon idée</a>
           </div>
           <div class="lane">
             <span class="lane-label">Oui, j'ai mon fichier</span>
@@ -79,6 +79,88 @@
           </div>
         </div>
         <p class="flow-note">Vous avez votre propre machine ? Je peux aussi vous livrer uniquement le fichier de découpe, prêt à l'emploi.</p>
+      </div>
+    </div>
+  </section>
+  <section id="creation" class="section" aria-labelledby="idea-title">
+    <div class="wrap">
+      <div class="section-head">
+        <div>
+          <p class="eyebrow">Création de fichier</p>
+          <h2 id="idea-title">Une idée, mais pas de fichier ?</h2>
+        </div>
+      </div>
+      <div class="idea">
+        <div class="idea-intro">
+          <p>Décrivez ce que vous imaginez : je dessine le fichier de découpe et vous envoie un aperçu avec le devis. Un logo, une photo ou un croquis sur papier suffisent pour démarrer.</p>
+          <ul class="idea-points">
+            <li>Découpe, gravure et assemblages multicouches</li>
+            <li>Aperçu à valider avant toute fabrication</li>
+            <li>Pièce découpée et envoyée, ou fichier seul pour votre machine</li>
+          </ul>
+        </div>
+        <form class="idea-form" id="ideaForm" novalidate>
+          <fieldset class="opt">
+            <legend>Ce dont vous avez besoin</legend>
+            <div class="seg" id="ideaNeed" role="radiogroup">
+              <button type="button" role="radio" aria-pressed="true" aria-checked="true" data-v="Fichier + découpe">Le fichier et la pièce découpée</button>
+              <button type="button" role="radio" aria-pressed="false" aria-checked="false" data-v="Fichier seul">Uniquement le fichier</button>
+            </div>
+          </fieldset>
+          <div class="field">
+            <label for="ideaDesc">Votre idée</label>
+            <textarea id="ideaDesc" rows="5" required placeholder="Ex. : un panneau prénom en 3 couches pour une chambre d'enfant, un logo d'entreprise gravé sur des sous-verres, une boîte de rangement à encoches…"></textarea>
+          </div>
+          <div class="opt-row">
+            <div class="opt">
+              <label for="ideaSize">Dimensions approximatives</label>
+              <input type="text" id="ideaSize" placeholder="Ex. : 30 × 20 cm">
+            </div>
+            <div class="opt">
+              <label for="ideaMat">Matériau</label>
+              <select id="ideaMat"></select>
+            </div>
+          </div>
+          <div class="opt-row">
+            <div class="opt">
+              <label for="ideaQty">Quantité</label>
+              <input type="number" id="ideaQty" min="1" max="1000" value="1" inputmode="numeric">
+            </div>
+            <div class="opt">
+              <label for="ideaWhen">Délai souhaité</label>
+              <select id="ideaWhen">
+                <option>Pas pressé</option>
+                <option>Sous 2 semaines</option>
+                <option>Sous 1 semaine</option>
+                <option>Date précise (à indiquer)</option>
+              </select>
+            </div>
+          </div>
+          <div class="field">
+            <label for="ideaFiles">Images de référence <span class="opt-label">(facultatif : logo, photo, croquis · 5 fichiers, 8 Mo au total)</span></label>
+            <input type="file" id="ideaFiles" multiple accept="image/*,.pdf,.svg,.ai,.dxf">
+          </div>
+          <div class="field">
+            <label for="ideaEmail">Votre email</label>
+            <input type="email" id="ideaEmail" required autocomplete="email" placeholder="vous@exemple.fr">
+          </div>
+          <div class="hp" aria-hidden="true"><label for="ideaWebsite">Site web</label><input type="text" id="ideaWebsite" tabindex="-1" autocomplete="off"></div>
+          <div class="field-check">
+            <input type="checkbox" id="ideaConsent" required>
+            <label for="ideaConsent">J'accepte que mon email, mon message et mes fichiers soient utilisés uniquement pour répondre à ma demande.</label>
+          </div>
+          <p class="msg" id="ideaMsg" role="status" hidden></p>
+          <button class="btn" type="submit" id="ideaSend">Envoyer mon idée</button>
+          <div class="idea-done" id="ideaDone" hidden>
+            <h3>Idée bien reçue !</h3>
+            <p>Je vous réponds par email avec mes questions éventuelles, un premier aperçu et le devis.</p>
+          </div>
+          <div class="idea-done" id="ideaFallback" hidden>
+            <h3>L'envoi automatique n'a pas fonctionné</h3>
+            <p>Copiez ce récapitulatif et envoyez-le par email avec vos images.</p>
+            <textarea id="ideaFbText" rows="7" readonly></textarea>
+          </div>
+        </form>
       </div>
     </div>
   </section>
@@ -247,5 +329,6 @@
 <script src="js/vector.js"></script>
 <script src="js/request.js"></script>
 <script src="js/quotelaser.js"></script>
+<script src="js/ideaform.js"></script>
 </body>
 </html>

@@ -23,7 +23,7 @@ async function handleRequest(request, env) {
   const message = String(form.get("message") || "").trim().slice(0, 3000);
   const summary = String(form.get("summary") || "").trim().slice(0, 3000);
   const kind = String(form.get("kind") || "Demande").slice(0, 60);
-  const file = form.get("file");
+  const files = form.getAll("file").filter(f => f && typeof f === "object" && f.size > 0).slice(0, 5);
 
   if (form.get("website")) return json({ ok: true }); // robot
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email) || email.length > 200)
@@ -39,11 +39,14 @@ async function handleRequest(request, env) {
     if (!v.success) return json({ ok: false, error: "Vérification anti-robot échouée. Rechargez la page et réessayez." }, 400);
   }
 
-  const hasFile = file && typeof file === "object" && file.size > 0;
-  const fileTooBig = hasFile && file.size > MAX_FILE;
-  const fileNote = !hasFile ? "Aucun fichier" : fileTooBig
-    ? `${file.name} (${(file.size / 1048576).toFixed(1)} Mo — trop lourd, demander au client de l'envoyer par email)`
-    : `${file.name} (${(file.size / 1024).toFixed(0)} Ko, en pièce jointe)`;
+  // on joint les fichiers tant que le total reste sous la limite
+  let budget = MAX_FILE;
+  const attached = [], skipped = [];
+  for (const f of files) { if (f.size <= budget) { attached.push(f); budget -= f.size; } else skipped.push(f); }
+  const fileNote = !files.length ? "Aucun fichier" : [
+    ...attached.map(f => `${f.name} (${(f.size / 1024).toFixed(0)} Ko, en pièce jointe)`),
+    ...skipped.map(f => `${f.name} (${(f.size / 1048576).toFixed(1)} Mo — trop lourd, demander au client de l'envoyer par email)`)
+  ].join("\n");
 
   const results = [];
 
@@ -65,7 +68,7 @@ async function handleRequest(request, env) {
     };
     const body = new FormData();
     body.append("payload_json", JSON.stringify(payload));
-    if (hasFile && !fileTooBig) body.append("files[0]", file, file.name);
+    attached.forEach((f, i) => body.append(`files[${i}]`, f, f.name));
     const r = await fetch(env.DISCORD_WEBHOOK_URL, { method: "POST", body }).catch(() => null);
     results.push(!!(r && r.ok));
   }
@@ -73,7 +76,7 @@ async function handleRequest(request, env) {
   // ---------------------------------------------------------------- Email (Resend)
   if (env.RESEND_API_KEY && env.NOTIFY_EMAIL) {
     const attachments = [];
-    if (hasFile && !fileTooBig) attachments.push({ filename: file.name, content: toBase64(new Uint8Array(await file.arrayBuffer())) });
+    for (const f of attached) attachments.push({ filename: f.name, content: toBase64(new Uint8Array(await f.arrayBuffer())) });
     const html = `<h2>Nouvelle demande · ${escapeHtml(kind)}</h2>
       <p><strong>Client :</strong> <a href="mailto:${escapeHtml(email)}">${escapeHtml(email)}</a></p>
       <pre style="background:#f2f0ed;padding:12px;border-radius:6px">${escapeHtml(summary)}</pre>
