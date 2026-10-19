@@ -174,7 +174,7 @@ HOME = """  <section class="hero" aria-labelledby="hero-title">
             <p>Pièces fonctionnelles, prototypes, objets déco. Fichiers STL, 3MF ou STEP, ou modélisation sur mesure.</p>
             <ul class="specs">
               <li><span>PLA</span><span>PETG</span><span>TPU</span></li>
-              <li class="mono">17 €/kg + 1 €/h machine</li>
+              <li class="mono">17 €/kg + 7 €/h machine</li>
             </ul>
             <span class="cta">Estimer une impression <span aria-hidden="true">→</span></span>
           </div>
@@ -251,7 +251,7 @@ FLOW_3D = f"""  <section class="section" aria-labelledby="flow3-title">
           <div class="flow-end">
             {end_step(3, "On valide ensemble par email", "prix exact, couleur, délai")}
             {end_step(4, "Je fabrique la pièce", "sur mon parc d'imprimantes FDM")}
-            {end_step(5, "La pièce vous est envoyée")}
+            {end_step(5, "La pièce vous est envoyée", "frais de port en plus du devis")}
           </div>
         </div>
       </div>
@@ -321,11 +321,12 @@ QUOTE_3D = """  <section id="devis" class="section" aria-labelledby="d3-title">
             <div class="sep"><dt>Matière</dt><dd class="mono" data-k="matcost">—</dd></div>
             <div><dt>Machine</dt><dd class="mono" data-k="machcost">—</dd></div>
             <div><dt>Prix unitaire</dt><dd class="mono" data-k="unit">—</dd></div>
+            <div><dt>Frais de préparation</dt><dd class="mono" data-k="setup">—</dd></div>
           </dl>
           <div class="total"><span>Total estimé</span><strong class="mono" id="total3d">—</strong></div>
           <p class="warn" id="warn3d" hidden></p>
           <button class="btn" type="button" id="ask3d" disabled>Demander ce devis</button>
-          <p class="fine">Estimation indicative, sans valeur contractuelle. Je confirme le prix exact après vérification du fichier.</p>
+          <p class="fine">Prix hors frais de port. Estimation indicative, sans valeur contractuelle : je confirme le prix exact après vérification du fichier.</p>
         </aside>
       </div>
     </div>
@@ -381,7 +382,7 @@ FLOW_LASER = f"""  <section class="section" aria-labelledby="flowl-title">
           <div class="flow-end">
             {end_step(4, "On valide ensemble par email", "prix exact, matériau, délai")}
             {end_step(5, "Découpe et gravure", "sur laser xTool M1 Ultra")}
-            {end_step(6, "La pièce vous est envoyée")}
+            {end_step(6, "La pièce vous est envoyée", "frais de port en plus du devis")}
           </div>
         </div>
         <p class="flow-note">Vous avez votre propre machine ? Je peux aussi vous livrer uniquement le fichier de découpe, prêt à l'emploi.</p>
@@ -454,7 +455,7 @@ QUOTE_LASER = """  <section id="devis" class="section" aria-labelledby="dl-title
           <div class="total"><span>Total estimé</span><strong class="mono" id="totalL">—</strong></div>
           <p class="warn" id="warnL" hidden></p>
           <button class="btn" type="button" id="askL" disabled>Demander ce devis</button>
-          <p class="fine">Estimation indicative basée sur le temps machine. Je confirme le prix exact après vérification du fichier.</p>
+          <p class="fine">Prix hors frais de port. Estimation indicative basée sur le temps machine : je confirme le prix exact après vérification du fichier.</p>
         </aside>
       </div>
 
@@ -484,7 +485,7 @@ QUOTE_LASER = """  <section id="devis" class="section" aria-labelledby="dl-title
           </dl>
           <div class="total"><span>Total</span><strong class="mono" id="totalS">—</strong></div>
           <button class="btn" type="button" id="askS">Demander ce tampon</button>
-          <p class="fine">Prix fixe par tampon. Je vous recontacte pour valider le motif.</p>
+          <p class="fine">Prix fixe par tampon, hors frais de port. Je vous recontacte pour valider le motif.</p>
         </aside>
       </div>
     </div>

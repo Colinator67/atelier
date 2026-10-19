@@ -15,7 +15,8 @@ window.SITE_CONFIG = {
   // ---- Impression 3D ---------------------------------------------------
   print: {
     pricePerKg: 17,          // €/kg, tous matériaux
-    pricePerHour: 1,         // €/h machine
+    pricePerHour: 7,         // €/h machine (calé sur tes prix de référence : magnet 5 €, coq 25 €, trophée train 40 €)
+    setupFee: 2.5,           // € de frais de préparation, une fois par commande
     // Volume utile max (mm) : au-delà, le site prévient que la pièce devra être découpée
     maxSize: [256, 256, 256],
     // Coefficients d'estimation — à recaler avec tes résultats Orca (voir README)

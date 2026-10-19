@@ -201,6 +201,9 @@
       }
     }
     const flipped = vol < 0;
+    // les supports ne peuvent pas occuper plus que le vide de la boîte englobante
+    const emptyBox = Math.max(0, (maxX - minX) * (maxY - minY) * (maxZ - minZ) - Math.abs(vol));
+    supportVol = Math.min(supportVol, emptyBox * 0.5);
     return {
       triangles: n,
       volume: Math.abs(vol),

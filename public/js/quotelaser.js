@@ -158,7 +158,7 @@
         `Coupe : ${nf(0).format(r.cutLength)} mm · gravure : ${nf(1).format(r.engraveArea / 100)} cm²`,
         `Temps estimé : ${fmtMinutes(e.minutes)} par pièce`,
         `Quantité : ${e.qty}`,
-        `Total estimé : ${eur(e.unitPrice * e.qty)} (${eur(e.unitPrice)} / pièce)`
+        `Total estimé : ${eur(e.unitPrice * e.qty)} hors frais de port (${eur(e.unitPrice)} / pièce)`
       ].join("\n")
     });
   });
@@ -167,7 +167,7 @@
     openRequest({
       kind: "Tampon",
       file: sS.file,
-      summary: [`Tampon — ${sS.stamp.label}`, `Quantité : ${qty}`, `Total : ${eur(sS.stamp.price * qty)}`, `Motif : ${sS.file ? sS.file.name : "à décrire / envoyer"}`].join("\n")
+      summary: [`Tampon — ${sS.stamp.label}`, `Quantité : ${qty}`, `Total : ${eur(sS.stamp.price * qty)} hors frais de port`, `Motif : ${sS.file ? sS.file.name : "à décrire / envoyer"}`].join("\n")
     });
   });
 

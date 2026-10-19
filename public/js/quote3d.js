@@ -85,7 +85,7 @@
   function update3d() {
     const m = s3.metrics, lines = $("#lines3d"), warn = $("#warn3d");
     if (!m) {
-      setLines(lines, { size: "—", vol: "—", grams: "—", time: "—", matcost: "—", machcost: "—", unit: "—" });
+      setLines(lines, { size: "—", vol: "—", grams: "—", time: "—", matcost: "—", machcost: "—", unit: "—", setup: "—" });
       $("#total3d").textContent = "—"; warn.hidden = true; $("#ask3d").disabled = true; return;
     }
     const qty = clampQty($("#qty3d"));
@@ -99,9 +99,10 @@
       time: fmtDuration(e.hours),
       matcost: eur(e.materialCost),
       machcost: eur(e.machineCost),
-      unit: eur(e.unitPrice)
+      unit: eur(e.unitPrice),
+      setup: eur(P.setupFee || 0)
     });
-    $("#total3d").textContent = eur(e.unitPrice * qty);
+    $("#total3d").textContent = eur(e.unitPrice * qty + (P.setupFee || 0));
     const sortD = a => [...a].sort((x, y) => y - x);
     const tooBig = sortD(m.size).some((v, i) => v > sortD(P.maxSize)[i]);
     const notes = [];
@@ -181,7 +182,7 @@
         `Dimensions : ${fmtSize(m.size)} · volume ${nf(1).format(m.volume / 1000)} cm³`,
         `Estimation : ${nf(0).format(e.grams)} g · ${fmtDuration(e.hours)} par pièce`,
         `Quantité : ${e.qty}`,
-        `Total estimé : ${eur(e.unitPrice * e.qty)} (${eur(e.unitPrice)} / pièce)`
+        `Total estimé : ${eur(e.unitPrice * e.qty + (P.setupFee || 0))} hors frais de port (${eur(e.unitPrice)} / pièce + ${eur(P.setupFee || 0)} de préparation)`
       ].join("\n")
     });
   });
