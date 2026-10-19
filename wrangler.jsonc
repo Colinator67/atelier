@@ -1,0 +1,12 @@
+{
+  // Configuration du Worker "atelier" : site statique + envoi des demandes
+  "name": "atelier",
+  "main": "worker/index.js",
+  "compatibility_date": "2025-10-01",
+  "assets": {
+    "directory": "./public",
+    "binding": "ASSETS",
+    "run_worker_first": ["/api/*"]
+  },
+  "observability": { "enabled": true }
+}

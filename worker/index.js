@@ -1,8 +1,8 @@
 /* =========================================================================
-   Cloudflare Pages Function — reçoit les demandes de devis du site.
-   URL : /api/demande (POST, multipart/form-data)
+   Worker Cloudflare — sert le site (dossier public/) et reçoit les demandes
+   de devis sur /api/demande (POST, multipart/form-data).
 
-   Variables d'environnement (Cloudflare > Pages > ton projet > Settings > Variables) :
+   Variables (Cloudflare > Workers & Pages > atelier > Settings > Variables and Secrets) :
      DISCORD_WEBHOOK_URL  webhook d'un salon Discord privé (recommandé)
      RESEND_API_KEY       clé API Resend pour recevoir aussi un email (facultatif)
      NOTIFY_EMAIL         ton adresse, destinataire des emails
@@ -14,7 +14,7 @@ const MAX_FILE = 8 * 1024 * 1024; // limite des pièces jointes Discord sans boo
 const json = (data, status = 200) =>
   new Response(JSON.stringify(data), { status, headers: { "content-type": "application/json; charset=utf-8" } });
 
-export async function onRequestPost({ request, env }) {
+async function handleRequest(request, env) {
   let form;
   try { form = await request.formData(); }
   catch { return json({ ok: false, error: "Demande illisible." }, 400); }
@@ -100,9 +100,16 @@ export async function onRequestPost({ request, env }) {
   return json({ ok: true });
 }
 
-export function onRequest() {
-  return json({ ok: false, error: "Méthode non autorisée." }, 405);
-}
+export default {
+  async fetch(request, env) {
+    const url = new URL(request.url);
+    if (url.pathname === "/api/demande") {
+      if (request.method !== "POST") return json({ ok: false, error: "Méthode non autorisée." }, 405);
+      return handleRequest(request, env);
+    }
+    return env.ASSETS.fetch(request);
+  }
+};
 
 function toBase64(bytes) {
   let bin = "";
