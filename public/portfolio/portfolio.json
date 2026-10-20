@@ -23,6 +23,43 @@
   ],
   "projets": [
     {
+      "id": "tableaux-multicouches-fetes",
+      "titre": "Tableaux multicouches de fêtes",
+      "themes": [
+        "laser",
+        "deco"
+      ],
+      "resume": "Deux scènes en bois multicouche pour Noël et Halloween, découpées et gravées au laser.",
+      "description": "Deux tableaux décoratifs en contreplaqué superposé : une scène de Noël enneigée et une scène d'Halloween au clair de lune. Chaque couche est découpée et gravée au laser, puis l'empilement crée la profondeur. Fichiers de découpe multicouches conçus à l'atelier.",
+      "tags": [
+        "Découpe laser",
+        "Gravure",
+        "Multicouche",
+        "Contreplaqué"
+      ],
+      "images": [
+        "portfolio/img/tableaux-multicouches-fetes-1.jpg"
+      ]
+    },
+    {
+      "id": "tableau-multicouche-personnage",
+      "titre": "Silhouette multicouche",
+      "themes": [
+        "laser",
+        "deco"
+      ],
+      "resume": "Personnage en pied dont la silhouette s'ouvre sur des scènes gravées en profondeur.",
+      "description": "Pièce décorative en bois multicouche : la silhouette du personnage sert de cadre, et ses ouvertures laissent voir plusieurs couches gravées qui racontent une histoire. Découpe et gravure laser, fichier multicouche conçu à l'atelier.",
+      "tags": [
+        "Découpe laser",
+        "Gravure",
+        "Multicouche"
+      ],
+      "images": [
+        "portfolio/img/tableau-multicouche-personnage-1.jpg"
+      ]
+    },
+    {
       "id": "machine-a-vagues",
       "titre": "Machine à vagues",
       "themes": [
