@@ -45,6 +45,7 @@ window.SITE_CONFIG = {
       tech: "FDM à changeur d'outils, 4 têtes", materials: "PLA, PETG, TPU, mélangeables dans une même pièce", size: "270 × 270 × 270 mm",
       use: "Pièces rigides et souples à la fois, multicolore sans purge" },
     { name: "WonderMaker ZR Ultra", kind: "Impression 3D", art: "zr",
+      photos: {"closed": "img/atelier/zr-ferme.webp", "open": "img/atelier/zr-ouvert.webp", "inside": "img/atelier/zr-interieur.webp", "frame": [860, 830], "doorRect": [202, 276, 439, 445], "glass": "rgba(53, 52, 52, 0.61)", "frameColor": "#1F1F1F", "handle": {"src": "img/atelier/zr-poignee.webp", "rect": [616, 446, 25, 105]}, "hinge": "left", "openAngle": 114},
       tech: "FDM à changeur d'outils, 4 têtes en 5 s", materials: "PLA, PETG, TPU", size: "300 × 270 × 290 mm",
       use: "Multicolore à couleurs franches, multimatière" },
     { name: "Elegoo OrangeStorm Giga", kind: "Impression 3D grand format", art: "giga",
