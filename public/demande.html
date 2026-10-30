@@ -1,0 +1,220 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Décrire mon projet · impression_ant</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Décrivez votre projet d'impression 3D ou de découpe laser en quatre étapes. Réponse par email, téléphone ou WhatsApp.">
+<meta name="theme-color" content="#ECEAE7">
+<link rel="canonical" href="https://impressionant.fr/demande.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="impression_ant">
+<meta property="og:locale" content="fr_FR">
+<meta property="og:title" content="Décrire mon projet · impression_ant">
+<meta property="og:description" content="Décrivez votre projet d'impression 3D ou de découpe laser en quatre étapes. Réponse par email, téléphone ou WhatsApp.">
+<meta property="og:url" content="https://impressionant.fr/demande.html">
+<meta property="og:image" content="https://impressionant.fr/img/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="img/favicon.png">
+<link rel="apple-touch-icon" href="img/favicon.png">
+<link rel="preload" href="fonts/archivo-var.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/plex-sans-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<a class="skip" href="#contenu">Aller au contenu</a>
+<header class="topbar">
+  <div class="wrap topbar-in">
+    <a class="brand" href="index.html" aria-label="Accueil impression_ant">
+      <span class="brand-coins" aria-hidden="true">
+        <img src="img/logo-3d.png" alt="" width="32" height="32">
+        <img src="img/logo-laser.png" alt="" width="32" height="32">
+      </span>
+      <span class="brand-name" data-brand>impression_ant</span>
+    </a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-pages"><span class="nav-toggle-bars" aria-hidden="true"></span><span class="nav-toggle-label">Menu</span></button>
+    <nav class="nav" id="nav-pages" aria-label="Pages du site">
+      <a href="impression-3d.html"><img src="img/logo-3d.png" alt="" width="18" height="18">Impression 3D</a>
+      <a href="decoupe-laser.html"><img src="img/logo-laser.png" alt="" width="18" height="18">Découpe laser</a>
+      <a href="portfolio.html">Portfolio</a>
+      <a href="atelier.html">L'atelier</a>
+      <a class="nav-cta" href="demande.html">Décrire mon projet</a>
+    </nav>
+  </div>
+</header>
+
+<main id="contenu" class="ob-page">
+  <div class="wrap ob-wrap">
+    <div class="ob-progress" aria-hidden="true"><span class="ob-bar" id="obBar"></span></div>
+    <p class="ob-count" id="obCount" aria-live="polite">Étape 1 sur 5</p>
+
+    <form id="ob" novalidate>
+      <!-- 1. Type de demande -->
+      <section class="ob-step" data-step="type" aria-labelledby="ob-type-t">
+        <h1 class="ob-title" id="ob-type-t" tabindex="-1">Votre demande concerne :</h1>
+        <div class="ob-choices" role="radiogroup" aria-labelledby="ob-type-t">
+          <button type="button" class="ob-choice" role="radio" aria-checked="false" data-type="3d">
+            <img src="img/logo-3d.png" alt="" width="72" height="72">
+            <span class="ob-choice-t">Impression 3D</span>
+            <span class="ob-choice-d">Une pièce à modéliser puis imprimer : objet, pièce de rechange, prototype, déco.</span>
+          </button>
+          <button type="button" class="ob-choice" role="radio" aria-checked="false" data-type="laser">
+            <img src="img/logo-laser.png" alt="" width="72" height="72">
+            <span class="ob-choice-t">Découpe laser</span>
+            <span class="ob-choice-d">Un fichier de découpe à dessiner : multicouche, gravure, signalétique, tampon.</span>
+          </button>
+        </div>
+        <p class="ob-aside">Vous avez déjà votre fichier ? Le simulateur vous donne le prix tout de suite : <a href="impression-3d.html#devis">impression 3D</a> ou <a href="decoupe-laser.html#devis">découpe laser</a>.</p>
+      </section>
+
+      <!-- 2. Description -->
+      <section class="ob-step" data-step="desc" aria-labelledby="ob-desc-t" hidden>
+        <h1 class="ob-title" id="ob-desc-t" tabindex="-1">Décrivez brièvement votre projet</h1>
+        <p class="ob-sub">Vous pourrez ajouter des photos et des fichiers à l'étape suivante si vous en avez.</p>
+        <div class="field">
+          <label class="sr-only" for="obDesc">Description du projet</label>
+          <textarea id="obDesc" rows="6" maxlength="3000" aria-describedby="obDescHint obDescErr"></textarea>
+          <div class="ob-field-foot"><span class="hint" id="obDescHint">Usage, dimensions, matière, quantité : tout ce qui vous vient.</span><span class="hint ob-chars" id="obChars">0 / 3000</span></div>
+          <p class="field-err" id="obDescErr" hidden></p>
+        </div>
+        <fieldset class="ob-chips" id="obNeedWrap" hidden>
+          <legend>Ce dont vous avez besoin</legend>
+          <div class="chips" data-group="need">
+            <button type="button" class="chip is-on" aria-pressed="true" data-v="Le fichier et la pièce découpée">Le fichier et la pièce découpée</button>
+            <button type="button" class="chip" aria-pressed="false" data-v="Uniquement le fichier">Uniquement le fichier, pour ma machine</button>
+          </div>
+        </fieldset>
+        <fieldset class="ob-chips">
+          <legend>Délai souhaité <span class="opt-label">(facultatif)</span></legend>
+          <div class="chips" data-group="when">
+            <button type="button" class="chip" aria-pressed="false" data-v="Pas pressé">Pas pressé</button>
+            <button type="button" class="chip" aria-pressed="false" data-v="Sous 2 semaines">Sous 2 semaines</button>
+            <button type="button" class="chip" aria-pressed="false" data-v="Sous 1 semaine">Sous 1 semaine</button>
+            <button type="button" class="chip" aria-pressed="false" data-v="Date précise (dans la description)">Date précise</button>
+          </div>
+        </fieldset>
+      </section>
+
+      <!-- 3. Fichiers -->
+      <section class="ob-step" data-step="files" aria-labelledby="ob-files-t" hidden>
+        <h1 class="ob-title" id="ob-files-t" tabindex="-1">Ajoutez vos photos et fichiers</h1>
+        <p class="ob-sub">Photo de la pièce à remplacer, croquis, logo, fichier existant : tout aide. Jusqu'à 5 fichiers, 8 Mo au total.</p>
+        <label class="drop ob-drop" id="obDrop" for="obFiles">
+          <input type="file" id="obFiles" multiple hidden accept="image/*,.pdf,.svg,.ai,.dxf,.stl,.3mf,.step,.stp,.obj">
+          <span class="drop-title">Déposez vos fichiers ici</span>
+          <span class="drop-sub">ou cliquez pour les choisir</span>
+        </label>
+        <ul class="ob-files" id="obList" aria-live="polite"></ul>
+        <p class="field-err" id="obFilesErr" hidden></p>
+      </section>
+
+      <!-- 4. Contact -->
+      <section class="ob-step" data-step="contact" aria-labelledby="ob-contact-t" hidden>
+        <h1 class="ob-title" id="ob-contact-t" tabindex="-1">Comment voulez-vous être recontacté ?</h1>
+        <p class="ob-sub">Choisissez un ou plusieurs moyens. Je réponds sous <span data-delay="reply">48 h</span>.</p>
+        <div class="ob-contact" role="group" aria-labelledby="ob-contact-t">
+          <button type="button" class="ob-opt" aria-pressed="true" data-c="email"><span class="ob-check" aria-hidden="true"></span>Email</button>
+          <button type="button" class="ob-opt" aria-pressed="false" data-c="phone"><span class="ob-check" aria-hidden="true"></span>Appel téléphonique</button>
+          <button type="button" class="ob-opt" aria-pressed="false" data-c="sms"><span class="ob-check" aria-hidden="true"></span>SMS</button>
+          <button type="button" class="ob-opt" aria-pressed="false" data-c="whatsapp"><span class="ob-check" aria-hidden="true"></span>WhatsApp</button>
+        </div>
+        <div class="ob-fields">
+          <div class="field" id="obEmailWrap">
+            <label for="obEmail">Votre email</label>
+            <input type="email" id="obEmail" autocomplete="email" inputmode="email" placeholder="vous@exemple.fr" aria-describedby="obEmailErr">
+            <p class="field-err" id="obEmailErr" hidden></p>
+          </div>
+          <div class="field" id="obPhoneWrap" hidden>
+            <label for="obPhone">Votre numéro</label>
+            <input type="tel" id="obPhone" autocomplete="tel" inputmode="tel" placeholder="06 12 34 56 78" aria-describedby="obPhoneHint obPhoneErr">
+            <span class="hint" id="obPhoneHint">Numéro français ou international (+33, +356…)</span>
+            <p class="field-err" id="obPhoneErr" hidden></p>
+          </div>
+          <div class="field">
+            <label for="obName">Votre prénom <span class="opt-label">(facultatif)</span></label>
+            <input type="text" id="obName" autocomplete="given-name" maxlength="80">
+          </div>
+          <div class="field" id="obWhenWrap" hidden>
+            <label for="obCallTime">Quand vous appeler ? <span class="opt-label">(facultatif)</span></label>
+            <input type="text" id="obCallTime" maxlength="120" placeholder="Ex. : en semaine après 18 h">
+          </div>
+        </div>
+      </section>
+
+      <!-- 5. Récapitulatif -->
+      <section class="ob-step" data-step="recap" aria-labelledby="ob-recap-t" hidden>
+        <h1 class="ob-title" id="ob-recap-t" tabindex="-1">Vérifiez votre demande</h1>
+        <dl class="ob-recap" id="obRecap"></dl>
+        <div class="field-check">
+          <input type="checkbox" id="obConsent">
+          <label for="obConsent">J'accepte que mes coordonnées, mon message et mes fichiers soient utilisés uniquement pour répondre à ma demande (<a href="mentions-legales.html">données personnelles</a>).</label>
+        </div>
+        <p class="field-err" id="obConsentErr" hidden></p>
+        <div class="hp" aria-hidden="true"><label for="obWebsite">Site web</label><input type="text" id="obWebsite" tabindex="-1" autocomplete="off"></div>
+        <div id="turnstile"></div>
+        <p class="msg is-error" id="obSendErr" role="alert" hidden></p>
+      </section>
+
+      <div class="ob-nav" id="obNav">
+        <button type="button" class="btn btn-ghost" id="obBack">Retour</button>
+        <button type="button" class="btn" id="obNext">Continuer</button>
+      </div>
+      <p class="ob-draft" id="obDraft" hidden>Brouillon enregistré sur cet appareil · <button type="button" class="link-btn" id="obReset">Recommencer</button></p>
+    </form>
+
+    <!-- Envoyée -->
+    <section class="ob-done" id="obDone" hidden aria-labelledby="ob-done-t">
+      <span class="ob-done-mark" aria-hidden="true"></span>
+      <h1 class="ob-title" id="ob-done-t" tabindex="-1">Demande envoyée</h1>
+      <p class="ob-ref">Numéro de demande <strong id="obRef">—</strong></p>
+      <p class="ob-sub" id="obDoneText">Je vous réponds sous <span data-delay="reply">48 h</span>.</p>
+      <ol class="ob-next">
+        <li>Je lis votre demande et je reviens vers vous avec mes questions éventuelles.</li>
+        <li>Je vous envoie un devis, avec un aperçu à valider pour toute création.</li>
+        <li>Après votre accord, je fabrique et je vous envoie la pièce.</li>
+      </ol>
+      <p><a class="btn btn-ghost" href="portfolio.html">Voir le portfolio en attendant</a></p>
+    </section>
+
+    <!-- Échec d'envoi -->
+    <section class="ob-done" id="obFail" hidden aria-labelledby="ob-fail-t">
+      <h1 class="ob-title" id="ob-fail-t" tabindex="-1">L'envoi automatique n'a pas fonctionné</h1>
+      <p class="ob-sub">Votre demande n'est pas perdue : copiez le récapitulatif et envoyez-le à <a data-contact-email href="mailto:impression.ant.laser@gmail.com">impression.ant.laser@gmail.com</a>, avec vos fichiers en pièce jointe.</p>
+      <textarea id="obFailText" rows="9" readonly></textarea>
+      <div class="modal-actions">
+        <button type="button" class="btn btn-ghost" id="obCopy">Copier le récapitulatif</button>
+        <a class="btn" id="obMail" href="#">Ouvrir ma messagerie</a>
+      </div>
+    </section>
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="wrap footer-in">
+    <div class="footer-top">
+      <div class="footer-contact">
+        <p>Une question, un projet ? Je réponds sous <span data-delay="reply">48 h</span>.</p>
+        <p><a class="btn" href="demande.html">Décrire mon projet</a> <a class="footer-mail" href="mailto:impression.ant.laser@gmail.com" data-contact-email>impression.ant.laser@gmail.com</a></p>
+      </div>
+      <nav aria-label="Pied de page">
+        <a href="impression-3d.html">Impression 3D</a>
+        <a href="decoupe-laser.html">Découpe laser</a>
+        <a href="portfolio.html">Portfolio</a>
+        <a href="atelier.html">L'atelier et FAQ</a>
+        <a href="cgv.html">Conditions de vente</a>
+        <a href="mentions-legales.html">Mentions légales</a>
+      </nav>
+    </div>
+    <span class="footer-brand" data-brand>impression_ant</span>
+  </div>
+</footer>
+
+<script src="js/config.js"></script>
+<script src="js/layout.js"></script>
+<script src="js/onboarding.js"></script>
+</body>
+</html>

@@ -28,8 +28,13 @@
   function bindDrop(label, input, onFile) {
     ["dragenter", "dragover"].forEach(ev => label.addEventListener(ev, e => { e.preventDefault(); label.classList.add("is-over"); }));
     ["dragleave", "drop"].forEach(ev => label.addEventListener(ev, e => { e.preventDefault(); label.classList.remove("is-over"); }));
-    label.addEventListener("drop", e => { const f = e.dataTransfer.files[0]; if (f) onFile(f); });
-    input.addEventListener("change", () => { const f = input.files[0]; if (f) onFile(f); input.value = ""; });
+    // pendant l'analyse : la zone affiche un état de chargement
+    const run = (f) => {
+      label.classList.add("is-loading"); label.setAttribute("aria-busy", "true");
+      return Promise.resolve().then(() => onFile(f)).finally(() => { label.classList.remove("is-loading"); label.removeAttribute("aria-busy"); });
+    };
+    label.addEventListener("drop", e => { const f = e.dataTransfer.files[0]; if (f) run(f); });
+    input.addEventListener("change", () => { const f = input.files[0]; if (f) run(f); input.value = ""; });
   }
 
   // ---------------------------------------------------------- Filtres (onglets)
@@ -52,8 +57,52 @@
     });
   }
 
+  // ---------------------------------------------------------- Notifications brèves
+  function toast(text, kind) {
+    let box = $(".toasts");
+    if (!box) { box = document.createElement("div"); box.className = "toasts"; box.setAttribute("role", "status"); box.setAttribute("aria-live", "polite"); document.body.appendChild(box); }
+    const t = document.createElement("div");
+    t.className = "toast" + (kind ? " is-" + kind : "");
+    t.textContent = text;
+    box.appendChild(t);
+    setTimeout(() => { t.classList.add("is-out"); setTimeout(() => t.remove(), 220); }, 2600);
+  }
+
+  // ---------------------------------------------------------- Fichier déposé sur l'accueil
+  // L'accueil range le fichier dans IndexedDB, la page du simulateur le reprend.
+  const IDB = {
+    open() { return new Promise((res, rej) => { const r = indexedDB.open("atelier", 1); r.onupgradeneeded = () => r.result.createObjectStore("kv"); r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error); }); },
+    async set(k, v) { const db = await IDB.open(); return new Promise((res, rej) => { const tx = db.transaction("kv", "readwrite"); tx.objectStore("kv").put(v, k); tx.oncomplete = res; tx.onerror = () => rej(tx.error); }); },
+    async take(k) { const db = await IDB.open(); return new Promise((res, rej) => { const tx = db.transaction("kv", "readwrite"); const st = tx.objectStore("kv"); const g = st.get(k); g.onsuccess = () => { st.delete(k); }; tx.oncomplete = () => res(g.result); tx.onerror = () => rej(tx.error); }); }
+  };
+  function pickUpPendingFile(input) {
+    if (!input || !window.indexedDB) return;
+    IDB.take("pending-file").then(f => {
+      if (!f || !(f instanceof Blob)) return;
+      try {
+        const dt = new DataTransfer(); dt.items.add(f instanceof File ? f : new File([f], "fichier"));
+        input.files = dt.files;
+        input.dispatchEvent(new Event("change"));
+        const target = input.closest("section"); if (target) target.scrollIntoView({ behavior: "smooth", block: "start" });
+      } catch (e) { /* navigateur trop ancien : le client redépose son fichier */ }
+    }).catch(() => {});
+  }
+
+  // ---------------------------------------------------------- Menu mobile
+  const navBtn = $(".nav-toggle");
+  if (navBtn) {
+    const nav = $("#nav-pages");
+    const setOpen = (on) => { navBtn.setAttribute("aria-expanded", on); document.body.classList.toggle("nav-open", on); };
+    navBtn.addEventListener("click", () => setOpen(navBtn.getAttribute("aria-expanded") !== "true"));
+    document.addEventListener("keydown", e => { if (e.key === "Escape") setOpen(false); });
+    nav.addEventListener("click", e => { if (e.target.closest("a")) setOpen(false); });
+  }
+
   // Nom affiché (réglable dans config.js)
   $$("[data-brand]").forEach(el => el.textContent = C.brand);
+  // Délais et email affichés (réglables dans config.js)
+  $$("[data-delay]").forEach(el => { const v = (C.delays || {})[el.dataset.delay]; if (v) el.textContent = v; });
+  $$("[data-contact-email]").forEach(el => { const m = C.contactEmail || (C.legal || {}).email; if (m) { el.textContent = m; el.href = "mailto:" + m; } });
 
-  window.UI = { $, $$, nf, eur, mm, fmtSize, fmtDuration, fmtMinutes, esc, setLines, showMsg, clampQty, bindDrop, bindChips, loadScript };
+  window.UI = { $, $$, nf, eur, mm, fmtSize, fmtDuration, fmtMinutes, esc, setLines, showMsg, clampQty, bindDrop, bindChips, loadScript, toast, IDB, pickUpPendingFile };
 })();

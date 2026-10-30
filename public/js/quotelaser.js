@@ -171,5 +171,6 @@
     });
   });
 
-  // Turnstile (facultatif)
+  // fichier déposé depuis l'accueil
+  window.UI.pickUpPendingFile($("#fileL"));
 })();

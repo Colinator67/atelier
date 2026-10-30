@@ -9,6 +9,9 @@
   if (!grid) return;
 
   let data = { filtres: [], projets: [] };
+  // versions WebP générées par tools/images.py ; repli sur le JPG si elles n'existent pas
+  const thumb = (src) => src.replace(/\.jpe?g$/i, "-800.webp");
+  const large = (src) => src.replace(/\.jpe?g$/i, ".webp");
   let filter = "all";
 
   function renderFilters() {
@@ -26,7 +29,7 @@
     grid.innerHTML = list.map(p => `
       <button class="pf-card" type="button" data-id="${esc(p.id)}" aria-label="Voir le projet ${esc(p.titre)}">
         <div class="pf-img">
-          <img src="${esc(p.images[0])}" alt="" loading="lazy">
+          <img src="${esc(thumb(p.images[0]))}" data-fallback="${esc(p.images[0])}" alt="" loading="lazy" onerror="if(this.dataset.fallback&&this.src.indexOf(this.dataset.fallback)<0)this.src=this.dataset.fallback">
           ${p.images.length > 1 ? `<span class="pf-count">${p.images.length} photos</span>` : ""}
         </div>
         <div class="pf-body">
@@ -46,7 +49,9 @@
   // ---------------------------------------------------------- Visionneuse
   const lb = $("#lightbox");
   function showImage(p, i) {
-    $("#lb-img").src = p.images[i];
+    const img = $("#lb-img");
+    img.onerror = () => { if (img.src.indexOf(p.images[i]) < 0) img.src = p.images[i]; };
+    img.src = large(p.images[i]);
     $("#lb-img").alt = `${p.titre} — photo ${i + 1}`;
     $$("#lb-thumbs button").forEach((b, k) => b.setAttribute("aria-pressed", k === i ? "true" : "false"));
   }
@@ -57,7 +62,7 @@
     $("#lb-desc").textContent = p.description || p.resume || "";
     $("#lb-tags").innerHTML = (p.tags || []).map(t => `<span>${esc(t)}</span>`).join("");
     $("#lb-thumbs").innerHTML = p.images.length > 1
-      ? p.images.map((src, k) => `<button type="button" data-k="${k}" aria-label="Photo ${k + 1}"><img src="${esc(src)}" alt=""></button>`).join("")
+      ? p.images.map((src, k) => `<button type="button" data-k="${k}" aria-label="Photo ${k + 1}"><img src="${esc(thumb(src))}" alt="" onerror="this.onerror=null;this.src='${esc(src)}'"></button>`).join("")
       : "";
     $("#lb-thumbs").hidden = p.images.length < 2;
     $("#lb-thumbs").onclick = e => { const b = e.target.closest("[data-k]"); if (b) showImage(p, +b.dataset.k); };

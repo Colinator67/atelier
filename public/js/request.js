@@ -84,6 +84,9 @@
         throw new Error("HTTP " + res.status);
       }
       $("#reqForm").hidden = true; $("#reqSent").hidden = false;
+      const delay = (C.delays && C.delays.reply) || "48 h";
+      $("#reqSent p").innerHTML = `Numéro de demande <strong class="mono">${window.UI.esc(data.id || "—")}</strong>. Je vous réponds par email sous ${window.UI.esc(delay)}.` +
+        (data.confirmation ? ` Une confirmation vient de partir à <strong>${window.UI.esc(email)}</strong>.` : "");
       $("#reqMsg").value = "";
     } catch (err) {
       showFallback(email);
@@ -106,6 +109,15 @@
     if (navigator.clipboard) navigator.clipboard.writeText(t.value).then(done, () => { t.select(); });
     else t.select();
   });
+
+  // vérification de l'email à la sortie du champ, sans attendre l'envoi
+  $("#reqEmail").addEventListener("blur", () => {
+    const v = $("#reqEmail").value.trim();
+    const bad = v && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v);
+    $("#reqEmail").setAttribute("aria-invalid", bad ? "true" : "false");
+    showMsg($("#reqMsgBox"), bad ? "Cette adresse semble incomplète, par exemple vous@exemple.fr." : "", bad ? "error" : "");
+  });
+  $("#copyFb").addEventListener("click", () => window.UI.toast("Récapitulatif copié"));
 
   window.AskModal = { open: openRequest };
 })();

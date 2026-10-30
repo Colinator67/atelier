@@ -6,14 +6,27 @@
 <title>impression_ant · Impression 3D & découpe laser</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <meta name="description" content="Impression 3D, modélisation et découpe laser sur mesure. Devis instantané depuis votre fichier.">
+<meta name="theme-color" content="#ECEAE7">
+<link rel="canonical" href="https://impressionant.fr/">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="impression_ant">
+<meta property="og:locale" content="fr_FR">
+<meta property="og:title" content="impression_ant · Impression 3D & découpe laser">
+<meta property="og:description" content="Impression 3D, modélisation et découpe laser sur mesure. Devis instantané depuis votre fichier.">
+<meta property="og:url" content="https://impressionant.fr/">
+<meta property="og:image" content="https://impressionant.fr/img/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="img/favicon.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@112,600;112,800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="apple-touch-icon" href="img/favicon.png">
+<link rel="preload" href="fonts/archivo-var.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/plex-sans-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
+<a class="skip" href="#contenu">Aller au contenu</a>
 <header class="topbar">
   <div class="wrap topbar-in">
     <a class="brand" href="index.html" aria-label="Accueil impression_ant">
@@ -23,10 +36,13 @@
       </span>
       <span class="brand-name" data-brand>impression_ant</span>
     </a>
-    <nav class="nav" aria-label="Pages du site">
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-pages"><span class="nav-toggle-bars" aria-hidden="true"></span><span class="nav-toggle-label">Menu</span></button>
+    <nav class="nav" id="nav-pages" aria-label="Pages du site">
       <a href="impression-3d.html"><img src="img/logo-3d.png" alt="" width="18" height="18">Impression 3D</a>
       <a href="decoupe-laser.html"><img src="img/logo-laser.png" alt="" width="18" height="18">Découpe laser</a>
       <a href="portfolio.html">Portfolio</a>
+      <a href="atelier.html">L'atelier</a>
+      <a class="nav-cta" href="demande.html">Décrire mon projet</a>
     </nav>
   </div>
 </header>
@@ -40,14 +56,20 @@
         <a class="btn" href="impression-3d.html#devis">Estimer une impression</a>
         <a class="btn btn-ghost" href="decoupe-laser.html#devis">Estimer une découpe</a>
       </div>
+      <label class="quickdrop" id="quickDrop" for="quickFile">
+        <input type="file" id="quickFile" hidden accept=".stl,.3mf,.step,.stp,.svg,.dxf,.pdf,.ai">
+        <span class="quickdrop-t">Vous avez déjà un fichier ? Déposez-le ici</span>
+        <span class="quickdrop-s">STL, 3MF, STEP → impression 3D · SVG, DXF, PDF, AI → découpe laser</span>
+      </label>
+      <p class="msg is-error" id="quickMsg" role="alert" hidden></p>
     </div>
     <div class="home-hero-media" data-reveal>
       <figure>
-        <img src="portfolio/img/let-it-snow-2.jpg" alt="Sapin de Noël mécanique imprimé en 3D, les cadeaux tournent autour du sapin" width="950" height="1266" fetchpriority="high">
+        <img src="portfolio/img/let-it-snow-2-800.webp" srcset="portfolio/img/let-it-snow-2-800.webp 800w, portfolio/img/let-it-snow-2.webp 1400w" sizes="(max-width: 860px) 100vw, 50vw" alt="Sapin de Noël mécanique imprimé en 3D, les cadeaux tournent autour du sapin" width="950" height="1266" fetchpriority="high">
         <figcaption>Impression 3D · Let it snow !</figcaption>
       </figure>
       <figure>
-        <img src="portfolio/img/tableau-multicouche-personnage-1.jpg" alt="Silhouette en bois multicouche découpée et gravée au laser" width="728" height="1362">
+        <img src="portfolio/img/tableau-multicouche-personnage-1-800.webp" srcset="portfolio/img/tableau-multicouche-personnage-1-800.webp 800w, portfolio/img/tableau-multicouche-personnage-1.webp 1400w" sizes="(max-width: 700px) 50vw, 25vw" alt="Silhouette en bois multicouche découpée et gravée au laser" width="728" height="1362">
         <figcaption>Découpe laser · Silhouette multicouche</figcaption>
       </figure>
     </div>
@@ -78,6 +100,15 @@
     </a>
   </section>
 
+  <section class="promises-band" aria-label="Engagements">
+    <ul class="wrap promises promises-compact">
+      <li data-reveal><strong>Réponse sous <span data-delay="reply">48 h</span></strong><span>par email, téléphone ou WhatsApp</span></li>
+      <li data-reveal><strong>Fabrication en <span data-delay="make">3 à 7 jours</span></strong><span>après validation du devis</span></li>
+      <li data-reveal><strong>Rien à payer sur le site</strong><span>devis définitif envoyé par email</span></li>
+      <li data-reveal><strong>Aperçu à valider</strong><span>avant toute création sur mesure</span></li>
+    </ul>
+  </section>
+
   <section class="section" aria-labelledby="teaser-title">
     <div class="wrap">
       <div class="section-head" data-reveal>
@@ -85,23 +116,30 @@
         <a class="link-more" href="portfolio.html">Tout le portfolio <span aria-hidden="true">→</span></a>
       </div>
       <div class="teaser">
-        <a class="teaser-big" href="portfolio.html#machine-a-vagues" data-reveal><img src="portfolio/img/machine-a-vagues-1.jpg" alt="" loading="lazy"><span>Machine à vagues</span></a>
-        <a href="portfolio.html#tableaux-multicouches-fetes" data-reveal><img src="portfolio/img/tableaux-multicouches-fetes-1.jpg" alt="" loading="lazy"><span>Tableaux multicouches</span></a>
-        <a href="portfolio.html#glaces-usb" data-reveal><img src="portfolio/img/glaces-usb-1.jpg" alt="" loading="lazy"><span>Glaces USB</span></a>
-        <a href="portfolio.html#spookslot" data-reveal><img src="portfolio/img/spookslot-2.jpg" alt="" loading="lazy"><span>Spookslot</span></a>
-        <a href="portfolio.html#cadenas-escape-room" data-reveal><img src="portfolio/img/cadenas-escape-room-1.jpg" alt="" loading="lazy"><span>Cadenas escape room</span></a>
+        <a class="teaser-big" href="portfolio.html#machine-a-vagues" data-reveal><img src="portfolio/img/machine-a-vagues-1-800.webp" srcset="portfolio/img/machine-a-vagues-1-800.webp 800w, portfolio/img/machine-a-vagues-1.webp 1400w" sizes="(max-width: 860px) 100vw, 50vw" alt="" loading="lazy"><span>Machine à vagues</span></a>
+        <a href="portfolio.html#tableaux-multicouches-fetes" data-reveal><img src="portfolio/img/tableaux-multicouches-fetes-1-800.webp" srcset="portfolio/img/tableaux-multicouches-fetes-1-800.webp 800w, portfolio/img/tableaux-multicouches-fetes-1.webp 1400w" sizes="(max-width: 700px) 50vw, 25vw" alt="" loading="lazy"><span>Tableaux multicouches</span></a>
+        <a href="portfolio.html#glaces-usb" data-reveal><img src="portfolio/img/glaces-usb-1-800.webp" srcset="portfolio/img/glaces-usb-1-800.webp 800w, portfolio/img/glaces-usb-1.webp 1400w" sizes="(max-width: 700px) 50vw, 25vw" alt="" loading="lazy"><span>Glaces USB</span></a>
+        <a href="portfolio.html#spookslot" data-reveal><img src="portfolio/img/spookslot-2-800.webp" srcset="portfolio/img/spookslot-2-800.webp 800w, portfolio/img/spookslot-2.webp 1400w" sizes="(max-width: 700px) 50vw, 25vw" alt="" loading="lazy"><span>Spookslot</span></a>
+        <a href="portfolio.html#cadenas-escape-room" data-reveal><img src="portfolio/img/cadenas-escape-room-1-800.webp" srcset="portfolio/img/cadenas-escape-room-1-800.webp 800w, portfolio/img/cadenas-escape-room-1.webp 1400w" sizes="(max-width: 700px) 50vw, 25vw" alt="" loading="lazy"><span>Cadenas escape room</span></a>
       </div>
+    </div>
+  </section>
+
+  <section class="section reviews-section" aria-labelledby="rev-title" data-render-section="reviews" hidden>
+    <div class="wrap">
+      <h2 id="rev-title" data-reveal>Ils m'ont confié un projet</h2>
+      <div class="reviews" data-render="reviews"></div>
     </div>
   </section>
 
   <section class="section maker-section" aria-labelledby="maker-title">
     <div class="wrap maker">
-      <img src="portfolio/img/colin-1.jpg" alt="Portrait de Colin Ehret" width="933" height="1400" loading="lazy" data-reveal>
+      <img src="portfolio/img/colin-1-800.webp" srcset="portfolio/img/colin-1-800.webp 800w, portfolio/img/colin-1.webp 1400w" sizes="(max-width: 700px) 50vw, 25vw" alt="Portrait de Colin Ehret" width="933" height="1400" loading="lazy" data-reveal>
       <div class="maker-text" data-reveal>
         <h2 id="maker-title">Une seule personne, du fichier à la pièce</h2>
         <p>Je suis Colin, étudiant ingénieur en plasturgie à l'INSA Strasbourg et passionné d'impression 3D depuis près de 8 ans. Je lis votre fichier, je règle la machine, je fabrique et je vous réponds moi-même.</p>
         <p>Ma règle de design : une pièce doit s'imprimer sur n'importe quelle imprimante, avec le moins de supports possible et sans vis, adhésif ni aimants.</p>
-        <a class="link-more" href="portfolio.html">Voir mes projets <span aria-hidden="true">→</span></a>
+        <p class="maker-links"><a class="link-more" href="atelier.html">Comment je travaille <span aria-hidden="true">→</span></a> <a class="link-more" href="portfolio.html">Voir mes projets <span aria-hidden="true">→</span></a></p>
       </div>
     </div>
   </section>
@@ -109,19 +147,28 @@
 
 <footer class="footer">
   <div class="wrap footer-in">
-    <span data-brand>impression_ant</span>
-    <nav aria-label="Pied de page">
-      <a href="impression-3d.html">Impression 3D</a>
-      <a href="decoupe-laser.html">Découpe laser</a>
-      <a href="portfolio.html">Portfolio</a>
-      <a href="cgv.html">Conditions de vente</a>
-      <a href="mentions-legales.html">Mentions légales</a>
-    </nav>
+    <div class="footer-top">
+      <div class="footer-contact">
+        <p>Une question, un projet ? Je réponds sous <span data-delay="reply">48 h</span>.</p>
+        <p><a class="btn" href="demande.html">Décrire mon projet</a> <a class="footer-mail" href="mailto:impression.ant.laser@gmail.com" data-contact-email>impression.ant.laser@gmail.com</a></p>
+      </div>
+      <nav aria-label="Pied de page">
+        <a href="impression-3d.html">Impression 3D</a>
+        <a href="decoupe-laser.html">Découpe laser</a>
+        <a href="portfolio.html">Portfolio</a>
+        <a href="atelier.html">L'atelier et FAQ</a>
+        <a href="cgv.html">Conditions de vente</a>
+        <a href="mentions-legales.html">Mentions légales</a>
+      </nav>
+    </div>
+    <span class="footer-brand" data-brand>impression_ant</span>
   </div>
 </footer>
 
 <script src="js/config.js"></script>
 <script src="js/layout.js"></script>
+<script src="js/content.js"></script>
+<script src="js/home.js"></script>
 <script src="js/motion.js"></script>
 </body>
 </html>

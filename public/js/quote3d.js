@@ -43,15 +43,21 @@
         <h4>${esc(g.group)}</h4>
         <div class="swatches">${g.items.map(c => `<button type="button" class="swatch" data-id="${c.id}" aria-pressed="${c.id === s3.color.id}"><i style="background:${c.swatch}"></i>${esc(c.label)}</button>`).join("")}</div>
       </div>`).join("");
-    tintMesh();
+    tintMesh(); showColorPhoto();
   }
   $("#colors3d").addEventListener("click", e => {
     const b = e.target.closest(".swatch"); if (!b) return;
     const all = (P.colors[s3.material] || []).flatMap(g => g.items);
     s3.color = all.find(c => c.id === b.dataset.id);
     $$(".swatch", $("#colors3d")).forEach(x => x.setAttribute("aria-pressed", x === b ? "true" : "false"));
-    tintMesh();
+    tintMesh(); showColorPhoto();
   });
+  function showColorPhoto() {
+    const box = $("#colorPhoto3d"); if (!box) return;
+    const ph = s3.color && s3.color.photo;
+    box.hidden = !ph;
+    if (ph) box.innerHTML = `<img src="${esc(ph)}" alt="Échantillon imprimé : ${esc(s3.color.label)}" loading="lazy"><span>Échantillon réel · ${esc(s3.color.label)}</span>`;
+  }
 
   // Solidité
   $("#infill3d").innerHTML = P.infillOptions.map(o => `<option value="${o.id}">${esc(o.label)}</option>`).join("");
@@ -65,12 +71,13 @@
       const tris = await Geometry.readMeshFile(file);
       const m = Geometry.measure(tris, P.estimate.supportAngle);
       if (!m.closed || m.volume < 1) throw new Error("Le volume de la pièce est nul : le maillage est probablement ouvert ou vide.");
-      s3.metrics = m; s3.file = file;
+      s3.metrics = m; s3.file = file; s3.tris = tris; s3.scale = 1;
       $("#fname3d").textContent = file.name;
       $("#drop3d").hidden = true; $("#viewer3d").hidden = false;
       showMsg(msg, "");
       showMesh(tris);
       update3d();
+      window.UI.toast("Fichier analysé");
     } catch (err) {
       console.error(err);
       showMsg(msg, err.message || "Ce fichier n'a pas pu être lu.", "error");
@@ -105,9 +112,21 @@
     const tooBig = sortD(m.size).some((v, i) => v > sortD(P.maxSize)[i]);
     const notes = [];
     if (tooBig) notes.push(`La pièce dépasse le volume d'impression (${P.maxSize.join(" × ")} mm). Elle devra être découpée en plusieurs parties : le prix sera ajusté.`);
-    if (m.size.every(v => v < 2)) notes.push("La pièce est minuscule : votre fichier est peut-être en mètres ou en pouces au lieu de millimètres.");
-    if (m.size.some(v => v > 2000)) notes.push("La pièce est énorme : votre fichier est peut-être en microns au lieu de millimètres.");
-    warn.textContent = notes.join(" "); warn.hidden = !notes.length;
+    const fixes = [];
+    const maxDim = Math.max(...m.size);
+    if (maxDim < 15 && s3.scale === 1) {
+      notes.push(`La pièce ne mesure que ${fmtSize(m.size)} : votre fichier est peut-être en pouces ou en centimètres au lieu de millimètres.`);
+      fixes.push([25.4, "C'est en pouces (× 25,4)"], [10, "C'est en centimètres (× 10)"]);
+      if (maxDim < 2) fixes.push([1000, "C'est en mètres (× 1000)"]);
+    }
+    if (maxDim > 2000 && s3.scale === 1) {
+      notes.push("La pièce est énorme : votre fichier est peut-être en microns au lieu de millimètres.");
+      fixes.push([0.001, "C'est en microns (÷ 1000)"]);
+    }
+    if (s3.scale !== 1) notes.push(`Dimensions converties (× ${nf(s3.scale < 1 ? 3 : 1).format(s3.scale)}).`), fixes.push([1 / s3.scale, "Annuler la conversion"]);
+    warn.innerHTML = notes.map(n => `<span>${esc(n)}</span>`).join(" ") + (fixes.length ? `<span class="warn-actions">${fixes.map(([k, l]) => `<button type="button" class="btn btn-small btn-ghost" data-scale="${k}">${esc(l)}</button>`).join("")}</span>` : "");
+    warn.hidden = !notes.length;
+    const dims = $("#dims3d"); if (dims) dims.textContent = fmtSize(m.size);
     $("#ask3d").disabled = false;
   }
 
@@ -121,19 +140,30 @@
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(35, 1, 0.1, 100000);
     camera.up.set(0, 0, 1);
-    scene.add(new THREE.HemisphereLight(0xffffff, 0x8a7f74, 0.85));
-    const key = new THREE.DirectionalLight(0xffffff, 0.75); key.position.set(1, -1.4, 2); scene.add(key);
-    const material = new THREE.MeshStandardMaterial({ color: 0xC1A88A, roughness: 0.55, metalness: 0.05 });
+    renderer.outputEncoding = THREE.sRGBEncoding;
+    scene.add(new THREE.HemisphereLight(0xffffff, 0x8a7f74, 0.7));
+    const key = new THREE.DirectionalLight(0xffffff, 0.8); key.position.set(1, -1.4, 2); scene.add(key);
+    const rim = new THREE.DirectionalLight(0xffffff, 0.35); rim.position.set(-1.5, 1.2, 0.8); scene.add(rim);
+    const material = new THREE.MeshStandardMaterial({ color: 0xC1A88A, roughness: 0.6, metalness: 0.0 });
     const controls = THREE.OrbitControls ? new THREE.OrbitControls(camera, canvas) : null;
     const render = () => renderer.render(scene, camera);
-    if (controls) { controls.enableDamping = false; controls.addEventListener("change", render); }
+    const still = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    let spinning = false;
+    const loop = () => { if (!spinning) return; controls.update(); render(); requestAnimationFrame(loop); };
+    const spin = (on) => { if (!controls || still) return; controls.autoRotate = on; if (on && !spinning) { spinning = true; requestAnimationFrame(loop); } else if (!on) spinning = false; };
+    if (controls) {
+      controls.enableDamping = false; controls.autoRotateSpeed = 1.4;
+      controls.addEventListener("change", () => { if (!spinning) render(); });
+      // la rotation automatique s'arrête dès que le client manipule la pièce
+      controls.addEventListener("start", () => spin(false));
+    }
     const resize = () => {
       const w = canvas.clientWidth, h = canvas.clientHeight;
       if (!w || !h) return;
       renderer.setSize(w, h, false); camera.aspect = w / h; camera.updateProjectionMatrix(); render();
     };
     new ResizeObserver(resize).observe(canvas);
-    viewer = { renderer, scene, camera, controls, material, mesh: null, grid: null, render, resize };
+    viewer = { renderer, scene, camera, controls, material, mesh: null, grid: null, render, resize, spin };
     return viewer;
   }
   function showMesh(tris) {
@@ -156,6 +186,7 @@
     if (v.controls) { v.controls.target.set(0, 0, size.z / 2); v.controls.update(); } else v.camera.lookAt(0, 0, size.z / 2);
     tintMesh();
     requestAnimationFrame(v.resize);
+    v.spin(true);
   }
   function tintMesh() {
     if (!viewer || !s3.color) return;
@@ -164,8 +195,31 @@
     viewer.render();
   }
 
+  // conversion d'unités proposée dans l'avertissement
+  $("#warn3d").addEventListener("click", e => {
+    const b = e.target.closest("[data-scale]"); if (!b || !s3.tris) return;
+    const k = +b.dataset.scale;
+    const t = new Float32Array(s3.tris.length);
+    for (let i = 0; i < t.length; i++) t[i] = s3.tris[i] * k;
+    s3.tris = t; s3.scale = Math.abs(s3.scale * k - 1) < 1e-6 ? 1 : s3.scale * k;
+    s3.metrics = Geometry.measure(t, P.estimate.supportAngle);
+    showMesh(t); update3d();
+    window.UI.toast(s3.scale === 1 ? "Dimensions d'origine" : "Dimensions converties");
+  });
+
+  // comparaison des matières
+  const TRAITS = [["rigidite", "Rigidité"], ["souplesse", "Souplesse"], ["chaleur", "Tenue à la chaleur"], ["exterieur", "Extérieur, UV, humidité"]];
+  const cmp = $("#cmp3d");
+  if (cmp && P.materials.every(m => m.traits)) {
+    cmp.innerHTML = `<table class="cmp"><caption class="sr-only">Comparaison des matières</caption>
+      <thead><tr><th scope="col"><span class="sr-only">Critère</span></th>${P.materials.map(m => `<th scope="col">${esc(m.label)}</th>`).join("")}</tr></thead>
+      <tbody>${TRAITS.map(([k, l]) => `<tr><th scope="row">${l}</th>${P.materials.map(m => `<td><span class="meter" style="--v:${m.traits[k]}" role="img" aria-label="${m.traits[k]} sur 3"></span></td>`).join("")}</tr>`).join("")}
+      <tr><th scope="row">Idéal pour</th>${P.materials.map(m => `<td>${esc(m.best || "")}</td>`).join("")}</tr></tbody></table>`;
+  }
+
   renderColors();
   update3d();
+  window.UI.pickUpPendingFile($("#file3d"));
 
   $("#ask3d").addEventListener("click", () => {
     const m = s3.metrics, e = s3.estimate;

@@ -5,15 +5,28 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Découpe laser · impression_ant</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<meta name="description" content="Découpe et gravure laser sur bois et carton, tampons, et création de fichiers de découpe sur mesure.">
+<meta name="description" content="Découpe et gravure laser, création de fichiers multicouches et tampons. Devis instantané depuis votre fichier SVG, DXF, PDF ou AI.">
+<meta name="theme-color" content="#ECEAE7">
+<link rel="canonical" href="https://impressionant.fr/decoupe-laser.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="impression_ant">
+<meta property="og:locale" content="fr_FR">
+<meta property="og:title" content="Découpe laser · impression_ant">
+<meta property="og:description" content="Découpe et gravure laser, création de fichiers multicouches et tampons. Devis instantané depuis votre fichier SVG, DXF, PDF ou AI.">
+<meta property="og:url" content="https://impressionant.fr/decoupe-laser.html">
+<meta property="og:image" content="https://impressionant.fr/img/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="img/favicon.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@112,600;112,800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="apple-touch-icon" href="img/favicon.png">
+<link rel="preload" href="fonts/archivo-var.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/plex-sans-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body class="theme-laser">
 
+<a class="skip" href="#contenu">Aller au contenu</a>
 <header class="topbar">
   <div class="wrap topbar-in">
     <a class="brand" href="index.html" aria-label="Accueil impression_ant">
@@ -23,10 +36,13 @@
       </span>
       <span class="brand-name" data-brand>impression_ant</span>
     </a>
-    <nav class="nav" aria-label="Pages du site">
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-pages"><span class="nav-toggle-bars" aria-hidden="true"></span><span class="nav-toggle-label">Menu</span></button>
+    <nav class="nav" id="nav-pages" aria-label="Pages du site">
       <a href="impression-3d.html"><img src="img/logo-3d.png" alt="" width="18" height="18">Impression 3D</a>
       <a href="decoupe-laser.html" aria-current="page"><img src="img/logo-laser.png" alt="" width="18" height="18">Découpe laser</a>
       <a href="portfolio.html">Portfolio</a>
+      <a href="atelier.html">L'atelier</a>
+      <a class="nav-cta" href="demande.html">Décrire mon projet</a>
     </nav>
   </div>
 </header>
@@ -39,7 +55,7 @@
         <h1>Découpe &amp; gravure laser</h1>
         <p>Découpes multicouches, signalétique, décoration, tampons. Je dessine votre fichier de découpe à partir d'une idée, d'un logo ou d'une photo, ou je découpe directement le vôtre.</p>
       </div>
-      <figure class="page-hero-photo"><img src="portfolio/img/tableaux-multicouches-fetes-1.jpg" alt="Deux tableaux multicouches en contreplaqué découpés et gravés au laser" width="1600" height="1050" fetchpriority="high"></figure>
+      <figure class="page-hero-photo"><img src="portfolio/img/tableaux-multicouches-fetes-1-800.webp" srcset="portfolio/img/tableaux-multicouches-fetes-1-800.webp 800w, portfolio/img/tableaux-multicouches-fetes-1.webp 1400w" sizes="(max-width: 860px) 100vw, 50vw" alt="Deux tableaux multicouches en contreplaqué découpés et gravés au laser" width="1600" height="1050" fetchpriority="high"></figure>
     </div>
   </section>
   <section class="section" aria-labelledby="flowl-title">
@@ -59,7 +75,7 @@
               <div class="step" data-n="2"><strong>Je dessine le fichier</strong><span>découpe, gravure, multicouche si besoin</span></div>
               <div class="step" data-n="3"><strong>Vous validez l'aperçu</strong><span>je l'ajuste si besoin avant la découpe</span></div>
             </div>
-            <a class="btn btn-small lane-cta" href="#creation">Décrire mon idée</a>
+            <a class="btn btn-small lane-cta" href="demande.html?type=laser">Décrire mon idée</a>
           </div>
           <div class="lane">
             <span class="lane-label">Oui, j'ai mon fichier</span>
@@ -97,68 +113,11 @@
             <li>Pièce découpée et envoyée, ou fichier seul pour votre machine</li>
           </ul>
         </div>
-        <form class="idea-form" id="ideaForm" novalidate>
-          <fieldset class="opt">
-            <legend>Ce dont vous avez besoin</legend>
-            <div class="seg" id="ideaNeed" role="radiogroup">
-              <button type="button" role="radio" aria-pressed="true" aria-checked="true" data-v="Fichier + découpe">Le fichier et la pièce découpée</button>
-              <button type="button" role="radio" aria-pressed="false" aria-checked="false" data-v="Fichier seul">Uniquement le fichier</button>
-            </div>
-          </fieldset>
-          <div class="field">
-            <label for="ideaDesc">Votre idée</label>
-            <textarea id="ideaDesc" rows="5" required placeholder="Ex. : un panneau prénom en 3 couches pour une chambre d'enfant, un logo d'entreprise gravé sur des sous-verres, une boîte de rangement à encoches…"></textarea>
-          </div>
-          <div class="opt-row">
-            <div class="opt">
-              <label for="ideaSize">Dimensions approximatives</label>
-              <input type="text" id="ideaSize" placeholder="Ex. : 30 × 20 cm">
-            </div>
-            <div class="opt">
-              <label for="ideaMat">Matériau</label>
-              <select id="ideaMat"></select>
-            </div>
-          </div>
-          <div class="opt-row">
-            <div class="opt">
-              <label for="ideaQty">Quantité</label>
-              <input type="number" id="ideaQty" min="1" max="1000" value="1" inputmode="numeric">
-            </div>
-            <div class="opt">
-              <label for="ideaWhen">Délai souhaité</label>
-              <select id="ideaWhen">
-                <option>Pas pressé</option>
-                <option>Sous 2 semaines</option>
-                <option>Sous 1 semaine</option>
-                <option>Date précise (à indiquer)</option>
-              </select>
-            </div>
-          </div>
-          <div class="field">
-            <label for="ideaFiles">Images de référence <span class="opt-label">(facultatif : logo, photo, croquis · 5 fichiers, 8 Mo au total)</span></label>
-            <input type="file" id="ideaFiles" multiple accept="image/*,.pdf,.svg,.ai,.dxf">
-          </div>
-          <div class="field">
-            <label for="ideaEmail">Votre email</label>
-            <input type="email" id="ideaEmail" required autocomplete="email" placeholder="vous@exemple.fr">
-          </div>
-          <div class="hp" aria-hidden="true"><label for="ideaWebsite">Site web</label><input type="text" id="ideaWebsite" tabindex="-1" autocomplete="off"></div>
-          <div class="field-check">
-            <input type="checkbox" id="ideaConsent" required>
-            <label for="ideaConsent">J'accepte que mon email, mon message et mes fichiers soient utilisés uniquement pour répondre à ma demande.</label>
-          </div>
-          <p class="msg" id="ideaMsg" role="status" hidden></p>
-          <button class="btn" type="submit" id="ideaSend">Envoyer mon idée</button>
-          <div class="idea-done" id="ideaDone" hidden>
-            <h3>Idée bien reçue !</h3>
-            <p>Je vous réponds par email avec mes questions éventuelles, un premier aperçu et le devis.</p>
-          </div>
-          <div class="idea-done" id="ideaFallback" hidden>
-            <h3>L'envoi automatique n'a pas fonctionné</h3>
-            <p>Copiez ce récapitulatif et envoyez-le par email avec vos images.</p>
-            <textarea id="ideaFbText" rows="7" readonly></textarea>
-          </div>
-        </form>
+        <div class="idea-cta">
+          <p class="idea-cta-t">Quatre questions, deux minutes.</p>
+          <p>Votre type de projet, une description, vos images si vous en avez, et comment vous recontacter. Je vous réponds sous <span data-delay="reply">48 h</span> avec mes questions et un devis.</p>
+          <a class="btn" href="demande.html?type=laser">Décrire mon idée</a>
+        </div>
       </div>
     </div>
   </section>
@@ -265,14 +224,21 @@
 
 <footer class="footer">
   <div class="wrap footer-in">
-    <span data-brand>impression_ant</span>
-    <nav aria-label="Pied de page">
-      <a href="impression-3d.html">Impression 3D</a>
-      <a href="decoupe-laser.html">Découpe laser</a>
-      <a href="portfolio.html">Portfolio</a>
-      <a href="cgv.html">Conditions de vente</a>
-      <a href="mentions-legales.html">Mentions légales</a>
-    </nav>
+    <div class="footer-top">
+      <div class="footer-contact">
+        <p>Une question, un projet ? Je réponds sous <span data-delay="reply">48 h</span>.</p>
+        <p><a class="btn" href="demande.html">Décrire mon projet</a> <a class="footer-mail" href="mailto:impression.ant.laser@gmail.com" data-contact-email>impression.ant.laser@gmail.com</a></p>
+      </div>
+      <nav aria-label="Pied de page">
+        <a href="impression-3d.html">Impression 3D</a>
+        <a href="decoupe-laser.html">Découpe laser</a>
+        <a href="portfolio.html">Portfolio</a>
+        <a href="atelier.html">L'atelier et FAQ</a>
+        <a href="cgv.html">Conditions de vente</a>
+        <a href="mentions-legales.html">Mentions légales</a>
+      </nav>
+    </div>
+    <span class="footer-brand" data-brand>impression_ant</span>
   </div>
 </footer>
 <dialog class="modal" id="modal" aria-labelledby="modal-title">
@@ -327,7 +293,7 @@
 <script src="js/geometry.js"></script>
 <script src="js/vector.js"></script>
 <script src="js/request.js"></script>
+<script src="js/price.js"></script>
 <script src="js/quotelaser.js"></script>
-<script src="js/ideaform.js"></script>
 </body>
 </html>

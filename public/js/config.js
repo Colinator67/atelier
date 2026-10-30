@@ -12,6 +12,38 @@ window.SITE_CONFIG = {
   // Anti-spam Cloudflare Turnstile (facultatif) : colle ta "site key" ici pour l'activer
   turnstileSiteKey: "",
 
+  // ---- Engagements affichés sur le site (à ajuster) ---------------------
+  delays: {
+    reply: "24 à 48 h",                 // délai de première réponse
+    make: "3 à 7 jours",                // délai de fabrication habituel après validation
+    shipping: "Colissimo ou remise en main propre"
+  },
+
+  // ---- Avis clients réels (la section reste cachée tant que la liste est vide)
+  // { name: "Julie", city: "Strasbourg", text: "…", project: "Tableau multicouche", photo: "portfolio/img/xxx.jpg" }
+  reviews: [],
+
+  // ---- Machines de l'atelier (page « L'atelier ») -----------------------
+  // photo facultative : "img/atelier/x1c.jpg"
+  machines: [
+    { name: "Bambu Lab X1-Carbon", kind: "Impression 3D FDM", detail: "Pièces multicolores jusqu'à 256 × 256 × 256 mm" },
+    { name: "Bambu Lab A1 mini", kind: "Impression 3D FDM", detail: "Petites pièces et séries rapides" },
+    { name: "Snapmaker U1", kind: "Impression 3D FDM", detail: "Multimatière à changement d'outil" },
+    { name: "xTool M1 Ultra", kind: "Découpe et gravure laser", detail: "Bois, MDF, carton jusqu'à 300 × 300 mm" }
+  ],
+
+  // ---- Questions fréquentes (page « L'atelier ») -------------------------
+  faq: [
+    { q: "Le prix du simulateur est-il définitif ?", a: "Non, c'est une estimation calculée à partir de votre fichier. Je vérifie le fichier et vous envoie un devis définitif par email avant toute fabrication. Rien n'est payé sur le site." },
+    { q: "Comment se passe le paiement ?", a: "Les modalités sont indiquées sur le devis. La fabrication démarre après votre accord écrit et le paiement ou l'acompte prévu." },
+    { q: "Combien de temps faut-il ?", a: "Je réponds sous {reply}. La fabrication prend en général {make} après validation du devis ; le délai exact est écrit sur le devis." },
+    { q: "Comment la pièce m'est-elle livrée ?", a: "Par {shipping}. Les frais de port sont indiqués à part sur le devis." },
+    { q: "Et si mon fichier n'est pas imprimable ?", a: "Je vous le signale avant fabrication, avec ce qui pose problème. Je peux corriger le fichier ou le remodéliser : c'est précisé sur le devis." },
+    { q: "Je n'ai pas de fichier, seulement une idée.", a: "C'est fréquent. Décrivez votre projet, ajoutez une photo ou un croquis : je modélise la pièce ou je dessine le fichier de découpe, et vous validez un aperçu avant la fabrication." },
+    { q: "Les couleurs et l'aspect sont-ils garantis ?", a: "Les couleurs à l'écran sont indicatives. L'impression 3D laisse de fines lignes de couches et la découpe laser des bords légèrement brunis : c'est propre à ces techniques, pas un défaut." },
+    { q: "Puis-je retourner une pièce ?", a: "Les pièces faites sur mesure ne sont pas concernées par le droit de rétractation. En cas de défaut, envoyez-moi des photos : je propose une réparation, un remplacement ou un remboursement selon la garantie légale." }
+  ],
+
   // ---- Impression 3D ---------------------------------------------------
   print: {
     pricePerKg: 17,          // €/kg, tous matériaux
@@ -34,9 +66,9 @@ window.SITE_CONFIG = {
       { id: "plein",    label: "Plein (100 %)",   value: 1.00 }
     ],
     materials: [
-      { id: "PLA",  label: "PLA",  density: 1.24, flow: 10,  note: "Rigide, large choix de couleurs et d'effets" },
-      { id: "PETG", label: "PETG", density: 1.27, flow: 8,   note: "Plus résistant à la chaleur et aux chocs" },
-      { id: "TPU",  label: "TPU",  density: 1.21, flow: 3.5, note: "Souple, type caoutchouc" }
+      { id: "PLA",  label: "PLA",  density: 1.24, flow: 10,  note: "Rigide, large choix de couleurs et d'effets", traits: { rigidite: 3, souplesse: 0, chaleur: 1, exterieur: 1 }, best: "Déco, prototypes, figurines" },
+      { id: "PETG", label: "PETG", density: 1.27, flow: 8,   note: "Plus résistant à la chaleur et aux chocs", traits: { rigidite: 2, souplesse: 1, chaleur: 2, exterieur: 3 }, best: "Pièces mécaniques, extérieur, voiture" },
+      { id: "TPU",  label: "TPU",  density: 1.21, flow: 3.5, note: "Souple, type caoutchouc", traits: { rigidite: 0, souplesse: 3, chaleur: 1, exterieur: 2 }, best: "Joints, coques, pièces anti-choc" }
     ],
     // flow = débit moyen réel en mm³/s (déplacements compris). Sert au calcul du temps.
     colors: {

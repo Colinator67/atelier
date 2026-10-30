@@ -7,6 +7,10 @@
      RESEND_API_KEY       clé API Resend pour recevoir aussi un email (facultatif)
      NOTIFY_EMAIL         ton adresse, destinataire des emails
      FROM_EMAIL           expéditeur (par défaut : "Devis <onboarding@resend.dev>")
+     CONFIRM_FROM         expéditeur de l'email de confirmation envoyé au client, sur ton domaine
+                          vérifié dans Resend, ex. "impression_ant <contact@impressionant.fr>".
+                          Sans cette variable, aucun email n'est envoyé au client.
+     REPLY_DELAY          délai de réponse annoncé dans la confirmation (défaut : "48 h")
      TURNSTILE_SECRET     clé secrète Turnstile si l'anti-spam est activé (facultatif)
    ========================================================================= */
 
@@ -20,14 +24,29 @@ async function handleRequest(request, env) {
   catch { return json({ ok: false, error: "Demande illisible." }, 400); }
 
   const email = String(form.get("email") || "").trim();
+  const phone = String(form.get("phone") || "").replace(/[\s.\-()]/g, "").slice(0, 20);
+  const name = String(form.get("name") || "").trim().slice(0, 80);
+  const contact = String(form.get("contact") || "email").split(",").map(c => c.trim()).filter(c => ["email", "phone", "sms", "whatsapp"].includes(c));
   const message = String(form.get("message") || "").trim().slice(0, 3000);
   const summary = String(form.get("summary") || "").trim().slice(0, 3000);
   const kind = String(form.get("kind") || "Demande").slice(0, 60);
   const files = form.getAll("file").filter(f => f && typeof f === "object" && f.size > 0).slice(0, 5);
 
   if (form.get("website")) return json({ ok: true }); // robot
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email) || email.length > 200)
-    return json({ ok: false, error: "Adresse email invalide." }, 400);
+  const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email) && email.length <= 200;
+  const phoneOk = /^(\+\d{8,15}|0\d{9})$/.test(phone);
+  if (email && !emailOk) return json({ ok: false, error: "Adresse email invalide." }, 400);
+  if (phone && !phoneOk) return json({ ok: false, error: "Numéro de téléphone invalide." }, 400);
+  if (!emailOk && !phoneOk) return json({ ok: false, error: "Indiquez un email ou un numéro pour que je puisse vous répondre." }, 400);
+
+  const id = requestId();
+  const LABEL = { email: "Email", phone: "Appel", sms: "SMS", whatsapp: "WhatsApp" };
+  const contactTxt = [
+    name ? `Prénom : ${name}` : "",
+    emailOk ? `Email : ${email}` : "",
+    phoneOk ? `Tél. : ${phone}` + (phone ? ` · WhatsApp : https://wa.me/${phone.replace(/^0/, "33").replace(/^\+/, "")}` : "") : "",
+    `Préfère : ${(contact.length ? contact : ["email"]).map(c => LABEL[c]).join(", ")}`
+  ].filter(Boolean).join("\n");
 
   // Anti-spam Turnstile
   if (env.TURNSTILE_SECRET) {
@@ -55,10 +74,10 @@ async function handleRequest(request, env) {
     const payload = {
       username: "Devis du site",
       embeds: [{
-        title: `Nouvelle demande · ${kind}`,
+        title: `Demande ${id} · ${kind}`,
         color: kind.startsWith("Impression") ? 0xC1A88A : 0x4C4C4C,
         fields: [
-          { name: "Client", value: email },
+          { name: "Client", value: contactTxt.slice(0, 1000) },
           { name: "Récapitulatif", value: "```\n" + summary.slice(0, 1000) + "\n```" },
           { name: "Précisions", value: message ? message.slice(0, 1000) : "—" },
           { name: "Fichier", value: fileNote }
@@ -77,8 +96,8 @@ async function handleRequest(request, env) {
   if (env.RESEND_API_KEY && env.NOTIFY_EMAIL) {
     const attachments = [];
     for (const f of attached) attachments.push({ filename: f.name, content: toBase64(new Uint8Array(await f.arrayBuffer())) });
-    const html = `<h2>Nouvelle demande · ${escapeHtml(kind)}</h2>
-      <p><strong>Client :</strong> <a href="mailto:${escapeHtml(email)}">${escapeHtml(email)}</a></p>
+    const html = `<h2>Demande ${id} · ${escapeHtml(kind)}</h2>
+      <p><strong>Client :</strong><br>${escapeHtml(contactTxt).replace(/\n/g, "<br>")}</p>
       <pre style="background:#f2f0ed;padding:12px;border-radius:6px">${escapeHtml(summary)}</pre>
       <p><strong>Précisions :</strong><br>${escapeHtml(message || "—").replace(/\n/g, "<br>")}</p>
       <p><strong>Fichier :</strong> ${escapeHtml(fileNote)}</p>
@@ -89,8 +108,8 @@ async function handleRequest(request, env) {
       body: JSON.stringify({
         from: env.FROM_EMAIL || "Devis <onboarding@resend.dev>",
         to: [env.NOTIFY_EMAIL],
-        reply_to: email,
-        subject: `Demande de devis · ${kind} · ${email}`,
+        ...(emailOk ? { reply_to: email } : {}),
+        subject: `Demande ${id} · ${kind} · ${emailOk ? email : phone}`,
         html,
         attachments
       })
@@ -100,7 +119,35 @@ async function handleRequest(request, env) {
 
   if (!results.length) return json({ ok: false, error: "L'envoi n'est pas encore configuré sur ce site." }, 503);
   if (!results.some(Boolean)) return json({ ok: false }, 502);
-  return json({ ok: true });
+
+  // ---------------------------------------------------------------- Confirmation au client
+  let confirmation = false;
+  if (emailOk && env.RESEND_API_KEY && env.CONFIRM_FROM) {
+    const delay = env.REPLY_DELAY || "48 h";
+    const hello = name ? `Bonjour ${escapeHtml(name)},` : "Bonjour,";
+    const chtml = `<div style="font-family:system-ui,-apple-system,Segoe UI,sans-serif;font-size:16px;line-height:1.55;color:#2A2928;max-width:560px">
+      <p>${hello}</p>
+      <p>J'ai bien reçu votre demande <strong>${id}</strong> (${escapeHtml(kind)}). Je la lis et je vous réponds sous ${escapeHtml(delay)}.</p>
+      <p style="margin:20px 0 6px;font-weight:600">Votre demande</p>
+      <pre style="white-space:pre-wrap;font-family:inherit;background:#F4F2EF;padding:14px;border-radius:6px;margin:0">${escapeHtml(summary)}${message ? "\n\n" + escapeHtml(message) : ""}</pre>
+      <p style="margin-top:20px">La suite : je vous envoie un devis définitif (avec un aperçu à valider s'il y a une création), puis je fabrique après votre accord. Rien n'est à payer pour l'instant.</p>
+      <p>Pour compléter votre demande, répondez simplement à cet email.</p>
+      <p>Colin<br><span style="color:#6E6A66">impression_ant · impression 3D et découpe laser</span></p>
+    </div>`;
+    const r = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: { "Authorization": `Bearer ${env.RESEND_API_KEY}`, "Content-Type": "application/json" },
+      body: JSON.stringify({
+        from: env.CONFIRM_FROM,
+        to: [email],
+        ...(env.NOTIFY_EMAIL ? { reply_to: env.NOTIFY_EMAIL } : {}),
+        subject: `Demande ${id} bien reçue · impression_ant`,
+        html: chtml
+      })
+    }).catch(() => null);
+    confirmation = !!(r && r.ok);
+  }
+  return json({ ok: true, id, confirmation });
 }
 
 export default {
@@ -117,6 +164,15 @@ export default {
     return env.ASSETS.fetch(request);
   }
 };
+
+// Numéro de demande lisible : IA-AAMMJJ-XXXX (sans 0/O/1/I pour éviter les confusions)
+function requestId() {
+  const d = new Date(Date.now() + 3600e3); // heure de Paris (approx.)
+  const ymd = d.toISOString().slice(2, 10).replace(/-/g, "");
+  const A = "23456789ABCDEFGHJKLMNPQRSTUVWXYZ";
+  const rnd = crypto.getRandomValues(new Uint8Array(4));
+  return `IA-${ymd}-${Array.from(rnd, b => A[b % A.length]).join("")}`;
+}
 
 function toBase64(bytes) {
   let bin = "";

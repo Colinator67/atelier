@@ -5,15 +5,28 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Portfolio · impression_ant</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<meta name="description" content="Portfolio de Colin Ehret : mécanismes imprimés en 3D, commandes sur mesure et modélisation paramétrique.">
+<meta name="description" content="Portfolio de Colin Ehret : mécanismes imprimés en 3D, découpes laser multicouches, commandes sur mesure et modélisation paramétrique.">
+<meta name="theme-color" content="#ECEAE7">
+<link rel="canonical" href="https://impressionant.fr/portfolio.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="impression_ant">
+<meta property="og:locale" content="fr_FR">
+<meta property="og:title" content="Portfolio · impression_ant">
+<meta property="og:description" content="Portfolio de Colin Ehret : mécanismes imprimés en 3D, découpes laser multicouches, commandes sur mesure et modélisation paramétrique.">
+<meta property="og:url" content="https://impressionant.fr/portfolio.html">
+<meta property="og:image" content="https://impressionant.fr/img/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="icon" href="img/favicon.png">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@112,600;112,800&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="apple-touch-icon" href="img/favicon.png">
+<link rel="preload" href="fonts/archivo-var.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/plex-sans-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
+<a class="skip" href="#contenu">Aller au contenu</a>
 <header class="topbar">
   <div class="wrap topbar-in">
     <a class="brand" href="index.html" aria-label="Accueil impression_ant">
@@ -23,10 +36,13 @@
       </span>
       <span class="brand-name" data-brand>impression_ant</span>
     </a>
-    <nav class="nav" aria-label="Pages du site">
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-pages"><span class="nav-toggle-bars" aria-hidden="true"></span><span class="nav-toggle-label">Menu</span></button>
+    <nav class="nav" id="nav-pages" aria-label="Pages du site">
       <a href="impression-3d.html"><img src="img/logo-3d.png" alt="" width="18" height="18">Impression 3D</a>
       <a href="decoupe-laser.html"><img src="img/logo-laser.png" alt="" width="18" height="18">Découpe laser</a>
       <a href="portfolio.html" aria-current="page">Portfolio</a>
+      <a href="atelier.html">L'atelier</a>
+      <a class="nav-cta" href="demande.html">Décrire mon projet</a>
     </nav>
   </div>
 </header>
@@ -37,7 +53,7 @@
       <h1 id="pf-title">Imaginé, modélisé, fabriqué</h1>
       <p class="lede">Photos, impressions et modélisations entièrement réalisées par Colin Ehret : mécanismes imprimés d'un seul tenant, commandes sur mesure et objets paramétriques.</p>
     </div>
-    <div class="pf-strip"><img src="portfolio/img/let-it-snow-1.jpg" alt="Sapin de Noël mécanique imprimé en 3D"></div>
+    <div class="pf-strip"><img src="portfolio/img/let-it-snow-1-800.webp" srcset="portfolio/img/let-it-snow-1-800.webp 800w, portfolio/img/let-it-snow-1.webp 1400w" sizes="(max-width: 860px) 100vw, 50vw" alt="Sapin de Noël mécanique imprimé en 3D"></div>
   </section>
 
   <section class="section" aria-labelledby="projets-title">
@@ -55,7 +71,7 @@
 
   <section class="section" aria-labelledby="about-title">
     <div class="wrap about">
-      <img src="portfolio/img/colin-1.jpg" alt="Portrait de Colin Ehret" loading="lazy">
+      <img src="portfolio/img/colin-1-800.webp" srcset="portfolio/img/colin-1-800.webp 800w, portfolio/img/colin-1.webp 1400w" sizes="(max-width: 700px) 50vw, 25vw" alt="Portrait de Colin Ehret" loading="lazy">
       <div>
         <h3 id="about-title">À propos</h3>
         <p>Étudiant ingénieur en plasturgie à l'INSA Strasbourg, je suis passionné par l'impression 3D depuis près de 8 ans. Les modèles présentés ici viennent de projets personnels, d'études ou de commandes. Je les vois comme un entraînement permanent : je veux maîtriser parfaitement la modélisation 3D pour devenir chef de projet en fabrication additive, ou contribuer à faire progresser cette technologie par la recherche.</p>
@@ -85,14 +101,21 @@
 
 <footer class="footer">
   <div class="wrap footer-in">
-    <span data-brand>impression_ant</span>
-    <nav aria-label="Pied de page">
-      <a href="impression-3d.html">Impression 3D</a>
-      <a href="decoupe-laser.html">Découpe laser</a>
-      <a href="portfolio.html">Portfolio</a>
-      <a href="cgv.html">Conditions de vente</a>
-      <a href="mentions-legales.html">Mentions légales</a>
-    </nav>
+    <div class="footer-top">
+      <div class="footer-contact">
+        <p>Une question, un projet ? Je réponds sous <span data-delay="reply">48 h</span>.</p>
+        <p><a class="btn" href="demande.html">Décrire mon projet</a> <a class="footer-mail" href="mailto:impression.ant.laser@gmail.com" data-contact-email>impression.ant.laser@gmail.com</a></p>
+      </div>
+      <nav aria-label="Pied de page">
+        <a href="impression-3d.html">Impression 3D</a>
+        <a href="decoupe-laser.html">Découpe laser</a>
+        <a href="portfolio.html">Portfolio</a>
+        <a href="atelier.html">L'atelier et FAQ</a>
+        <a href="cgv.html">Conditions de vente</a>
+        <a href="mentions-legales.html">Mentions légales</a>
+      </nav>
+    </div>
+    <span class="footer-brand" data-brand>impression_ant</span>
   </div>
 </footer>
 

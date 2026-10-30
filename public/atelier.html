@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>L'atelier · impression_ant</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<meta name="description" content="Comment je travaille, les machines de l'atelier, les délais et les réponses aux questions fréquentes.">
+<meta name="theme-color" content="#ECEAE7">
+<link rel="canonical" href="https://impressionant.fr/atelier.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="impression_ant">
+<meta property="og:locale" content="fr_FR">
+<meta property="og:title" content="L'atelier · impression_ant">
+<meta property="og:description" content="Comment je travaille, les machines de l'atelier, les délais et les réponses aux questions fréquentes.">
+<meta property="og:url" content="https://impressionant.fr/atelier.html">
+<meta property="og:image" content="https://impressionant.fr/img/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" href="img/favicon.png">
+<link rel="apple-touch-icon" href="img/favicon.png">
+<link rel="preload" href="fonts/archivo-var.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/plex-sans-400.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<a class="skip" href="#contenu">Aller au contenu</a>
+<header class="topbar">
+  <div class="wrap topbar-in">
+    <a class="brand" href="index.html" aria-label="Accueil impression_ant">
+      <span class="brand-coins" aria-hidden="true">
+        <img src="img/logo-3d.png" alt="" width="32" height="32">
+        <img src="img/logo-laser.png" alt="" width="32" height="32">
+      </span>
+      <span class="brand-name" data-brand>impression_ant</span>
+    </a>
+    <button class="nav-toggle" type="button" aria-expanded="false" aria-controls="nav-pages"><span class="nav-toggle-bars" aria-hidden="true"></span><span class="nav-toggle-label">Menu</span></button>
+    <nav class="nav" id="nav-pages" aria-label="Pages du site">
+      <a href="impression-3d.html"><img src="img/logo-3d.png" alt="" width="18" height="18">Impression 3D</a>
+      <a href="decoupe-laser.html"><img src="img/logo-laser.png" alt="" width="18" height="18">Découpe laser</a>
+      <a href="portfolio.html">Portfolio</a>
+      <a href="atelier.html" aria-current="page">L'atelier</a>
+      <a class="nav-cta" href="demande.html">Décrire mon projet</a>
+    </nav>
+  </div>
+</header>
+
+<main id="contenu" class="at-page">
+  <section class="wrap pf-hero" aria-labelledby="at-title">
+    <div data-reveal>
+      <h1 id="at-title">Comment je travaille</h1>
+      <p class="lede">Une seule personne s'occupe de votre demande, du premier message à l'envoi de la pièce. Voici comment ça se passe, avec quelles machines, et les réponses aux questions qu'on me pose le plus.</p>
+    </div>
+    <div class="pf-strip" data-reveal><img src="portfolio/img/sous-bock-mecanique-1-800.webp" srcset="portfolio/img/sous-bock-mecanique-1-800.webp 800w, portfolio/img/sous-bock-mecanique-1.webp 1400w" sizes="(max-width: 860px) 100vw, 50vw" alt="Sous-bock mécanique à engrenages imprimé en 3D" width="1366" height="1025"></div>
+  </section>
+
+  <section class="section promises-section" aria-labelledby="pr-title">
+    <div class="wrap">
+      <h2 id="pr-title" data-reveal>Ce sur quoi vous pouvez compter</h2>
+      <ul class="promises">
+        <li data-reveal><strong data-delay="reply">24 à 48 h</strong><span>pour une première réponse, par le moyen de contact que vous choisissez</span></li>
+        <li data-reveal><strong data-delay="make">3 à 7 jours</strong><span>de fabrication habituels après validation du devis, délai exact écrit sur le devis</span></li>
+        <li data-reveal><strong>0 €</strong><span>à payer sur le site : le prix définitif vous est envoyé par email, vous décidez ensuite</span></li>
+        <li data-reveal><strong>Aperçu validé</strong><span>avant toute fabrication quand je modélise ou dessine pour vous</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <section class="section" aria-labelledby="steps-title">
+    <div class="wrap steps-wrap">
+      <h2 id="steps-title" data-reveal>Du message à la pièce</h2>
+      <ol class="process">
+        <li data-reveal><strong>Vous m'envoyez votre fichier ou votre idée</strong><span>Le simulateur donne une estimation tout de suite. Sans fichier, décrivez le projet en quatre étapes.</span></li>
+        <li data-reveal><strong>Je vérifie et je vous réponds</strong><span>Questions éventuelles, conseils de matière, puis un devis définitif avec le délai et les frais de port.</span></li>
+        <li data-reveal><strong>Je modélise ou je dessine si besoin</strong><span>Vous recevez un aperçu à valider. Je l'ajuste jusqu'à ce qu'il vous convienne.</span></li>
+        <li data-reveal><strong>Je fabrique</strong><span>Sur mes imprimantes 3D ou mon laser, avec un contrôle de chaque pièce avant l'envoi.</span></li>
+        <li data-reveal><strong>Vous recevez la pièce</strong><span>Par <span data-delay="shipping">Colissimo ou remise en main propre</span>.</span></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="section machines-section" aria-labelledby="mach-title">
+    <div class="wrap">
+      <h2 id="mach-title" data-reveal>Les machines de l'atelier</h2>
+      <div class="machines" data-render="machines"></div>
+    </div>
+  </section>
+
+  <section class="section reviews-section" aria-labelledby="rev-title" data-render-section="reviews" hidden>
+    <div class="wrap">
+      <h2 id="rev-title" data-reveal>Ils m'ont confié un projet</h2>
+      <div class="reviews" data-render="reviews"></div>
+    </div>
+  </section>
+
+  <section class="section" id="faq" aria-labelledby="faq-title">
+    <div class="wrap faq-wrap">
+      <h2 id="faq-title" data-reveal>Questions fréquentes</h2>
+      <div class="faq" data-render="faq"></div>
+    </div>
+  </section>
+
+  <section class="section cta-section" aria-labelledby="cta-title">
+    <div class="wrap cta-band" data-reveal>
+      <h2 id="cta-title">Un projet en tête ?</h2>
+      <p>Décrivez-le en deux minutes, ou obtenez un prix tout de suite si vous avez déjà le fichier.</p>
+      <div class="hero-actions">
+        <a class="btn" href="demande.html">Décrire mon projet</a>
+        <a class="btn btn-ghost" href="impression-3d.html#devis">Estimer une impression</a>
+        <a class="btn btn-ghost" href="decoupe-laser.html#devis">Estimer une découpe</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">
+  <div class="wrap footer-in">
+    <div class="footer-top">
+      <div class="footer-contact">
+        <p>Une question, un projet ? Je réponds sous <span data-delay="reply">48 h</span>.</p>
+        <p><a class="btn" href="demande.html">Décrire mon projet</a> <a class="footer-mail" href="mailto:impression.ant.laser@gmail.com" data-contact-email>impression.ant.laser@gmail.com</a></p>
+      </div>
+      <nav aria-label="Pied de page">
+        <a href="impression-3d.html">Impression 3D</a>
+        <a href="decoupe-laser.html">Découpe laser</a>
+        <a href="portfolio.html">Portfolio</a>
+        <a href="atelier.html">L'atelier et FAQ</a>
+        <a href="cgv.html">Conditions de vente</a>
+        <a href="mentions-legales.html">Mentions légales</a>
+      </nav>
+    </div>
+    <span class="footer-brand" data-brand>impression_ant</span>
+  </div>
+</footer>
+
+<script src="js/config.js"></script>
+<script src="js/layout.js"></script>
+<script src="js/content.js"></script>
+<script src="js/motion.js"></script>
+</body>
+</html>

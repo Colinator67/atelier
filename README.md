@@ -5,24 +5,35 @@ Site statique (HTML/CSS/JS) hébergé gratuitement sur un **Worker Cloudflare** 
 ## Contenu
 
 ```
-wrangler.jsonc                    configuration Cloudflare (ne pas toucher)
-worker/index.js                   reçoit les demandes et les envoie sur Discord + email
-public/index.html                 accueil
-public/impression-3d.html         page impression 3D (parcours + simulateur)
-public/decoupe-laser.html         page découpe laser (parcours + simulateur + tampons)
+wrangler.jsonc                    configuration Cloudflare (page 404 activée)
+worker/index.js                   reçoit les demandes : numéro IA-AAMMJJ-XXXX, Discord, email, confirmation client
+public/index.html                 accueil (dépôt direct d'un fichier → bon simulateur)
+public/impression-3d.html         impression 3D (parcours + simulateur)
+public/decoupe-laser.html         découpe laser (parcours + simulateur + tampons)
+public/demande.html               « Décrire mon projet » : formulaire en 5 étapes
+public/atelier.html               « L'atelier » : méthode, engagements, machines, avis, FAQ
 public/portfolio.html             portfolio
-public/mentions-legales.html      mentions légales
+public/404.html                   page introuvable
 public/css/style.css              charte graphique
-public/js/config.js               ← TOUT ce qui se règle : prix, matières, couleurs, vitesses laser, mentions légales
-public/js/geometry.js             lecture STL / 3MF / STEP + calcul poids, temps, prix
-public/js/vector.js               lecture SVG / DXF / PDF / AI + longueur de coupe, surface gravée
-public/js/*.js                    interface (une page = un script)
-public/portfolio/portfolio.json   ← la liste de tes projets (portfolio)
-public/portfolio/img/             ← leurs photos
-tools/build_pages.py              ancien générateur de pages : ne plus le relancer depuis la refonte d'octobre 2026 (il écraserait la nouvelle mise en page) ; modifier directement les .html
+public/fonts/                     polices hébergées sur le site
+public/js/config.js               ← TOUT ce qui se règle : prix, matières, délais affichés, avis, machines, FAQ, mentions
+public/js/onboarding.js           formulaire en étapes (brouillon gardé sur l'appareil)
+public/js/price.js                total animé + barre de prix fixe sur téléphone
+public/js/content.js              affiche machines, avis et FAQ depuis config.js
 public/js/motion.js               apparition des blocs au défilement (attribut data-reveal)
-public/img/                       logos
+public/js/geometry.js, vector.js  lecture des fichiers 3D et 2D, calculs
+public/portfolio/portfolio.json   ← la liste de tes projets
+public/portfolio/img/             ← leurs photos (JPG + versions WebP)
+public/img/og.jpg                 image affichée quand on partage un lien du site
+tools/chrome.py                   met à jour en-tête, menu, pied de page et balises de partage de toutes les pages
+tools/images.py                   crée les versions WebP des nouvelles photos du portfolio
 ```
+
+Les pages se modifient directement. Pour changer le menu ou le pied de page partout : édite `tools/chrome.py` puis lance `python tools/chrome.py`.
+
+## Avis clients, délais, machines, FAQ
+
+Tout est dans `public/js/config.js` : `delays`, `reviews` (la section avis reste cachée tant que la liste est vide — n'y mets que de vrais avis), `machines` (photo facultative) et `faq`. Pour une photo d'échantillon de couleur, ajoute `photo: "img/couleurs/rouge.jpg"` à la couleur voulue.
 
 ## 1. Mise en ligne
 
@@ -42,6 +53,12 @@ Adresse publique : Worker « atelier » → *Domains* → active l'interrupteur 
 3. Sans domaine perso, Resend n'envoie qu'à l'adresse du compte : c'est exactement ce qu'il faut ici. Répondre à l'email écrit directement au client.
 
 Les variables s'appliquent dès l'enregistrement (*Deploy*).
+
+### Email de confirmation au client
+Le client reçoit « Demande IA-… bien reçue » si tu envoies depuis ton domaine :
+1. Resend → *Domains* → *Add Domain* → `impressionant.fr`, puis ajoute chez ton registraire les enregistrements DNS indiqués (DKIM, SPF) et attends la validation.
+2. Ajoute dans Cloudflare la variable `CONFIRM_FROM` = `impression_ant <contact@impressionant.fr>` (n'importe quelle adresse du domaine) et, si tu veux, `REPLY_DELAY` = `24 à 48 h`.
+Sans `CONFIRM_FROM`, tout fonctionne mais aucun email n'est envoyé au client. Les réponses du client à cet email arrivent sur `NOTIFY_EMAIL`.
 
 Fichiers de plus de 8 Mo : ils ne sont pas joints, la notification te le signale et tu demandes au client de te l'envoyer.
 
@@ -87,6 +104,10 @@ Bloc `laser.materials` : `cutSpeed` (mm/s), `passes`, `engraveSpeed` (mm/s). Les
 ## 6. Domaine perso (plus tard)
 
 Achète le domaine (environ 7 à 15 €/an), puis Worker « atelier » → *Domains* → *Add Domain*. Rien d'autre à modifier.
+
+## Ajouter des photos au portfolio
+
+Après avoir déposé des JPG : `pip install Pillow` puis `python tools/images.py` (crée les WebP plus légers). Sans ça, le site affiche les JPG.
 
 ## Tester en local
 
