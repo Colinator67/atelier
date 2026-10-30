@@ -134,3 +134,9 @@ Pour suivre un nouveau bouton : ajouter `data-track="clic:Nom du bouton"` sur l'
 - Google Search Console : ajouter la propriété « Domaine » impressionant.fr (la vérification DNS se fait
   en un clic avec Cloudflare), puis Sitemaps → `sitemap.xml`.
 - Bing Webmaster Tools : « Importer depuis Google Search Console ».
+
+## Page « Création de fichiers » et version anglaise
+
+- Textes FR et EN de la page : `tools/files_page.py` (puis `python3 tools/chrome.py`).
+- Parcours de demande en anglais : `tools/en_request.py` recopie et traduit `demande.html` (à relancer après chaque modification de celle-ci).
+- Les demandes venues de la version anglaise arrivent marquées « client anglophone », et la confirmation part en anglais.

@@ -33,15 +33,16 @@ async function handleRequest(request, env) {
   const contact = String(form.get("contact") || "email").split(",").map(c => c.trim()).filter(c => ["email", "phone", "sms", "whatsapp"].includes(c));
   const message = String(form.get("message") || "").trim().slice(0, 3000);
   const summary = String(form.get("summary") || "").trim().slice(0, 3000);
-  const kind = String(form.get("kind") || "Demande").slice(0, 60);
+  const en = form.get("lang") === "en"; // demande venue de la version anglaise (en/request)
+  const kind = String(form.get("kind") || "Demande").slice(0, 60) + (en ? " · client anglophone" : "");
   const files = form.getAll("file").filter(f => f && typeof f === "object" && f.size > 0).slice(0, 5);
 
   if (form.get("website")) return json({ ok: true }); // robot
   const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email) && email.length <= 200;
   const phoneOk = /^(\+\d{8,15}|0\d{9})$/.test(phone);
-  if (email && !emailOk) return json({ ok: false, error: "Adresse email invalide." }, 400);
-  if (phone && !phoneOk) return json({ ok: false, error: "Numéro de téléphone invalide." }, 400);
-  if (!emailOk && !phoneOk) return json({ ok: false, error: "Indiquez un email ou un numéro pour que je puisse vous répondre." }, 400);
+  if (email && !emailOk) return json({ ok: false, error: en ? "Invalid email address." : "Adresse email invalide." }, 400);
+  if (phone && !phoneOk) return json({ ok: false, error: en ? "Invalid phone number." : "Numéro de téléphone invalide." }, 400);
+  if (!emailOk && !phoneOk) return json({ ok: false, error: en ? "Please enter an email or a phone number so I can reply." : "Indiquez un email ou un numéro pour que je puisse vous répondre." }, 400);
 
   const id = requestId();
   const LABEL = { email: "Email", phone: "Appel", sms: "SMS", whatsapp: "WhatsApp" };
@@ -59,7 +60,7 @@ async function handleRequest(request, env) {
       method: "POST",
       body: new URLSearchParams({ secret: env.TURNSTILE_SECRET, response: String(token || ""), remoteip: request.headers.get("CF-Connecting-IP") || "" })
     }).then(r => r.json()).catch(() => ({ success: false }));
-    if (!v.success) return json({ ok: false, error: "Vérification anti-robot échouée. Rechargez la page et réessayez." }, 400);
+    if (!v.success) return json({ ok: false, error: en ? "Anti-robot check failed. Reload the page and try again." : "Vérification anti-robot échouée. Rechargez la page et réessayez." }, 400);
   }
 
   // on joint les fichiers tant que le total reste sous la limite
@@ -128,8 +129,16 @@ async function handleRequest(request, env) {
   let confirmation = false;
   if (emailOk && env.RESEND_API_KEY && env.CONFIRM_FROM) {
     const delay = env.REPLY_DELAY || "48 h";
-    const hello = name ? `Bonjour ${escapeHtml(name)},` : "Bonjour,";
-    const chtml = `<div style="font-family:system-ui,-apple-system,Segoe UI,sans-serif;font-size:16px;line-height:1.55;color:#2A2928;max-width:560px">
+    const hello = name ? `${en ? "Hello" : "Bonjour"} ${escapeHtml(name)},` : (en ? "Hello," : "Bonjour,");
+    const chtml = en ? `<div style="font-family:system-ui,-apple-system,Segoe UI,sans-serif;font-size:16px;line-height:1.55;color:#2A2928;max-width:560px">
+      <p>${hello}</p>
+      <p>Thanks, I've received your request <strong>${id}</strong>. I'll read it and reply within 48 hours.</p>
+      <p style="margin:20px 0 6px;font-weight:600">Your request</p>
+      <pre style="white-space:pre-wrap;font-family:inherit;background:#F4F2EF;padding:14px;border-radius:6px;margin:0">${escapeHtml(summary)}${message ? "\n\n" + escapeHtml(message) : ""}</pre>
+      <p style="margin-top:20px">Next: I send you a preview and a price, we fine-tune it together, then you receive your file. Nothing to pay for now.</p>
+      <p>To add anything to your request, just reply to this email.</p>
+      <p>Colin<br><span style="color:#6E6A66">impression_ant · custom laser files and 3D models · Strasbourg, France</span></p>
+    </div>` : `<div style="font-family:system-ui,-apple-system,Segoe UI,sans-serif;font-size:16px;line-height:1.55;color:#2A2928;max-width:560px">
       <p>${hello}</p>
       <p>J'ai bien reçu votre demande <strong>${id}</strong> (${escapeHtml(kind)}). Je la lis et je vous réponds sous ${escapeHtml(delay)}.</p>
       <p style="margin:20px 0 6px;font-weight:600">Votre demande</p>
@@ -145,7 +154,7 @@ async function handleRequest(request, env) {
         from: env.CONFIRM_FROM,
         to: [email],
         ...(env.NOTIFY_EMAIL ? { reply_to: env.NOTIFY_EMAIL } : {}),
-        subject: `Demande ${id} bien reçue · impression_ant`,
+        subject: en ? `Request ${id} received · impression_ant` : `Demande ${id} bien reçue · impression_ant`,
         html: chtml
       })
     }).catch(() => null);

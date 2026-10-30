@@ -16,7 +16,7 @@ window.SITE_CONFIG = {
   delays: {
     reply: "24 à 48 h",                 // délai de première réponse
     make: "3 à 7 jours",                // délai de fabrication habituel après validation
-    shipping: "Colissimo ou retrait gratuit à l'atelier (Mommenheim, près de Brumath)"
+    shipping: "Colissimo ou retrait gratuit à Strasbourg (quartier Aristide-Briand)"
   },
 
   // ---- Avis clients réels (la section reste cachée tant que la liste est vide)
@@ -67,7 +67,7 @@ window.SITE_CONFIG = {
     { q: "Le prix du simulateur est-il définitif ?", a: "Non, c'est une estimation calculée à partir de votre fichier. Je vérifie le fichier et vous envoie un devis définitif par email avant toute fabrication. Rien n'est payé sur le site." },
     { q: "Comment se passe le paiement ?", a: "Les modalités sont indiquées sur le devis. La fabrication démarre après votre accord écrit et le paiement ou l'acompte prévu." },
     { q: "Combien de temps faut-il ?", a: "Je réponds sous {reply}. La fabrication prend en général {make} après validation du devis ; le délai exact est écrit sur le devis." },
-    { q: "Comment la pièce m'est-elle livrée ?", a: "Par Colissimo partout en France, ou en retrait gratuit à l'atelier de Mommenheim (Bas-Rhin, à environ 25 minutes de Strasbourg), sur rendez-vous. Les frais de port sont indiqués à part sur le devis." },
+    { q: "Comment la pièce m'est-elle livrée ?", a: "Par Colissimo partout en France, ou en retrait gratuit à Strasbourg, quartier Aristide-Briand, sur rendez-vous. Les frais de port sont indiqués à part sur le devis." },
     { q: "Et si mon fichier n'est pas imprimable ?", a: "Je vous le signale avant fabrication, avec ce qui pose problème. Je peux corriger le fichier ou le remodéliser : c'est précisé sur le devis." },
     { q: "Je n'ai pas de fichier, seulement une idée.", a: "C'est fréquent. Décrivez votre projet, ajoutez une photo ou un croquis : je modélise la pièce ou je dessine le fichier de découpe, et vous validez un aperçu avant la fabrication." },
     { q: "Les couleurs et l'aspect sont-ils garantis ?", a: "Les couleurs à l'écran sont indicatives. L'impression 3D laisse de fines lignes de couches et la découpe laser des bords légèrement brunis : c'est propre à ces techniques, pas un défaut." },
