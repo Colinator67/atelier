@@ -32,59 +32,76 @@
 </header>
 
 <main id="contenu">
-  <section class="hero" aria-labelledby="hero-title">
-    <div class="wrap hero-head">
-      <h1 id="hero-title">Vos pièces en plastique imprimé ou en bois découpé, chiffrées en quelques secondes.</h1>
-      <p class="lede">Déposez votre fichier, choisissez la matière, obtenez une estimation. Pas de fichier ? Je modélise la pièce ou je dessine le fichier de découpe pour vous.</p>
+  <section class="home-hero wrap" aria-labelledby="hero-title">
+    <div class="home-hero-text" data-reveal>
+      <h1 id="hero-title">Impression&nbsp;3D<br> et découpe&nbsp;laser</h1>
+      <p class="lede">Déposez votre fichier, choisissez la matière : le prix s'affiche tout de suite. Pas de fichier ? Je modélise la pièce ou je dessine le fichier de découpe pour vous.</p>
+      <div class="hero-actions">
+        <a class="btn" href="impression-3d.html#devis">Estimer une impression</a>
+        <a class="btn btn-ghost" href="decoupe-laser.html#devis">Estimer une découpe</a>
+      </div>
     </div>
-    <div class="split">
-      <a class="side side-3d" href="impression-3d.html">
-        <div class="side-in">
-          <img class="side-logo" src="img/logo-3d.png" alt="Logo impression 3D" width="160" height="160">
-          <div class="side-text">
-            <p class="eyebrow">Atelier impression 3D</p>
-            <h2>Impression & modélisation 3D</h2>
-            <p>Pièces fonctionnelles, prototypes, objets déco. Fichiers STL, 3MF ou STEP, ou modélisation sur mesure.</p>
-            <ul class="specs">
-              <li><span>PLA</span><span>PETG</span><span>TPU</span></li>
-              <li class="mono">Devis instantané depuis votre fichier</li>
-            </ul>
-            <span class="cta">Estimer une impression <span aria-hidden="true">→</span></span>
-          </div>
-        </div>
-      </a>
-      <a class="side side-laser" href="decoupe-laser.html">
-        <div class="side-in">
-          <img class="side-logo" src="img/logo-laser.png" alt="Logo découpe laser" width="160" height="160">
-          <div class="side-text">
-            <p class="eyebrow">Atelier découpe laser</p>
-            <h2>Découpe, gravure & création de fichiers</h2>
-            <p>Découpes multicouches, signalétique, tampons. Vos fichiers SVG, DXF, PDF ou AI, ou un fichier dessiné pour vous.</p>
-            <ul class="specs">
-              <li><span>MDF</span><span>Contreplaqué</span><span>Carton</span><span>Tampons</span></li>
-              <li class="mono">Création de fichier sur mesure</li>
-            </ul>
-            <span class="cta">Estimer une découpe <span aria-hidden="true">→</span></span>
-          </div>
-        </div>
-      </a>
+    <div class="home-hero-media" data-reveal>
+      <figure>
+        <img src="portfolio/img/let-it-snow-2.jpg" alt="Sapin de Noël mécanique imprimé en 3D, les cadeaux tournent autour du sapin" width="950" height="1266" fetchpriority="high">
+        <figcaption>Impression 3D · Let it snow !</figcaption>
+      </figure>
+      <figure>
+        <img src="portfolio/img/tableau-multicouche-personnage-1.jpg" alt="Silhouette en bois multicouche découpée et gravée au laser" width="728" height="1362">
+        <figcaption>Découpe laser · Silhouette multicouche</figcaption>
+      </figure>
     </div>
+  </section>
+
+  <section class="split" aria-label="Les deux ateliers">
+    <a class="side side-3d" href="impression-3d.html">
+      <div class="side-in" data-reveal>
+        <img class="side-logo" src="img/logo-3d.png" alt="" width="160" height="160">
+        <div class="side-text">
+          <h2>Impression &amp; modélisation 3D</h2>
+          <p>Pièces fonctionnelles, prototypes, objets déco. Fichiers STL, 3MF ou STEP, ou modélisation sur mesure.</p>
+          <p class="specs">PLA · PETG · TPU</p>
+          <span class="cta">Estimer une impression <span aria-hidden="true">→</span></span>
+        </div>
+      </div>
+    </a>
+    <a class="side side-laser" href="decoupe-laser.html">
+      <div class="side-in" data-reveal>
+        <img class="side-logo" src="img/logo-laser.png" alt="" width="160" height="160">
+        <div class="side-text">
+          <h2>Découpe &amp; gravure laser</h2>
+          <p>Découpes multicouches, signalétique, tampons. Vos fichiers SVG, DXF, PDF ou AI, ou un fichier dessiné pour vous.</p>
+          <p class="specs">MDF · Contreplaqué · Carton · Tampons</p>
+          <span class="cta">Estimer une découpe <span aria-hidden="true">→</span></span>
+        </div>
+      </div>
+    </a>
   </section>
 
   <section class="section" aria-labelledby="teaser-title">
     <div class="wrap">
-      <div class="section-head">
-        <div>
-          <p class="eyebrow">Portfolio</p>
-          <h2 id="teaser-title">Quelques réalisations</h2>
-        </div>
-        <a class="link-more" href="portfolio.html">Voir tout le portfolio <span aria-hidden="true">→</span></a>
+      <div class="section-head" data-reveal>
+        <h2 id="teaser-title">Quelques réalisations</h2>
+        <a class="link-more" href="portfolio.html">Tout le portfolio <span aria-hidden="true">→</span></a>
       </div>
       <div class="teaser">
-        <a href="portfolio.html#machine-a-vagues"><img src="portfolio/img/machine-a-vagues-1.jpg" alt="Machine à vagues imprimée en 3D" loading="lazy"></a>
-        <a href="portfolio.html#glaces-usb"><img src="portfolio/img/glaces-usb-1.jpg" alt="Glaces porte-clés USB" loading="lazy"></a>
-        <a href="portfolio.html#spookslot"><img src="portfolio/img/spookslot-2.jpg" alt="Figurine Spookslot" loading="lazy"></a>
-        <a href="portfolio.html#let-it-snow"><img src="portfolio/img/let-it-snow-2.jpg" alt="Sapin de Noël mécanique" loading="lazy"></a>
+        <a class="teaser-big" href="portfolio.html#machine-a-vagues" data-reveal><img src="portfolio/img/machine-a-vagues-1.jpg" alt="" loading="lazy"><span>Machine à vagues</span></a>
+        <a href="portfolio.html#tableaux-multicouches-fetes" data-reveal><img src="portfolio/img/tableaux-multicouches-fetes-1.jpg" alt="" loading="lazy"><span>Tableaux multicouches</span></a>
+        <a href="portfolio.html#glaces-usb" data-reveal><img src="portfolio/img/glaces-usb-1.jpg" alt="" loading="lazy"><span>Glaces USB</span></a>
+        <a href="portfolio.html#spookslot" data-reveal><img src="portfolio/img/spookslot-2.jpg" alt="" loading="lazy"><span>Spookslot</span></a>
+        <a href="portfolio.html#cadenas-escape-room" data-reveal><img src="portfolio/img/cadenas-escape-room-1.jpg" alt="" loading="lazy"><span>Cadenas escape room</span></a>
+      </div>
+    </div>
+  </section>
+
+  <section class="section maker-section" aria-labelledby="maker-title">
+    <div class="wrap maker">
+      <img src="portfolio/img/colin-1.jpg" alt="Portrait de Colin Ehret" width="933" height="1400" loading="lazy" data-reveal>
+      <div class="maker-text" data-reveal>
+        <h2 id="maker-title">Une seule personne, du fichier à la pièce</h2>
+        <p>Je suis Colin, étudiant ingénieur en plasturgie à l'INSA Strasbourg et passionné d'impression 3D depuis près de 8 ans. Je lis votre fichier, je règle la machine, je fabrique et je vous réponds moi-même.</p>
+        <p>Ma règle de design : une pièce doit s'imprimer sur n'importe quelle imprimante, avec le moins de supports possible et sans vis, adhésif ni aimants.</p>
+        <a class="link-more" href="portfolio.html">Voir mes projets <span aria-hidden="true">→</span></a>
       </div>
     </div>
   </section>
@@ -105,5 +122,6 @@
 
 <script src="js/config.js"></script>
 <script src="js/layout.js"></script>
+<script src="js/motion.js"></script>
 </body>
 </html>

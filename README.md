@@ -19,7 +19,8 @@ public/js/vector.js               lecture SVG / DXF / PDF / AI + longueur de cou
 public/js/*.js                    interface (une page = un script)
 public/portfolio/portfolio.json   ← la liste de tes projets (portfolio)
 public/portfolio/img/             ← leurs photos
-tools/build_pages.py              régénère les pages (menu, pied de page communs)
+tools/build_pages.py              ancien générateur de pages : ne plus le relancer depuis la refonte d'octobre 2026 (il écraserait la nouvelle mise en page) ; modifier directement les .html
+public/js/motion.js               apparition des blocs au défilement (attribut data-reveal)
 public/img/                       logos
 ```
 
