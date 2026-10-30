@@ -828,7 +828,8 @@ html[data-morph="print"] .logo-morph[data-fx="print"] .lm-tool::after, .logo-mor
 .mc-photo { object-fit: cover; border-radius: 10px; }
 /* la porte est posée sur l'intérieur de la machine (coordonnées du dessin, recalées dans la marge de 6 %) */
 .mc-door { position: absolute; margin: 0; transform-style: preserve-3d; transition: transform 420ms var(--ease-in-out) 140ms; z-index: 2; }
-.mc-art .mc-door { left: calc(6% + var(--cx) * .88) !important; top: calc(6% + var(--cy) * .88) !important; right: calc(6% + var(--cr) * .88); bottom: calc(6% + var(--cb) * .88); width: auto !important; height: auto !important; }
+.mc-art .mc-door { left: calc(6% + var(--dx) * .88); top: calc(6% + var(--dy) * .88); width: calc(var(--dw) * .88); height: calc(var(--dh) * .88); }
+.mc-door.is-arm { transition: transform 520ms var(--ease-in-out) 120ms; }
 .mc-door svg { display: block; width: 100%; height: 100%; }
 .mc-door.is-side { transform-origin: left center; }
 .mc-door.is-lid { transform-origin: center top; z-index: 2; } /* le capot passe derrière la fiche une fois sortie */
@@ -853,12 +854,17 @@ html[data-morph="print"] .logo-morph[data-fx="print"] .lm-tool::after, .logo-mor
    La porte s'ouvre d'abord, puis la fiche sort de la machine ; à la fermeture, l'inverse. */
 .mc.is-open .mc-door.is-side { transform: rotateY(-102deg); transition-delay: 0ms; }
 .mc.is-open .mc-door.is-lid { transform: rotateX(108deg); transition-delay: 0ms; }
+.mc.is-open .mc-door.is-arm { transform: translateY(-62%); transition-delay: 0ms; }
 .mc.is-open .mc-sheet { clip-path: inset(0 0 0 0 round 10px); opacity: 1; transition: clip-path 440ms var(--ease-out) 320ms, opacity 140ms ease 320ms; }
 .mc.has-photo.is-open .mc-sheet { transition-delay: 0ms; }
+/* sans porte (A1 mini, Giga) : on laisse le portique finir de monter avant de sortir la fiche */
+.mc.is-open .mc-door.is-arm ~ .mc-sheet { transition-delay: 560ms, 560ms; }
 @media (hover: hover) and (pointer: fine) {
   .mc:hover .mc-door.is-side { transform: rotateY(-102deg); transition-delay: 0ms; }
   .mc:hover .mc-door.is-lid { transform: rotateX(108deg); transition-delay: 0ms; }
+  .mc:hover .mc-door.is-arm { transform: translateY(-62%); transition-delay: 0ms; }
   .mc:hover .mc-sheet { clip-path: inset(0 0 0 0 round 10px); opacity: 1; transition: clip-path 440ms var(--ease-out) 320ms, opacity 140ms ease 320ms; }
   .mc:hover .mc-hint { opacity: 0; }
+  .mc:hover .mc-door.is-arm ~ .mc-sheet { transition-delay: 560ms, 560ms; }
 }
 @media (prefers-reduced-motion: reduce) { .mc-door { display: none; } }
