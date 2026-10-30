@@ -210,9 +210,11 @@
       const c = document.createElement("canvas"); c.width = w; c.height = h; const x = c.getContext("2d");
       x.drawImage(img, 0, 0, w, h); URL.revokeObjectURL(url);
       const d = x.getImageData(0, 0, w, h), p = d.data;
-      let sum = 0, n = 0, transparent = 0;
-      for (let i = 0; i < p.length; i += 4) { if (p[i + 3] < 128) { transparent++; continue; } sum += 0.299 * p[i] + 0.587 * p[i + 1] + 0.114 * p[i + 2]; n++; }
-      const useAlpha = transparent > p.length / 4 * 0.15, thr = n ? Math.min(200, sum / n) : 128;
+      let sum = 0, n = 0, transparent = 0, dark = 0;
+      for (let i = 0; i < p.length; i += 4) { if (p[i + 3] < 128) { transparent++; continue; } const l = 0.299 * p[i] + 0.587 * p[i + 1] + 0.114 * p[i + 2]; sum += l; n++; if (l < 128) dark++; }
+      // PNG détouré d'une seule couleur : la silhouette fait l'encre ; sinon, ce sont les zones sombres
+      const contrast = n && dark / n > 0.08 && dark / n < 0.92;
+      const useAlpha = transparent > p.length / 4 * 0.15 && !contrast, thr = n ? Math.min(200, sum / n) : 128;
       let x0 = w, y0 = h, x1 = 0, y1 = 0;
       for (let y = 0; y < h; y++) for (let xx = 0; xx < w; xx++) {
         const i = (y * w + xx) * 4, lum = 0.299 * p[i] + 0.587 * p[i + 1] + 0.114 * p[i + 2];
@@ -383,6 +385,80 @@
     hud.hidden = true; hidePanel(); clearTimeout(antTimer); if (antAnim) antAnim.cancel(); ant.hidden = true;
   }
 
+  // ------------------------------------------------------------ SVG prêt à graver
+  // Gravure = tout ce qui n'est pas de l'encre à l'intérieur du cercle (le relief qui reste porte l'encre),
+  // découpe = le cercle. Le motif est inversé (miroir) pour que l'empreinte se lise à l'endroit.
+  function engraveSVG(spec, diamCm) {
+    const mmD = diamCm * 10, pad = 1, ppm = mmD > 120 ? 8 : 12;         // 1 mm de marge, px par mm
+    const S = mmD + 2 * pad, N = Math.ceil(S * ppm), R = mmD / 2 * ppm, rc = (mmD / 2 + 0.4) * ppm, c0 = S / 2 * ppm;
+    const art = design(mmD * ppm, spec);
+    const cv = document.createElement("canvas"); cv.width = cv.height = N;
+    const x = cv.getContext("2d"); x.drawImage(art, c0 - art.width / 2, c0 - art.width / 2);
+    const px = x.getImageData(0, 0, N, N).data;
+    const m = new Uint8Array(N * N);
+    for (let y = 0; y < N; y++) for (let i = 0; i < N; i++) {
+      const dx = i + 0.5 - c0, dy = y + 0.5 - c0;
+      m[y * N + i] = (dx * dx + dy * dy <= rc * rc && px[(y * N + i) * 4 + 3] < 128) ? 1 : 0;
+    }
+    const loops = trace(m, N, N).map(l => simplify(l, 0.75)).filter(l => l.length > 2);
+    const mm = v => (v / ppm).toFixed(2);
+    // miroir horizontal : x → S - x
+    const d = loops.map(l => "M" + l.map(([a, b]) => `${(S - a / ppm).toFixed(2)} ${mm(b)}`).join("L") + "Z").join("");
+    const t = s2 => String(s2).replace(/[<&>"]/g, ch => ({ "<": "&lt;", "&": "&amp;", ">": "&gt;", '"': "&quot;" }[ch]));
+    return `<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="${S}mm" height="${S}mm" viewBox="0 0 ${S} ${S}">
+  <title>Tampon Ø ${diamCm} cm · ${t(spec.text)} · motif en miroir, prêt à graver</title>
+  <desc>Noir : gravure (zones en creux). Rouge : découpe du cercle Ø ${(mmD + 0.8).toFixed(1)} mm. Motif inversé pour une empreinte à l'endroit.</desc>
+  <path id="gravure" fill="#000000" fill-rule="evenodd" d="${d}"/>
+  <circle id="decoupe" cx="${S / 2}" cy="${S / 2}" r="${(mmD / 2 + 0.4).toFixed(2)}" fill="none" stroke="#FF0000" stroke-width="0.1"/>
+</svg>`;
+  }
+  // contours d'un masque binaire : arêtes des pixels allumés enchaînées en boucles fermées (remplissage pair-impair)
+  function trace(m, w, h) {
+    const W1 = w + 1, o1 = new Int32Array(W1 * (h + 1)).fill(-1), o2 = new Int32Array(W1 * (h + 1)).fill(-1);
+    const add = (a, b) => { if (o1[a] < 0) o1[a] = b; else o2[a] = b; };
+    const on = (i, y) => i >= 0 && y >= 0 && i < w && y < h && m[y * w + i];
+    for (let y = 0; y < h; y++) for (let i = 0; i < w; i++) {
+      if (!m[y * w + i]) continue;
+      const tl = y * W1 + i, tr = tl + 1, bl = tl + W1, br = bl + 1;
+      if (!on(i, y - 1)) add(tl, tr);
+      if (!on(i + 1, y)) add(tr, br);
+      if (!on(i, y + 1)) add(br, bl);
+      if (!on(i - 1, y)) add(bl, tl);
+    }
+    const take = v => { let n = o1[v]; if (n >= 0) { o1[v] = o2[v]; o2[v] = -1; } return n; };
+    const loops = [];
+    for (let s = 0; s < o1.length; s++) {
+      while (o1[s] >= 0) {
+        const pts = []; let v = s, guard = 0;
+        do { pts.push([v % W1, (v / W1) | 0]); v = take(v); } while (v >= 0 && v !== s && ++guard < 4e6);
+        // retire les points alignés (escaliers droits)
+        const out = pts.filter((p, k) => { const a = pts[(k - 1 + pts.length) % pts.length], b = pts[(k + 1) % pts.length]; return (b[0] - a[0]) * (p[1] - a[1]) - (b[1] - a[1]) * (p[0] - a[0]) !== 0; });
+        if (out.length > 2) loops.push(out);
+      }
+    }
+    return loops;
+  }
+  // Douglas-Peucker sur une boucle fermée
+  function simplify(pts, eps) {
+    if (pts.length < 8) return pts;
+    let far = 0, fd = -1;
+    for (let k = 1; k < pts.length; k++) { const d2 = (pts[k][0] - pts[0][0]) ** 2 + (pts[k][1] - pts[0][1]) ** 2; if (d2 > fd) { fd = d2; far = k; } }
+    const dp = (a) => {
+      const keep = new Uint8Array(a.length); keep[0] = keep[a.length - 1] = 1;
+      const st2 = [[0, a.length - 1]];
+      while (st2.length) {
+        const [i, j] = st2.pop(); let dm = 0, km = -1;
+        const [x1, y1] = a[i], [x2, y2] = a[j], L = Math.hypot(x2 - x1, y2 - y1) || 1;
+        for (let k = i + 1; k < j; k++) { const dd = Math.abs((x2 - x1) * (y1 - a[k][1]) - (x1 - a[k][0]) * (y2 - y1)) / L; if (dd > dm) { dm = dd; km = k; } }
+        if (dm > eps) { keep[km] = 1; st2.push([i, km], [km, j]); }
+      }
+      return a.filter((_, k) => keep[k]);
+    };
+    const A = dp(pts.slice(0, far + 1)), B = dp([...pts.slice(far), pts[0]]);
+    return [...A, ...B.slice(1, -1)];
+  }
+
   // ------------------------------------------------------------ commande
   function order() {
     const big = document.createElement("canvas"); big.width = big.height = 1200;
@@ -390,6 +466,8 @@
     const m = design(1100); x.drawImage(m, 50, 50);
     big.toBlob(blob => {
       const file = new File([blob], "apercu-tampon.png", { type: "image/png" });
+      let svg = null;
+      try { svg = new File([engraveSVG({ text: st.text, around: st.around, logo: st.logo }, cm(st.size))], `tampon-${cm(st.size)}cm-a-graver.svg`, { type: "image/svg+xml" }); } catch (e) { /* l'aperçu suffit */ }
       const qtyIn = document.getElementById("qtyS");
       const qty = qtyIn ? Math.max(1, Math.round(+qtyIn.value || 1)) : 1;
       const unit = deal.price(st.size.price);
@@ -399,9 +477,10 @@
       track("tampon_commande", st.size.label);
       window.AskModal.open({
         kind: "Tampon",
-        file,
+        files: svg ? [file, svg] : [file],
         summary: [
-          `Tampon — ${st.size.label} (motif créé avec le testeur, aperçu en pièce jointe)`,
+          `Tampon — ${st.size.label} (motif créé avec le testeur)`,
+          `Pièces jointes : aperçu PNG${svg ? " + SVG prêt à graver (miroir, gravure en noir, découpe du cercle en rouge)" : ""}`,
           `Texte au centre : ${st.text.trim() || "aucun"}`,
           `Texte autour : ${st.around.trim() || "aucun"}`,
           st.logo ? `Logo : ${st.logoFile ? st.logoFile.name : "oui"} (à m'envoyer en bonne qualité si possible)` : null,

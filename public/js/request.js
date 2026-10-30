@@ -68,8 +68,9 @@
     fd.append("email", email);
     fd.append("message", $("#reqMsg").value.trim());
     fd.append("summary", current.summary);
-    const file = current.file || extra;
-    if (file) fd.append("file", file, file.name);
+    // fichiers joints par la page (ex. tampon : aperçu + SVG prêt à graver), puis celui du client
+    const files = [...(current.files || []), ...(current.file ? [current.file] : []), ...(extra && !current.file ? [extra] : [])];
+    files.forEach(f => fd.append("file", f, f.name));
     const ts = document.querySelector('[name="cf-turnstile-response"]');
     if (ts) fd.append("cf-turnstile-response", ts.value);
 
