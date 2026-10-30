@@ -60,6 +60,7 @@ const EVENTS = {
   devis_demande: "Devis demandé depuis un simulateur", demande_etape: "Formulaire « Décrire mon projet » · étape atteinte",
   demande_envoyee: "Formulaire « Décrire mon projet » · envoyé", depot_accueil: "Fichier déposé sur l'accueil",
   machine_fiche: "Fiche machine ouverte", projet_vu: "Projet vu dans le livre", projet_photos: "Photos d'un projet agrandies",
+  tampon_test: "Testeur de tampon ouvert", tampon_defi: "Défi de la fourmi", tampon_commande: "Tampon commandé depuis le testeur",
   clic: "Clic sur un bouton", email: "Clic sur l'email"
 };
 const FLAGS = c => c && c.length === 2 ? String.fromCodePoint(...[...c.toUpperCase()].map(ch => 127397 + ch.charCodeAt(0))) : "";

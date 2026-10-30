@@ -138,10 +138,14 @@
   bindDrop($("#dropS"), $("#fileS"), file => { sS.file = file; $("#fnameS").textContent = "Fichier joint : " + file.name; });
   function updateS() {
     const qty = clampQty($("#qtyS"));
-    setLines($("#linesS"), { label: sS.stamp.label, unit: eur(sS.stamp.price) });
-    $("#totalS").textContent = eur(sS.stamp.price * qty);
+    const D = window.StampDeal, on = !!(D && D.active()), unit = on ? D.price(sS.stamp.price) : sS.stamp.price;
+    setLines($("#linesS"), { label: sS.stamp.label, unit: eur(unit) });
+    $("#totalS").textContent = eur(unit * qty);
+    $("#dealS").hidden = !on;
+    if (on) $("#dealS").innerHTML = `Code <strong>${D.code}</strong> : -${D.pct} % appliqués (au lieu de ${eur(sS.stamp.price * qty)}). Une fois par commande, non cumulable.`;
   }
   updateS();
+  document.addEventListener("stampdeal", updateS);
 
   $("#askL").addEventListener("click", () => {
     if (sl.raster) {
@@ -168,7 +172,8 @@
     openRequest({
       kind: "Tampon",
       file: sS.file,
-      summary: [`Tampon — ${sS.stamp.label}`, `Quantité : ${qty}`, `Total : ${eur(sS.stamp.price * qty)} hors frais de port`, `Motif : ${sS.file ? sS.file.name : "à décrire / envoyer"}`].join("\n")
+      summary: (() => { const D = window.StampDeal, on = !!(D && D.active()), unit = on ? D.price(sS.stamp.price) : sS.stamp.price;
+        return [`Tampon — ${sS.stamp.label}`, `Quantité : ${qty}`, on ? `Remise défi : ${D.code} (-${D.pct} %)` : null, `Total : ${eur(unit * qty)} hors frais de port`, `Motif : ${sS.file ? sS.file.name : "à décrire / envoyer"}`].filter(Boolean).join("\n"); })()
     });
   });
 

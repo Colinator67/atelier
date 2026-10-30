@@ -44,6 +44,7 @@
 
     <h3>4. Prix</h3>
     <p>Les prix sont exprimés en euros. Sauf mention contraire, ils ne comprennent pas les frais de port, indiqués séparément sur le devis. ${esc(lg.vatMention)}</p>
+    <p>Remise « défi de la fourmi » : le code FOURMI10, gagné dans le testeur de tampon du site, donne 10 % de remise sur le prix des tampons. Il s'applique une fois par commande, n'est pas cumulable avec une autre remise et n'a pas de valeur monétaire. Il reste valable tant qu'il est proposé sur le site.</p>
 
     <h3>5. Paiement</h3>
     <p>Le paiement s'effectue selon les modalités indiquées sur le devis. Aucun paiement n'est réalisé sur le site. La fabrication démarre après acceptation du devis et réception du paiement ou de l'acompte prévu.</p>
