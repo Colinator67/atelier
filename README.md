@@ -140,3 +140,10 @@ Pour suivre un nouveau bouton : ajouter `data-track="clic:Nom du bouton"` sur l'
 - Textes FR et EN de la page : `tools/files_page.py` (puis `python3 tools/chrome.py`).
 - Parcours de demande en anglais : `tools/en_request.py` recopie et traduit `demande.html` (à relancer après chaque modification de celle-ci).
 - Les demandes venues de la version anglaise arrivent marquées « client anglophone », et la confirmation part en anglais.
+
+## Suivi de commande
+
+- Chaque demande envoyée par le site est enregistrée avec son numéro (table `demandes` de la base D1 atelier-stats).
+- Le client suit l'avancement sur https://impressionant.fr/suivi (ou /en/track) avec son numéro ; le lien est aussi dans l'email de confirmation.
+- Pour changer l'étape ou laisser un message au client : https://impressionant.fr/stats → section « Demandes et suivi de commande ».
+- Une demande reçue ailleurs (Instagram, téléphone) peut y être ajoutée pour obtenir un numéro de suivi.

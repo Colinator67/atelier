@@ -90,6 +90,7 @@
       if (mark) { mark.dataset.fx = window.UI.pageFx(); window.UI.replay(mark); }
       const delay = (C.delays && C.delays.reply) || "48 h";
       $("#reqSent p").innerHTML = `Numéro de demande <strong class="mono">${window.UI.esc(data.id || "—")}</strong>. Je vous réponds par email sous ${window.UI.esc(delay)}.` +
+        (data.id ? ` <a href="/suivi?ref=${encodeURIComponent(data.id)}">Suivre cette demande</a>.` : "") +
         (data.confirmation ? ` Une confirmation vient de partir à <strong>${window.UI.esc(email)}</strong>.` : "");
       $("#reqMsg").value = "";
     } catch (err) {

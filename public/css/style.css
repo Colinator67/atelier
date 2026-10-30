@@ -1074,3 +1074,34 @@ html.st-lock { overflow: hidden; }
 .stp-home { background: var(--surface-2); }
 @media (max-width: 860px) { .stp { grid-template-columns: 1fr; } .stp-paper { max-width: 560px; } }
 @media (prefers-reduced-motion: reduce) { .st-demo-imp { animation: none; opacity: .92; } .stp-paper { transition: none; } }
+
+/* ── Suivi de commande (/suivi, /en/track) ── */
+.sv-page { padding-block: clamp(36px, 6vw, 80px); }
+.sv-wrap { max-width: 760px; display: grid; gap: 18px; }
+.sv-wrap h1 { font-size: clamp(2.2rem, 4.5vw, 3.4rem); line-height: 1; letter-spacing: -0.02em; }
+.sv-lede { max-width: 58ch; margin: 0; }
+.sv-form { display: flex; gap: 10px; flex-wrap: wrap; }
+.sv-form input { flex: 1 1 240px; font: 600 1.15rem/1.2 var(--f-body); letter-spacing: .04em; padding: 14px 16px; border-radius: 12px; border: 1.5px solid var(--line); background: var(--surface); color: var(--fg); text-transform: uppercase; }
+.sv-form input::placeholder { color: var(--muted); opacity: .6; }
+.sv-form input:focus-visible { outline: 2px solid var(--accent); outline-offset: 1px; }
+.sv-card { background: var(--surface); border-radius: var(--r); padding: clamp(20px, 3vw, 30px); display: grid; gap: 20px; animation: faqIn 260ms var(--ease-out); }
+.sv-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; flex-wrap: wrap; }
+.sv-head h2 { font-size: 1.5rem; letter-spacing: .02em; }
+.sv-head p { margin: 2px 0 0; color: var(--muted); }
+.sv-badge { padding: 6px 12px; border-radius: 999px; background: var(--fg); color: var(--bg); font-weight: 600; font-size: .9rem; white-space: nowrap; }
+.sv-badge.is-end { background: #2D6A3E; color: #fff; }
+.sv-badge.is-off { background: var(--surface-2); color: var(--muted); }
+.sv-cancel { margin: 0; color: var(--muted); }
+.sv-steps { list-style: none; margin: 0; padding: 0; display: grid; }
+.sv-step { position: relative; display: grid; gap: 2px; padding: 0 0 22px 38px; color: var(--muted); }
+.sv-step::before { content: ""; position: absolute; left: 6px; top: 4px; width: 14px; height: 14px; border-radius: 50%; border: 2px solid var(--line); background: var(--surface); box-sizing: border-box; }
+.sv-step:not(:last-child)::after { content: ""; position: absolute; left: 12px; top: 22px; bottom: 2px; width: 2px; background: var(--line); }
+.sv-step span { font-size: .88rem; }
+.sv-step.is-done, .sv-step.is-now { color: var(--fg); }
+.sv-step.is-done::before { background: var(--fg); border-color: var(--fg); }
+.sv-step.is-done:not(:last-child)::after { background: var(--fg); }
+.sv-step.is-now::before { left: 3px; top: 1px; width: 20px; height: 20px; border: 5px solid var(--accent); background: var(--surface); }
+.sv-step.is-now strong { font-size: 1.1rem; }
+.sv-note { padding: 14px 16px; border-radius: 12px; background: var(--surface-2); }
+.sv-note p { margin: 4px 0 0; white-space: pre-line; }
+.sv-help { margin: 0; color: var(--muted); font-size: .92rem; }

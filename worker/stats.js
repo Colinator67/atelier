@@ -1,3 +1,4 @@
+import { adminPost, adminSection, ADMIN_CSS } from "./suivi.js";
 /* =========================================================================
    Statistiques de visite, sans cookie ni donnée personnelle.
    - POST /api/s : une page vue ou une action envoyée par public/js/stats.js
@@ -75,6 +76,7 @@ export async function dashboard(request, env) {
   try { ok = auth.startsWith("Basic ") && atob(auth.slice(6)).split(":").slice(1).join(":") === env.STATS_PASSWORD; } catch (e) {}
   if (!ok) return unauthorized();
   if (!env.STATS) return new Response("Base de statistiques non reliée.", { status: 503 });
+  if (request.method === "POST") return adminPost(request, env);
 
   const url = new URL(request.url);
   const days = Math.min(400, Math.max(1, parseInt(url.searchParams.get("jours") || "30", 10) || 30));
@@ -91,6 +93,7 @@ export async function dashboard(request, env) {
     q("SELECT label k, COUNT(DISTINCT day || visitor) n FROM events WHERE kind='event' AND name='demande_etape' AND day >= ? GROUP BY label")
   ]);
   const t = tot[0] || { v: 0, u: 0 };
+  const orders = await adminSection(env, url.searchParams.get("ok")).catch(() => "");
   const bars = (rows, total) => rows.length ? `<table>${rows.map(r => `<tr><td>${esc(r.k || "—")}</td><td class="bar"><i style="width:${total ? Math.max(2, r.n / total * 100) : 0}%"></i></td><td class="n">${r.n}</td></tr>`).join("")}</table>` : `<p class="empty">Pas encore de données.</p>`;
   const max = (rows) => rows.reduce((m, r) => Math.max(m, r.n), 0);
   const maxDay = perDay.reduce((m, r) => Math.max(m, r.u), 0);
@@ -114,12 +117,14 @@ export async function dashboard(request, env) {
  td.n{text-align:right;font-variant-numeric:tabular-nums;font-weight:600;width:3em} .empty{color:#8C857C}
  .chart{display:flex;align-items:flex-end;gap:3px;height:160px;padding-top:8px} .col{flex:1;display:grid;grid-template-rows:1fr auto;height:100%;min-width:0}
  .col i{align-self:end;display:block;background:#4C4C4C;border-radius:3px 3px 0 0;min-height:1px} .col span{font-size:.65rem;color:#8C857C;text-align:center}
- .note{color:#6E6A66;font-size:.88rem}
+ .note{color:#6E6A66;font-size:.88rem}${ADMIN_CSS}
 </style></head><body><main class="st">
 <h1>Statistiques du site</h1>
+<p class="note"><a href="#demandes">Aller aux demandes et au suivi de commande</a></p>
 <nav class="per">${[7, 30, 90, 365].map(n => `<a href="?jours=${n}" class="${n === days ? "on" : ""}">${n === 365 ? "12 mois" : n + " jours"}</a>`).join("")}</nav>
 <section class="kpi"><div><b>${t.u}</b><span>visiteurs</span></div><div><b>${t.v}</b><span>pages vues</span></div>
 <div><b>${funnel[0].n}</b><span>ont ouvert « Décrire mon projet »</span></div><div><b>${sent + (groups.devis_demande || []).reduce((s, e) => s + e.n, 0)}</b><span>demandes envoyées</span></div></section>
+${orders}
 <section class="card"><h2>Visiteurs par jour</h2>${chart}</section>
 <section class="grid">
  <div class="card"><h2>D'où viennent les visiteurs</h2>${bars(sources, max(sources))}<p class="note">« Direct » : adresse tapée, favori, ou lien sans origine connue. Pour suivre une campagne, ajoute ?utm_source=nom à tes liens.</p></div>

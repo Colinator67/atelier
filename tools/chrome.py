@@ -26,7 +26,7 @@ NAV_EN = [
     ("en/index.html#faq", "FAQ"),
 ]
 # pages traduites : page française ↔ page anglaise (balises hreflang et lien FR/EN du menu)
-ALT = {"creation-fichiers.html": "en/index.html", "demande.html": "en/request.html"}
+ALT = {"creation-fichiers.html": "en/index.html", "demande.html": "en/request.html", "suivi.html": "en/track.html"}
 ALT.update({v: k for k, v in list(ALT.items())})
 
 # page : (titre, description, page active du menu, classe du body)
@@ -42,6 +42,8 @@ PAGES = {
     "mentions-legales.html": ("Mentions légales et données personnelles | impression_ant", "Mentions légales, données personnelles et mesure d'audience du site impression_ant.", None),
     "en/index.html": ("Custom laser cutting files and 3D models, made to order | impression_ant", "Made-to-order multilayer laser cutting files from €15 and custom 3D models, ready for your machine. Exclusive to you, sell what you make, revisions until you approve.", "en"),
     "en/request.html": ("Describe your project · custom laser file or 3D model | impression_ant", "Describe your laser file or 3D model in four short steps, add photos or sketches, and get a reply with a preview and a quote within 48 hours.", "en"),
+    "suivi.html": ("Suivre ma demande | impression_ant", "Suivez l'avancement de votre demande d'impression 3D, de découpe laser ou de création de fichier avec votre numéro de demande.", None),
+    "en/track.html": ("Track your request | impression_ant", "Follow the progress of your custom file or 3D printing request with your request number.", "en"),
     "404.html": ("Page introuvable | impression_ant", "Cette page n'existe pas ou a été déplacée.", None),
 }
 
@@ -195,6 +197,7 @@ FOOTER_EN = f"""<footer class="footer">
       <nav aria-label="Footer">
         <a href="en/index.html">Custom design files</a>
         <a href="en/request.html">Start a request</a>
+        <a href="en/track.html">Track your request</a>
         <a href="index.html" hreflang="fr">3D printing &amp; laser cutting in Strasbourg (French)</a>
         <a href="mentions-legales.html" hreflang="fr">Legal notice &amp; privacy (French)</a>
       </nav>
@@ -217,6 +220,7 @@ FOOTER = f"""<footer class="footer">
         <a href="portfolio.html">Portfolio</a>
         <a href="creation-fichiers.html">Création de fichiers</a>
         <a href="atelier.html">L'atelier et FAQ</a>
+        <a href="suivi.html">Suivre ma demande</a>
         <a href="cgv.html">Conditions de vente</a>
         <a href="mentions-legales.html">Mentions légales</a>
       </nav>

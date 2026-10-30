@@ -1,4 +1,5 @@
 import { collect, dashboard } from "./stats.js";
+import { record, lookup, requestId } from "./suivi.js";
 
 /* =========================================================================
    Worker Cloudflare — sert le site (dossier public/) et reçoit les demandes
@@ -124,6 +125,8 @@ async function handleRequest(request, env) {
 
   if (!results.length) return json({ ok: false, error: "L'envoi n'est pas encore configuré sur ce site." }, 503);
   if (!results.some(Boolean)) return json({ ok: false }, 502);
+  await record(env, { id, kind, contact: [name, emailOk ? email : "", phoneOk ? phone : ""].filter(Boolean).join(" · "), lang: en ? "en" : "fr" });
+  const track = `https://impressionant.fr/${en ? "en/track" : "suivi"}?ref=${id}`;
 
   // ---------------------------------------------------------------- Confirmation au client
   let confirmation = false;
@@ -136,6 +139,7 @@ async function handleRequest(request, env) {
       <p style="margin:20px 0 6px;font-weight:600">Your request</p>
       <pre style="white-space:pre-wrap;font-family:inherit;background:#F4F2EF;padding:14px;border-radius:6px;margin:0">${escapeHtml(summary)}${message ? "\n\n" + escapeHtml(message) : ""}</pre>
       <p style="margin-top:20px">Next: I send you a preview and a price, we fine-tune it together, then you receive your file. Nothing to pay for now.</p>
+      <p>Track your request at any time: <a href="${track}">${track}</a></p>
       <p>To add anything to your request, just reply to this email.</p>
       <p>Colin<br><span style="color:#6E6A66">impression_ant · custom laser files and 3D models · Strasbourg, France</span></p>
     </div>` : `<div style="font-family:system-ui,-apple-system,Segoe UI,sans-serif;font-size:16px;line-height:1.55;color:#2A2928;max-width:560px">
@@ -144,6 +148,7 @@ async function handleRequest(request, env) {
       <p style="margin:20px 0 6px;font-weight:600">Votre demande</p>
       <pre style="white-space:pre-wrap;font-family:inherit;background:#F4F2EF;padding:14px;border-radius:6px;margin:0">${escapeHtml(summary)}${message ? "\n\n" + escapeHtml(message) : ""}</pre>
       <p style="margin-top:20px">La suite : je vous envoie un devis définitif (avec un aperçu à valider s'il y a une création), puis je fabrique après votre accord. Rien n'est à payer pour l'instant.</p>
+      <p>Vous pouvez suivre l'avancement à tout moment : <a href="${track}">${track}</a></p>
       <p>Pour compléter votre demande, répondez simplement à cet email.</p>
       <p>Colin<br><span style="color:#6E6A66">impression_ant · impression 3D et découpe laser</span></p>
     </div>`;
@@ -175,19 +180,11 @@ export default {
       return handleRequest(request, env);
     }
     if (url.pathname === "/api/s" && request.method === "POST") return collect(request, env).catch(() => new Response(null, { status: 204 }));
+    if (url.pathname === "/api/suivi" && request.method === "GET") return lookup(request, env).catch(() => json({ ok: false, error: "indisponible" }, 503));
     if (url.pathname === "/stats") return dashboard(request, env);
     return env.ASSETS.fetch(request);
   }
 };
-
-// Numéro de demande lisible : IA-AAMMJJ-XXXX (sans 0/O/1/I pour éviter les confusions)
-function requestId() {
-  const d = new Date(Date.now() + 3600e3); // heure de Paris (approx.)
-  const ymd = d.toISOString().slice(2, 10).replace(/-/g, "");
-  const A = "23456789ABCDEFGHJKLMNPQRSTUVWXYZ";
-  const rnd = crypto.getRandomValues(new Uint8Array(4));
-  return `IA-${ymd}-${Array.from(rnd, b => A[b % A.length]).join("")}`;
-}
 
 function toBase64(bytes) {
   let bin = "";

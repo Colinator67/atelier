@@ -335,6 +335,7 @@
       window.track && window.track("demande_envoyee", (state.type === "laser" ? "Découpe laser" : "Impression 3D") + (EN ? " (EN)" : ""));
       form.hidden = true; $("#obDone").hidden = false;
       $("#obRef").textContent = data.id || "—";
+      if (data.id) $("#obDoneText").insertAdjacentHTML("afterend", `<p class="ob-track"><a class="link-more" href="${EN ? "/en/track" : "/suivi"}?ref=${encodeURIComponent(data.id)}">${EN ? "Track this request" : "Suivre cette demande"} <span aria-hidden="true">→</span></a></p>`);
       const mark = $("#obMark");
       mark.dataset.fx = state.type === "laser" ? "engrave" : "print";
       window.UI.replay(mark);
