@@ -115,3 +115,22 @@ Après avoir déposé des JPG : `pip install Pillow` puis `python tools/images.p
 ## Tester en local
 
 Ouvre un terminal dans le dossier `public` et lance `python -m http.server 8000`, puis va sur http://localhost:8000. L'envoi des demandes ne fonctionne qu'une fois en ligne : en local, le site affiche le récapitulatif à copier.
+
+## Statistiques de visite (/stats)
+
+Le site compte ses visites lui-même, sans cookie (base Cloudflare D1 « atelier-stats »).
+
+1. Cloudflare → Workers & Pages → atelier → Settings → Variables and Secrets → ajouter un secret
+   `STATS_PASSWORD` (le mot de passe du tableau de bord). Facultatif : `STATS_SALT`, une suite de caractères au hasard.
+2. Ouvrir https://impressionant.fr/stats (identifiant : n'importe lequel, mot de passe : celui choisi).
+   Périodes : `?jours=7`, `30`, `90` ou `365`.
+
+Pour suivre un nouveau bouton : ajouter `data-track="clic:Nom du bouton"` sur l'élément.
+
+## Référencement
+
+- Après chaque modification du portfolio : `cd tools && python3 seo.py` (pages projet, liste, sitemap.xml, robots.txt),
+  et après un changement de titre ou de description : `python3 chrome.py`.
+- Google Search Console : ajouter la propriété « Domaine » impressionant.fr (la vérification DNS se fait
+  en un clic avec Cloudflare), puis Sitemaps → `sitemap.xml`.
+- Bing Webmaster Tools : « Importer depuis Google Search Console ».

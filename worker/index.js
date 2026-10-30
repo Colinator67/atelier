@@ -1,3 +1,5 @@
+import { collect, dashboard } from "./stats.js";
+
 /* =========================================================================
    Worker Cloudflare — sert le site (dossier public/) et reçoit les demandes
    de devis sur /api/demande (POST, multipart/form-data).
@@ -12,6 +14,8 @@
                           Sans cette variable, aucun email n'est envoyé au client.
      REPLY_DELAY          délai de réponse annoncé dans la confirmation (défaut : "48 h")
      TURNSTILE_SECRET     clé secrète Turnstile si l'anti-spam est activé (facultatif)
+     STATS_PASSWORD       mot de passe de la page /stats (statistiques de visite)
+     STATS_SALT           texte au hasard pour anonymiser les visiteurs (facultatif)
    ========================================================================= */
 
 const MAX_FILE = 8 * 1024 * 1024; // limite des pièces jointes Discord sans boost
@@ -161,6 +165,8 @@ export default {
       if (request.method !== "POST") return json({ ok: false, error: "Méthode non autorisée." }, 405);
       return handleRequest(request, env);
     }
+    if (url.pathname === "/api/s" && request.method === "POST") return collect(request, env).catch(() => new Response(null, { status: 204 }));
+    if (url.pathname === "/stats") return dashboard(request, env);
     return env.ASSETS.fetch(request);
   }
 };

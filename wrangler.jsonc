@@ -7,8 +7,12 @@
     "directory": "./public",
     "binding": "ASSETS",
     "not_found_handling": "404-page",
-    "run_worker_first": ["/api/*"]
+    "run_worker_first": ["/api/*", "/stats"]
   },
+  // statistiques de visite (sans cookie) : base D1 « atelier-stats »
+  "d1_databases": [
+    { "binding": "STATS", "database_name": "atelier-stats", "database_id": "0e04ce83-a77e-4e70-b172-e882f5e53d82" }
+  ],
   "observability": { "enabled": true },
   // garde les variables ajoutées dans le tableau de bord Cloudflare lors des déploiements
   "keep_vars": true

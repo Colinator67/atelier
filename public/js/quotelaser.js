@@ -45,6 +45,7 @@
         showMsg(msg, "");
       }
       updateL();
+      window.track && window.track("devis_laser_fichier", (file.name.split(".").pop() || "").toUpperCase());
     } catch (err) {
       console.error(err);
       showMsg(msg, err.message || "Ce fichier n'a pas pu être lu.", "error");

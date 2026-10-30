@@ -10,6 +10,7 @@
     const ext = (f.name.split(".").pop() || "").toLowerCase();
     const page = PRINT.includes(ext) ? "impression-3d.html" : LASER.includes(ext) ? "decoupe-laser.html" : null;
     if (!page) { showMsg($("#quickMsg"), `Le format .${ext} n'est pas lu par les simulateurs. Décrivez votre projet et joignez le fichier : je vous fais un devis.`, "error"); return; }
+    window.track && window.track("depot_accueil", ext.toUpperCase());
     drop.classList.add("is-loading");
     try { await IDB.set("pending-file", f); } catch (e) { /* le client redéposera le fichier */ }
     location.href = page + "#devis";

@@ -78,6 +78,7 @@
       showMesh(tris);
       update3d();
       window.UI.toast("Fichier analysé");
+      window.track && window.track("devis_3d_fichier", (file.name.split(".").pop() || "").toUpperCase());
     } catch (err) {
       console.error(err);
       showMsg(msg, err.message || "Ce fichier n'a pas pu être lu.", "error");

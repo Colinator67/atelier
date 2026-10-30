@@ -235,6 +235,13 @@
 
   // au toucher ou au clavier : ouvrir / fermer (une machine à la fois)
   const cards = $$(".mc", box);
+  cards.forEach((card, i) => {
+    const name = (C.machines[i] || {}).name || "";
+    let t = null;
+    card.addEventListener("mouseenter", () => { t = setTimeout(() => window.track && window.track("machine_fiche", name, true), 600); });
+    card.addEventListener("mouseleave", () => clearTimeout(t));
+    card.addEventListener("click", () => window.track && window.track("machine_fiche", name, true));
+  });
   cards.forEach(card => {
     const btn = card.querySelector(".mc-btn");
     btn.addEventListener("click", () => {

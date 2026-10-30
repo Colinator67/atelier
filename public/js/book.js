@@ -221,6 +221,7 @@
   }
   function afterTurn() {
     const vis = visiblePages();
+    vis.forEach(i => { const pg = pages[i]; if (pg && pg.project && window.track) window.track("projet_vu", pg.project.titre, true); });
     vis.forEach(i => {
       if (!pages[i] || !pages[i].laser) return;
       const pg = book.querySelector(`[data-page="${i}"]`);
@@ -334,6 +335,7 @@
     const p = data.projets.find(x => x.id === id);
     if (!p) return;
     $("#lb-title").textContent = p.titre;
+    window.track && window.track("projet_photos", p.titre);
     $("#lb-desc").textContent = p.description || p.resume || "";
     $("#lb-tags").innerHTML = (p.tags || []).map(t => `<span>${esc(t)}</span>`).join("");
     $("#lb-thumbs").innerHTML = p.images.length > 1

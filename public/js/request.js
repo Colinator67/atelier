@@ -84,6 +84,7 @@
         throw new Error("HTTP " + res.status);
       }
       $("#reqForm").hidden = true; $("#reqSent").hidden = false;
+      window.track && window.track("devis_demande", current.kind);
       const mark = $("#reqMark");
       if (mark) { mark.dataset.fx = window.UI.pageFx(); window.UI.replay(mark); }
       const delay = (C.delays && C.delays.reply) || "48 h";

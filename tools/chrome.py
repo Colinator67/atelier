@@ -4,6 +4,7 @@ Le contenu propre à chaque page (entre <main> et </main>) n'est jamais touché.
 
 Usage : python tools/chrome.py   (depuis la racine du dépôt)
 """
+import json
 import re
 from pathlib import Path
 
@@ -20,25 +21,62 @@ NAV = [
 
 # page : (titre, description, page active du menu, classe du body)
 PAGES = {
-    "index.html": ("impression_ant · Impression 3D & découpe laser", "Impression 3D, modélisation et découpe laser sur mesure. Devis instantané depuis votre fichier.", None),
-    "impression-3d.html": ("Impression 3D · impression_ant", "Impression 3D PLA, PETG et TPU et modélisation sur mesure. Devis instantané depuis votre fichier STL, 3MF ou STEP.", "impression-3d.html"),
-    "decoupe-laser.html": ("Découpe laser · impression_ant", "Découpe et gravure laser, création de fichiers multicouches et tampons. Devis instantané depuis votre fichier SVG, DXF, PDF ou AI.", "decoupe-laser.html"),
-    "portfolio.html": ("Portfolio · impression_ant", "Portfolio de Colin Ehret : mécanismes imprimés en 3D, découpes laser multicouches, commandes sur mesure et modélisation paramétrique.", "portfolio.html"),
-    "atelier.html": ("L'atelier · impression_ant", "Comment je travaille, les machines de l'atelier, les délais et les réponses aux questions fréquentes.", "atelier.html"),
-    "demande.html": ("Décrire mon projet · impression_ant", "Décrivez votre projet d'impression 3D ou de découpe laser en quatre étapes. Réponse par email, téléphone ou WhatsApp.", None),
-    "cgv.html": ("Conditions générales de vente · impression_ant", "Conditions générales de vente d'impression_ant : devis, paiement, fabrication, livraison, garanties.", None),
-    "mentions-legales.html": ("Mentions légales · impression_ant", "Mentions légales et données personnelles du site impression_ant.", None),
-    "404.html": ("Page introuvable · impression_ant", "Cette page n'existe pas ou a été déplacée.", None),
+    "index.html": ("Impression 3D et découpe laser sur mesure près de Strasbourg | impression_ant", "Impression 3D, découpe et gravure laser sur mesure en Alsace, envoi partout en France. Déposez votre fichier : prix immédiat. Pas de fichier ? Je modélise pour vous.", None),
+    "impression-3d.html": ("Impression 3D sur mesure, devis instantané · PLA, PETG, TPU | impression_ant", "Impression 3D à la demande en PLA, PETG ou TPU, jusqu'à 80 cm. Déposez votre STL, 3MF ou STEP : prix immédiat. Modélisation 3D sur mesure si vous n'avez pas de fichier.", "impression-3d.html"),
+    "decoupe-laser.html": ("Découpe et gravure laser sur mesure, devis instantané | impression_ant", "Découpe et gravure laser bois, MDF, contreplaqué et carton, tableaux multicouches et tampons personnalisés. Déposez votre SVG, DXF ou PDF : prix immédiat, ou fichier dessiné pour vous.", "decoupe-laser.html"),
+    "portfolio.html": ("Portfolio : réalisations en impression 3D et découpe laser | impression_ant", "Mécanismes imprimés d'un seul tenant, commandes sur mesure, objets paramétriques et tableaux laser multicouches : les réalisations de Colin Ehret, ingénieur en plasturgie.", "portfolio.html"),
+    "atelier.html": ("L'atelier : machines, délais et questions fréquentes | impression_ant", "Les imprimantes 3D et le laser de l'atelier, les délais de réponse et de fabrication, et les réponses aux questions fréquentes sur les devis, le paiement et la livraison.", "atelier.html"),
+    "demande.html": ("Décrire mon projet d'impression 3D ou de découpe laser | impression_ant", "Décrivez votre projet en quatre étapes, ajoutez photos et croquis, choisissez email, téléphone ou WhatsApp : réponse sous 48 h avec un devis.", None),
+    "cgv.html": ("Conditions générales de vente | impression_ant", "Conditions générales de vente d'impression_ant : devis, paiement, fabrication, livraison, garanties.", None),
+    "mentions-legales.html": ("Mentions légales et données personnelles | impression_ant", "Mentions légales, données personnelles et mesure d'audience du site impression_ant.", None),
+    "404.html": ("Page introuvable | impression_ant", "Cette page n'existe pas ou a été déplacée.", None),
+}
+
+# ---- données structurées (schema.org) : l'entreprise sur toutes les pages, les services sur les pages ateliers
+BUSINESS = {
+    "@context": "https://schema.org", "@type": "LocalBusiness", "@id": SITE + "/#atelier",
+    "name": "impression_ant", "alternateName": "IMPRESSION ANT", "url": SITE + "/",
+    "description": "Atelier d'impression 3D, de modélisation 3D et de découpe et gravure laser sur mesure, avec devis instantané depuis le fichier du client.",
+    "image": SITE + "/img/og.jpg", "logo": SITE + "/img/logo-3d.png", "email": "impression.ant.laser@gmail.com",
+    "founder": {"@type": "Person", "name": "Colin Ehret", "jobTitle": "Ingénieur en plasturgie"},
+    "address": {"@type": "PostalAddress", "streetAddress": "27 B route de Brumath", "postalCode": "67670", "addressLocality": "Mommenheim", "addressRegion": "Grand Est", "addressCountry": "FR"},
+    "areaServed": [{"@type": "AdministrativeArea", "name": "Bas-Rhin"}, {"@type": "AdministrativeArea", "name": "Alsace"}, {"@type": "Country", "name": "France"}],
+    "knowsAbout": ["Impression 3D", "Modélisation 3D", "Découpe laser", "Gravure laser", "Plasturgie", "Fabrication additive"],
+    "priceRange": "€",
+}
+SERVICES = {
+    "impression-3d.html": {"@context": "https://schema.org", "@type": "Service", "serviceType": "Impression 3D sur mesure", "name": "Impression et modélisation 3D",
+        "provider": {"@id": SITE + "/#atelier"}, "areaServed": {"@type": "Country", "name": "France"}, "url": SITE + "/impression-3d",
+        "description": "Impression 3D FDM en PLA, PETG et TPU, multicolore, jusqu'à 800 × 800 × 1000 mm, et modélisation 3D sur mesure. Devis instantané depuis un fichier STL, 3MF ou STEP.",
+        "offers": {"@type": "Offer", "priceCurrency": "EUR", "description": "Prix calculé selon la matière (17 €/kg) et le temps machine, estimation instantanée sur le site."}},
+    "decoupe-laser.html": {"@context": "https://schema.org", "@type": "Service", "serviceType": "Découpe et gravure laser sur mesure", "name": "Découpe, gravure laser et création de fichiers",
+        "provider": {"@id": SITE + "/#atelier"}, "areaServed": {"@type": "Country", "name": "France"}, "url": SITE + "/decoupe-laser",
+        "description": "Découpe et gravure laser sur MDF, contreplaqué et carton, tableaux multicouches, signalétique, création de fichiers de découpe et tampons personnalisés. Devis instantané depuis un fichier SVG, DXF, PDF ou AI.",
+        "hasOfferCatalog": {"@type": "OfferCatalog", "name": "Tampons personnalisés", "itemListElement": [
+            {"@type": "Offer", "name": "Tampon Ø 6 cm", "price": "10.00", "priceCurrency": "EUR"},
+            {"@type": "Offer", "name": "Tampon Ø 10 cm", "price": "15.00", "priceCurrency": "EUR"},
+            {"@type": "Offer", "name": "Tampon Ø 20 cm", "price": "25.00", "priceCurrency": "EUR"}]}},
 }
 
 
-def head(file, title, desc):
-    url = SITE + "/" + ("" if file == "index.html" else file)
+
+def page_url(file):
+    """Adresse publique : Cloudflare sert les pages sans « .html »."""
+    return SITE + "/" + ("" if file == "index.html" else file[:-5] if file.endswith(".html") else file)
+
+
+def ld(*objs):
+    return "\n".join('<script type="application/ld+json">' + json.dumps(o, ensure_ascii=False, separators=(",", ":")) + "</script>" for o in objs if o)
+
+
+def head(file, title, desc, extra=None):
+    url = page_url(file)
     return f"""<head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>{title}</title>
 <meta name="claude:viewport-fit-sides" content="cover">
+<meta name="robots" content="{"noindex" if file == "404.html" else "index, follow, max-image-preview:large"}">
 <meta name="description" content="{desc}">
 <meta name="theme-color" content="#ECEAE7">
 <link rel="canonical" href="{url}">
@@ -57,6 +95,8 @@ def head(file, title, desc):
 <link rel="preload" href="fonts/archivo-var.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="fonts/plex-sans-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="css/style.css">
+<script src="js/stats.js" defer></script>
+{ld(BUSINESS, SERVICES.get(file), extra)}
 <script>try{{var m=sessionStorage.getItem("morph");if(m){{document.documentElement.dataset.morph=m;sessionStorage.removeItem("morph")}}}}catch(e){{}}</script>
 </head>"""
 
@@ -67,7 +107,7 @@ def header(active):
         cur = ' aria-current="page"' if href == active else ""
         img = f'<img src="{icon}" alt="" width="18" height="18">' if icon else ""
         links.append(f'      <a href="{href}"{cur}>{img}{label}</a>')
-    links.append('      <a class="nav-cta" href="demande.html">Décrire mon projet</a>')
+    links.append('      <a class="nav-cta" href="demande.html" data-track="clic:Menu · Décrire mon projet">Décrire mon projet</a>')
     return f"""<a class="skip" href="#contenu">Aller au contenu</a>
 <header class="topbar">
   <div class="wrap topbar-in">
@@ -91,7 +131,7 @@ FOOTER = f"""<footer class="footer">
     <div class="footer-top">
       <div class="footer-contact">
         <p>Une question, un projet ? Je réponds sous <span data-delay="reply">48 h</span>.</p>
-        <p><a class="btn" href="demande.html">Décrire mon projet</a> <a class="footer-mail" href="mailto:impression.ant.laser@gmail.com" data-contact-email>impression.ant.laser@gmail.com</a></p>
+        <p><a class="btn" href="demande.html" data-track="clic:Pied de page · Décrire mon projet">Décrire mon projet</a> <a class="footer-mail" href="mailto:impression.ant.laser@gmail.com" data-contact-email>impression.ant.laser@gmail.com</a></p>
       </div>
       <nav aria-label="Pied de page">
         <a href="impression-3d.html">Impression 3D</a>

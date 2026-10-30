@@ -51,6 +51,7 @@
     $("#obNext").hidden = state.step === 0;
     $("#obNext").textContent = state.step === STEPS.length - 1 ? "Envoyer ma demande" : (STEPS[state.step] === "files" && !state.files.length ? "Continuer sans fichier" : "Continuer");
     if (STEPS[state.step] === "recap") renderRecap();
+    window.track && window.track("demande_etape", STEPS[state.step], true);
     if (STEPS[state.step] === "recap") loadTurnstile();
     if (!opts.silent) {
       const h = sections[state.step].querySelector(".ob-title");
@@ -296,6 +297,7 @@
         throw new Error("HTTP " + res.status);
       }
       clearDraft();
+      window.track && window.track("demande_envoyee", state.type === "laser" ? "Découpe laser" : "Impression 3D");
       form.hidden = true; $("#obDone").hidden = false;
       $("#obRef").textContent = data.id || "—";
       const mark = $("#obMark");
