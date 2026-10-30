@@ -24,11 +24,30 @@
   const clampQty = (input) => Math.max(1, Math.min(+input.max || 999, Math.round(+input.value || 1)));
 
 
+  // ---------------------------------------------------------- Logo animé (gravure / impression)
+  // morph("print" | "engrave", { from, to, cls, toHTML })
+  function morph(fx, o = {}) {
+    const img = (src, c) => src ? `<img class="${c}" src="${src}" alt="">` : `<span class="${c}"></span>`;
+    return `<div class="logo-morph ${o.cls || ""}" data-fx="${fx}" aria-hidden="true">
+      ${img(o.from, "lm-from")}${o.toHTML ? `<span class="lm-to">${o.toHTML}</span>` : img(o.to, "lm-to")}
+      <span class="lm-layers"></span><span class="lm-tool"><i></i></span>
+      <span class="lm-smoke"><i></i><i></i><i></i><i></i><i></i></span></div>`;
+  }
+  // relance une animation .lm-play
+  function replay(el) { el.classList.remove("lm-play"); void el.offsetWidth; el.classList.add("lm-play"); }
+  const pageFx = () => document.body.classList.contains("theme-laser") ? "engrave" : "print";
+
   // ---------------------------------------------------------- Dépôt de fichier
   function bindDrop(label, input, onFile) {
     ["dragenter", "dragover"].forEach(ev => label.addEventListener(ev, e => { e.preventDefault(); label.classList.add("is-over"); }));
     ["dragleave", "drop"].forEach(ev => label.addEventListener(ev, e => { e.preventDefault(); label.classList.remove("is-over"); }));
     // pendant l'analyse : la zone affiche un état de chargement
+    // animation de chargement : le logo de l'atelier s'imprime ou se grave en boucle
+    if (!label.querySelector(".drop-fx") && (document.body.classList.contains("theme-3d") || document.body.classList.contains("theme-laser"))) {
+      const fx = pageFx(), logo = fx === "engrave" ? "img/logo-laser.png" : "img/logo-3d.png";
+      label.insertAdjacentHTML("beforeend", `<span class="drop-fx">${morph(fx, { from: logo, to: logo, cls: "lm-loop lm-ghost" })}<span>Analyse du fichier…</span></span>`);
+      label.classList.add("has-fx");
+    }
     const run = (f) => {
       label.classList.add("is-loading"); label.setAttribute("aria-busy", "true");
       return Promise.resolve().then(() => onFile(f)).finally(() => { label.classList.remove("is-loading"); label.removeAttribute("aria-busy"); });
@@ -120,5 +139,5 @@
   $$("[data-delay]").forEach(el => { const v = (C.delays || {})[el.dataset.delay]; if (v) el.textContent = v; });
   $$("[data-contact-email]").forEach(el => { const m = C.contactEmail || (C.legal || {}).email; if (m) { el.textContent = m; el.href = "mailto:" + m; } });
 
-  window.UI = { $, $$, nf, eur, mm, fmtSize, fmtDuration, fmtMinutes, esc, setLines, showMsg, clampQty, bindDrop, bindChips, loadScript, toast, IDB, pickUpPendingFile };
+  window.UI = { $, $$, nf, eur, mm, fmtSize, fmtDuration, fmtMinutes, esc, setLines, showMsg, clampQty, bindDrop, bindChips, loadScript, toast, IDB, pickUpPendingFile, morph, replay, pageFx };
 })();

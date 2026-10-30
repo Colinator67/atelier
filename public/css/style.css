@@ -229,7 +229,7 @@ body.theme-laser .page-hero { border-bottom: 1px solid var(--line); background: 
 @media (hover: hover) and (pointer: fine) { .chip:not(.is-on):hover { background: color-mix(in srgb, var(--fg) 12%, transparent); } }
 .chip.is-on { background: var(--pick-bg); color: var(--pick-fg); border-color: var(--pick-bg); }
 
-.drop { display: grid; place-items: center; gap: 6px; text-align: center; cursor: pointer; min-height: 220px; padding: 24px; border-radius: var(--r); border: 2px dashed color-mix(in srgb, var(--fg) 30%, transparent); background: color-mix(in srgb, var(--surface) 60%, transparent); transition: background-color 150ms ease, border-color 150ms ease; }
+.drop { position: relative; overflow: hidden; display: grid; place-items: center; gap: 6px; text-align: center; cursor: pointer; min-height: 220px; padding: 24px; border-radius: var(--r); border: 2px dashed color-mix(in srgb, var(--fg) 30%, transparent); background: color-mix(in srgb, var(--surface) 60%, transparent); transition: background-color 150ms ease, border-color 150ms ease; }
 .drop:hover, .drop.is-over { border-color: var(--fg); background: var(--surface); }
 .drop-small { min-height: 120px; }
 .drop-title { font: 600 1.15rem/1.2 var(--f-display); font-stretch: 112%; }
@@ -642,40 +642,52 @@ input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--pick-bg)
 ::view-transition-old(root), ::view-transition-new(root) { animation-duration: 280ms; animation-timing-function: var(--ease-out); }
 @media (prefers-reduced-motion: reduce) { @view-transition { navigation: none; } }
 
-/* ---------- Logo qui se transforme entre les ateliers ----------
-   html[data-morph="engrave"] : arrivée sur la découpe laser depuis l'impression 3D
-   html[data-morph="print"]   : arrivée sur l'impression 3D depuis la découpe laser
-   --p = avancement de 0 % à 100 % (gravure de haut en bas, impression de bas en haut) */
+/* ---------- Logo qui se transforme (gravure laser / impression 3D) ----------
+   Déclenché par html[data-morph] (changement de page), .lm-play (une fois) ou .lm-loop (en boucle).
+   --p = avancement de 0 % à 100 % (gravure de haut en bas, impression de bas en haut).
+   .lm-fast = version courte ; .lm-ghost = l'image de départ est un fantôme grisé. */
 @property --p { syntax: "<percentage>"; inherits: true; initial-value: 100%; }
-.logo-morph { position: relative; width: clamp(72px, 9vw, 120px); aspect-ratio: 1; border-radius: 50%; overflow: hidden; isolation: isolate; cursor: pointer; view-transition-name: workshop-logo; --p: 100%; }
-.logo-morph img { position: absolute; inset: 0; width: 100%; height: 100%; border-radius: 50%; }
+.logo-morph { position: relative; width: clamp(72px, 9vw, 120px); aspect-ratio: 1; border-radius: 50%; overflow: hidden; isolation: isolate; --p: 100%; --lm-dur: 1.9s; --lm-delay: .35s; --lm-steps: 24; }
+.page-hero .logo-morph { cursor: pointer; view-transition-name: workshop-logo; }
+.logo-morph[data-fx="print"] { --lm-dur: 2.3s; }
+.logo-morph.lm-fast { --lm-dur: .7s; --lm-delay: 0s; --lm-steps: 12; }
+.logo-morph > img, .logo-morph > .lm-to, .logo-morph > .lm-from { position: absolute; inset: 0; width: 100%; height: 100%; border-radius: 50%; }
 .lm-from, .lm-tool, .lm-smoke, .lm-layers { display: none; }
+.lm-ghost .lm-from { filter: grayscale(1); opacity: .3; }
 ::view-transition-group(workshop-logo) { animation-duration: 280ms; }
 
 /* Gravure laser */
-html[data-morph="engrave"] .logo-morph[data-fx="engrave"] { animation: lmRun 1.9s linear .35s both; }
-html[data-morph="engrave"] [data-fx="engrave"] .lm-from { display: block; }
-html[data-morph="engrave"] [data-fx="engrave"] .lm-to { clip-path: inset(0 0 calc(100% - var(--p)) 0); }
-html[data-morph="engrave"] [data-fx="engrave"] .lm-tool { display: block; position: absolute; left: 0; right: 0; top: var(--p); height: 2px; margin-top: -1px; background: #FFB27A; box-shadow: 0 0 6px 1px rgba(255, 140, 70, .9), 0 0 18px 4px rgba(255, 110, 40, .45); animation: lmOut 250ms ease 2.2s both; z-index: 2; }
-html[data-morph="engrave"] [data-fx="engrave"] .lm-tool i { position: absolute; top: -4px; left: 0; width: 10px; height: 10px; margin-left: -5px; border-radius: 50%; background: #FFF6EC; box-shadow: 0 0 8px 3px rgba(255, 170, 90, .95), 0 0 22px 8px rgba(255, 120, 40, .5); animation: lmRaster 130ms linear infinite alternate; }
-html[data-morph="engrave"] [data-fx="engrave"] .lm-smoke { display: block; position: absolute; inset: 0; z-index: 3; pointer-events: none; animation: lmOut 400ms ease 2.25s both; }
+html[data-morph="engrave"] .logo-morph[data-fx="engrave"], .logo-morph.lm-play[data-fx="engrave"], .logo-morph.lm-loop[data-fx="engrave"] { animation: lmRun var(--lm-dur) linear var(--lm-delay) both; }
+html[data-morph="engrave"] .logo-morph[data-fx="engrave"] .lm-from, .logo-morph.lm-play[data-fx="engrave"] .lm-from, .logo-morph.lm-loop[data-fx="engrave"] .lm-from { display: block; }
+html[data-morph="engrave"] .logo-morph[data-fx="engrave"] .lm-to, .logo-morph.lm-play[data-fx="engrave"] .lm-to, .logo-morph.lm-loop[data-fx="engrave"] .lm-to { clip-path: inset(0 0 calc(100% - var(--p)) 0); }
+html[data-morph="engrave"] .logo-morph[data-fx="engrave"] .lm-tool, .logo-morph.lm-play[data-fx="engrave"] .lm-tool, .logo-morph.lm-loop[data-fx="engrave"] .lm-tool { display: block; position: absolute; left: 0; right: 0; top: var(--p); height: 2px; margin-top: -1px; background: #FFB27A; box-shadow: 0 0 6px 1px rgba(255, 140, 70, .9), 0 0 18px 4px rgba(255, 110, 40, .45); animation: lmOut 250ms ease calc(var(--lm-delay) + var(--lm-dur)) both; z-index: 2; }
+html[data-morph="engrave"] .logo-morph[data-fx="engrave"] .lm-tool i, .logo-morph.lm-play[data-fx="engrave"] .lm-tool i, .logo-morph.lm-loop[data-fx="engrave"] .lm-tool i { position: absolute; top: -4px; left: 0; width: 10px; height: 10px; margin-left: -5px; border-radius: 50%; background: #FFF6EC; box-shadow: 0 0 8px 3px rgba(255, 170, 90, .95), 0 0 22px 8px rgba(255, 120, 40, .5); animation: lmRaster 130ms linear infinite alternate; }
+html[data-morph="engrave"] .logo-morph[data-fx="engrave"] .lm-smoke, .logo-morph.lm-play[data-fx="engrave"] .lm-smoke, .logo-morph.lm-loop[data-fx="engrave"] .lm-smoke { display: block; position: absolute; inset: 0; z-index: 3; pointer-events: none; animation: lmOut 400ms ease calc(var(--lm-delay) + var(--lm-dur)) both; }
 .lm-smoke i { position: absolute; top: var(--p); width: 14%; aspect-ratio: 1; border-radius: 50%; background: rgba(200, 196, 190, .55); filter: blur(4px); opacity: 0; animation: lmSmoke 900ms ease-out infinite; }
 .lm-smoke i:nth-child(1) { left: 18%; animation-delay: .35s; }
 .lm-smoke i:nth-child(2) { left: 38%; animation-delay: .55s; }
 .lm-smoke i:nth-child(3) { left: 58%; animation-delay: .45s; }
 .lm-smoke i:nth-child(4) { left: 74%; animation-delay: .7s; }
 .lm-smoke i:nth-child(5) { left: 46%; animation-delay: .9s; }
+.lm-fast .lm-smoke i { animation-delay: 0s; animation-duration: 500ms; }
 
 /* Impression 3D couche par couche */
-html[data-morph="print"] .logo-morph[data-fx="print"] { animation: lmRun 2.3s steps(24, end) .35s both; }
-html[data-morph="print"] [data-fx="print"] .lm-from { display: block; animation: lmGhost 2.65s ease both; }
-html[data-morph="print"] [data-fx="print"] .lm-to { clip-path: inset(calc(100% - var(--p)) 0 0 0); }
-html[data-morph="print"] [data-fx="print"] .lm-layers { display: block; position: absolute; inset: 0; border-radius: 50%; clip-path: inset(calc(100% - var(--p)) 0 0 0); background: repeating-linear-gradient(0deg, rgba(0, 0, 0, .10) 0 1px, transparent 1px 4px); animation: lmOut 500ms ease 2.7s both; z-index: 1; }
-html[data-morph="print"] [data-fx="print"] .lm-tool { display: block; position: absolute; top: calc(100% - var(--p)); left: 20%; width: 16%; height: 14%; margin-top: -14%; z-index: 2; animation: lmTravel 260ms var(--ease-in-out) infinite alternate, lmOut 250ms ease 2.6s both; }
-html[data-morph="print"] [data-fx="print"] .lm-tool i { position: absolute; inset: 0; background: #2A2928; clip-path: polygon(0 0, 100% 0, 100% 52%, 68% 52%, 56% 100%, 44% 100%, 32% 52%, 0 52%); }
-html[data-morph="print"] [data-fx="print"] .lm-tool::after { content: ""; position: absolute; left: 50%; bottom: -2px; width: 3px; height: 3px; margin-left: -1.5px; border-radius: 50%; background: #FF8A3D; box-shadow: 0 0 6px 2px rgba(255, 120, 40, .7); }
+html[data-morph="print"] .logo-morph[data-fx="print"], .logo-morph.lm-play[data-fx="print"], .logo-morph.lm-loop[data-fx="print"] { animation: lmRun var(--lm-dur) steps(var(--lm-steps), end) var(--lm-delay) both; }
+html[data-morph="print"] .logo-morph[data-fx="print"] .lm-from, .logo-morph.lm-play[data-fx="print"] .lm-from, .logo-morph.lm-loop[data-fx="print"] .lm-from { display: block; animation: lmGhost calc(var(--lm-delay) + var(--lm-dur) + .3s) ease both; }
+html[data-morph="print"] .logo-morph[data-fx="print"] .lm-to, .logo-morph.lm-play[data-fx="print"] .lm-to, .logo-morph.lm-loop[data-fx="print"] .lm-to { clip-path: inset(calc(100% - var(--p)) 0 0 0); }
+html[data-morph="print"] .logo-morph[data-fx="print"] .lm-layers, .logo-morph.lm-play[data-fx="print"] .lm-layers, .logo-morph.lm-loop[data-fx="print"] .lm-layers { display: block; position: absolute; inset: 0; border-radius: 50%; clip-path: inset(calc(100% - var(--p)) 0 0 0); background: repeating-linear-gradient(0deg, rgba(0, 0, 0, .10) 0 1px, transparent 1px 4px); animation: lmOut 500ms ease calc(var(--lm-delay) + var(--lm-dur) + .05s) both; z-index: 1; }
+html[data-morph="print"] .logo-morph[data-fx="print"] .lm-tool, .logo-morph.lm-play[data-fx="print"] .lm-tool, .logo-morph.lm-loop[data-fx="print"] .lm-tool { display: block; position: absolute; top: calc(100% - var(--p)); left: 20%; width: 16%; height: 14%; margin-top: -14%; z-index: 2; animation: lmTravel 260ms var(--ease-in-out) infinite alternate, lmOut 250ms ease calc(var(--lm-delay) + var(--lm-dur)) both; }
+html[data-morph="print"] .logo-morph[data-fx="print"] .lm-tool i, .logo-morph.lm-play[data-fx="print"] .lm-tool i, .logo-morph.lm-loop[data-fx="print"] .lm-tool i { position: absolute; inset: 0; background: #2A2928; clip-path: polygon(0 0, 100% 0, 100% 52%, 68% 52%, 56% 100%, 44% 100%, 32% 52%, 0 52%); }
+html[data-morph="print"] .logo-morph[data-fx="print"] .lm-tool::after, .logo-morph.lm-play[data-fx="print"] .lm-tool::after, .logo-morph.lm-loop[data-fx="print"] .lm-tool::after { content: ""; position: absolute; left: 50%; bottom: -2px; width: 3px; height: 3px; margin-left: -1.5px; border-radius: 50%; background: #FF8A3D; box-shadow: 0 0 6px 2px rgba(255, 120, 40, .7); }
+.lm-fast .lm-tool { animation-duration: 140ms, 250ms !important; }
 
-@media (prefers-reduced-motion: reduce) { .logo-morph .lm-from, .logo-morph .lm-tool, .logo-morph .lm-smoke, .logo-morph .lm-layers { display: none !important; } .logo-morph .lm-to { clip-path: none !important; } }
+/* En boucle (analyse d'un fichier) */
+.logo-morph.lm-loop { --lm-dur: 1.5s; --lm-delay: 0s; --lm-steps: 16; animation-iteration-count: infinite !important; }
+.logo-morph.lm-loop .lm-from { animation: none !important; }
+.logo-morph.lm-loop[data-fx="engrave"] .lm-tool, .logo-morph.lm-loop .lm-smoke, .logo-morph.lm-loop .lm-layers { animation: none !important; }
+.logo-morph.lm-loop[data-fx="print"] .lm-tool { animation: lmTravel 220ms var(--ease-in-out) infinite alternate !important; }
+
+@media (prefers-reduced-motion: reduce) { .logo-morph .lm-tool, .logo-morph .lm-smoke, .logo-morph .lm-layers { display: none !important; } .logo-morph:not(.lm-loop) .lm-from { display: none !important; } .logo-morph .lm-to { clip-path: none !important; } }
 
 @keyframes lmRun { from { --p: 0%; } to { --p: 100%; } }
 @keyframes lmRaster { from { left: 4%; } to { left: 96%; } }
@@ -683,3 +695,29 @@ html[data-morph="print"] [data-fx="print"] .lm-tool::after { content: ""; positi
 @keyframes lmTravel { from { left: 14%; } to { left: 70%; } }
 @keyframes lmGhost { 0% { opacity: 1; } 20% { opacity: .35; } 85% { opacity: .2; } 100% { opacity: 0; } }
 @keyframes lmOut { to { opacity: 0; visibility: hidden; } }
+
+/* ---------- Analyse d'un fichier : le logo s'imprime ou se grave en boucle ---------- */
+.drop-fx { display: none; }
+.drop.is-loading { pointer-events: none; }
+.drop.is-loading.has-fx::after { content: none; }
+.drop.is-loading .drop-fx { display: grid; justify-items: center; gap: 12px; position: absolute; inset: 0; place-content: center; background: color-mix(in srgb, var(--surface) 88%, transparent); opacity: 0; animation: fxIn 200ms var(--ease-out) 150ms forwards; }
+.drop.is-loading > .drop-fx { opacity: 0; }
+.drop.is-loading.has-fx > *:not(.drop-fx) { opacity: .15; }
+.drop-fx .logo-morph { width: 72px; }
+.drop-fx span { font-weight: 600; }
+@keyframes fxIn { to { opacity: 1; } }
+
+/* ---------- Coche de réussite imprimée ou gravée ---------- */
+.done-mark { width: 72px; }
+.done-mark .lm-to { background: var(--fg); }
+.done-mark .lm-to::after { content: ""; position: absolute; left: 34%; top: 22%; width: 22%; height: 40%; border-right: 5px solid var(--bg); border-bottom: 5px solid var(--bg); transform: rotate(45deg); }
+.done-mark .lm-from { background: transparent; box-shadow: inset 0 0 0 3px color-mix(in srgb, var(--fg) 25%, transparent); }
+.done-mark[data-fx="engrave"] .lm-to { background: #4C4C4C; }
+.done-mark[data-fx="engrave"] .lm-to::after { border-color: #FCFCFC; }
+.done-mark[data-fx="print"] .lm-to { background: #C1A88A; }
+.done-mark[data-fx="print"] .lm-to::after { border-color: #2B2620; }
+.sent .done-mark { margin-bottom: 4px; }
+
+/* ---------- Cartes du choix de type ---------- */
+.ob-choice .logo-morph { width: 64px; flex: none; }
+@media (max-width: 600px) { .ob-choice .logo-morph { grid-row: span 2; width: 56px; } }

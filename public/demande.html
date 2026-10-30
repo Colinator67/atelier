@@ -59,12 +59,12 @@
         <h1 class="ob-title" id="ob-type-t" tabindex="-1">Votre demande concerne :</h1>
         <div class="ob-choices" role="radiogroup" aria-labelledby="ob-type-t">
           <button type="button" class="ob-choice" role="radio" aria-checked="false" data-type="3d">
-            <img src="img/logo-3d.png" alt="" width="72" height="72">
+            <div class="logo-morph lm-ghost lm-fast" data-fx="print" aria-hidden="true"><img class="lm-from" src="img/logo-3d.png" alt=""><img class="lm-to" src="img/logo-3d.png" alt=""><span class="lm-layers"></span><span class="lm-tool"><i></i></span><span class="lm-smoke"><i></i><i></i><i></i><i></i><i></i></span></div>
             <span class="ob-choice-t">Impression 3D</span>
             <span class="ob-choice-d">Une pièce à modéliser puis imprimer : objet, pièce de rechange, prototype, déco.</span>
           </button>
           <button type="button" class="ob-choice" role="radio" aria-checked="false" data-type="laser">
-            <img src="img/logo-laser.png" alt="" width="72" height="72">
+            <div class="logo-morph lm-ghost lm-fast" data-fx="engrave" aria-hidden="true"><img class="lm-from" src="img/logo-laser.png" alt=""><img class="lm-to" src="img/logo-laser.png" alt=""><span class="lm-layers"></span><span class="lm-tool"><i></i></span><span class="lm-smoke"><i></i><i></i><i></i><i></i><i></i></span></div>
             <span class="ob-choice-t">Découpe laser</span>
             <span class="ob-choice-d">Un fichier de découpe à dessiner : multicouche, gravure, signalétique, tampon.</span>
           </button>
@@ -169,7 +169,7 @@
 
     <!-- Envoyée -->
     <section class="ob-done" id="obDone" hidden aria-labelledby="ob-done-t">
-      <span class="ob-done-mark" aria-hidden="true"></span>
+      <div class="logo-morph done-mark" id="obMark" data-fx="print" aria-hidden="true"><span class="lm-from"></span><span class="lm-to"></span><span class="lm-layers"></span><span class="lm-tool"><i></i></span><span class="lm-smoke"><i></i><i></i><i></i><i></i><i></i></span></div>
       <h1 class="ob-title" id="ob-done-t" tabindex="-1">Demande envoyée</h1>
       <p class="ob-ref">Numéro de demande <strong id="obRef">—</strong></p>
       <p class="ob-sub" id="obDoneText">Je vous réponds sous <span data-delay="reply">48 h</span>.</p>

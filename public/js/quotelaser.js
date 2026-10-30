@@ -30,7 +30,7 @@
 
   bindDrop($("#dropL"), $("#fileL"), async (file) => {
     const msg = $("#msgL");
-    showMsg(msg, "Analyse du fichier…");
+    showMsg(msg, "");
     try {
       const r = await Vector.readLaserFile(file);
       sl.file = file;

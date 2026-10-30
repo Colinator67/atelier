@@ -66,7 +66,7 @@
   // Fichier
   bindDrop($("#drop3d"), $("#file3d"), async (file) => {
     const msg = $("#msg3d");
-    showMsg(msg, "Analyse du fichier…");
+    showMsg(msg, "");
     try {
       const tris = await Geometry.readMeshFile(file);
       const m = Geometry.measure(tris, P.estimate.supportAngle);

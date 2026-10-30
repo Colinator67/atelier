@@ -79,7 +79,18 @@
     $("#obNeedWrap").hidden = t !== "laser";
     save();
   }
-  $$(".ob-choice").forEach(b => b.addEventListener("click", () => { setType(b.dataset.type); setTimeout(() => show(1), 140); }));
+  // le logo de la carte s'imprime ou se grave, puis on passe à l'écran suivant
+  const still = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  let choosing = false;
+  $$(".ob-choice").forEach(b => b.addEventListener("click", () => {
+    if (choosing) return;
+    setType(b.dataset.type);
+    const m = b.querySelector(".logo-morph");
+    if (still || !m) { setTimeout(() => show(1), 140); return; }
+    choosing = true;
+    window.UI.replay(m);
+    setTimeout(() => { choosing = false; show(1); }, 900);
+  }));
 
   // ------------------------------------------------------------ 2. description
   const desc = $("#obDesc");
@@ -279,6 +290,9 @@
       clearDraft();
       form.hidden = true; $("#obDone").hidden = false;
       $("#obRef").textContent = data.id || "—";
+      const mark = $("#obMark");
+      mark.dataset.fx = state.type === "laser" ? "engrave" : "print";
+      window.UI.replay(mark);
       if (data.confirmation) $("#obDoneText").insertAdjacentHTML("beforeend", ` Un email de confirmation vient de partir à <strong>${esc(state.email.trim())}</strong>.`);
       window.scrollTo({ top: 0 });
       $("#ob-done-t").focus({ preventScroll: true });
