@@ -56,11 +56,14 @@
       const h = sections[state.step].querySelector(".ob-title");
       h.focus({ preventScroll: true });
       window.scrollTo({ top: 0, behavior: "smooth" });
-      if (!opts.fromHistory) history.pushState({ step: state.step }, "", "#" + STEPS[state.step]);
+      if (opts.replace) history.replaceState({ step: state.step, idx: histIdx }, "", "#" + STEPS[state.step]);
+      else if (!opts.fromHistory) history.pushState({ step: state.step, idx: ++histIdx }, "", "#" + STEPS[state.step]);
     }
     if (STEPS[state.step] === "desc") setTimeout(() => $("#obDesc").focus(), 60);
   }
+  let histIdx = 0; // nombre d'écrans empilés dans l'historique depuis l'arrivée sur la page
   window.addEventListener("popstate", e => {
+    if (e.state && typeof e.state.idx === "number") histIdx = e.state.idx;
     const i = e.state && typeof e.state.step === "number" ? e.state.step : STEPS.indexOf(location.hash.slice(1));
     if (i >= 0 && i <= furthestAllowed()) show(i, { fromHistory: true, back: i < state.step });
   });
@@ -244,7 +247,12 @@
     show(state.step + 1);
   }
   $("#obNext").addEventListener("click", next);
-  $("#obBack").addEventListener("click", () => history.length > 1 && history.state ? history.back() : show(state.step - 1, { back: true }));
+  // « Retour » revient à l'écran précédent, jamais à la page d'avant
+  $("#obBack").addEventListener("click", () => {
+    if (state.step === 0) return;
+    if (histIdx > 0) history.back();
+    else show(state.step - 1, { back: true, replace: true });
+  });
   form.addEventListener("submit", e => { e.preventDefault(); next(); });
   form.addEventListener("keydown", e => { if (e.key === "Enter" && e.target.tagName === "INPUT" && e.target.type !== "checkbox") { e.preventDefault(); next(); } });
   $("#obReset").addEventListener("click", () => {
@@ -327,20 +335,25 @@
   }
 
   const draft = loadDraft();
-  if (draft) { Object.assign(state, draft, { files: [] }); if (!Array.isArray(state.contact) || !state.contact.length) state.contact = ["email"]; }
+  const hasDraft = !!(draft && draft.desc && draft.desc.trim().length >= 10);
+  if (hasDraft) { Object.assign(state, draft, { files: [] }); if (!Array.isArray(state.contact) || !state.contact.length) state.contact = ["email"]; }
+  // un type passé dans l'adresse (bouton « Décrire mon projet » d'une page atelier) est présélectionné,
+  // mais le client le confirme lui-même : on commence toujours par l'écran 1
   const param = new URLSearchParams(location.search).get("type");
-  if (TYPES[param]) state.type = param;
+  if (TYPES[param] && !hasDraft) state.type = param;
   syncInputs();
+  history.replaceState({ step: 0, idx: 0 }, "", "#" + STEPS[0]);
+  show(0, { silent: true });
 
-  // un type passé dans l'adresse (bouton « Décrire mon projet » d'une page atelier) saute l'écran 1
-  let start = 0;
-  if (state.type) start = 1;
-  if (draft && draft.desc && draft.desc.trim().length >= 10 && typeof draft.step === "number") start = Math.min(draft.step, 3);
-  history.replaceState({ step: start }, "", "#" + STEPS[start]);
-  show(start, { silent: true });
-  if (start > 0) setTimeout(() => { const h = sections[start].querySelector(".ob-title"); h && h.focus({ preventScroll: true }); }, 0);
-  if (draft && (draft.desc || draft.email || draft.phone)) {
+  // brouillon : on propose de reprendre, sans sauter d'écran à la place du client
+  if (hasDraft) {
+    const box = document.createElement("div");
+    box.className = "ob-resume";
+    box.innerHTML = `<p>Vous aviez commencé une demande${draft.type ? ` (${esc(TYPES[draft.type] ? TYPES[draft.type].label : "")})` : ""}.</p>
+      <div><button type="button" class="btn btn-small" data-resume>Reprendre</button> <button type="button" class="btn btn-small btn-ghost" data-restart>Recommencer</button></div>`;
+    sections[0].insertBefore(box, sections[0].querySelector(".ob-choices"));
+    box.querySelector("[data-resume]").addEventListener("click", () => { box.remove(); show(Math.min(Math.max(1, draft.step || 1), 3)); if (draft.step >= 2) toast("Ajoutez à nouveau vos fichiers"); });
+    box.querySelector("[data-restart]").addEventListener("click", () => { box.remove(); $("#obReset").click(); });
     $("#obDraft").hidden = false;
-    toast(draft.step >= 2 ? "Brouillon repris · ajoutez à nouveau vos fichiers" : "Brouillon repris");
   }
 })();

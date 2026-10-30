@@ -721,3 +721,7 @@ html[data-morph="print"] .logo-morph[data-fx="print"] .lm-tool::after, .logo-mor
 /* ---------- Cartes du choix de type ---------- */
 .ob-choice .logo-morph { width: 64px; flex: none; }
 @media (max-width: 600px) { .ob-choice .logo-morph { grid-row: span 2; width: 56px; } }
+
+.ob-resume { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; gap: 12px 20px; background: var(--surface); border-radius: 12px; padding: 14px 16px; }
+.ob-resume p { font-weight: 500; }
+.ob-resume div { display: flex; gap: 8px; }
