@@ -23,7 +23,8 @@
   window.StampDeal = deal;
 
   const opener = $$("[data-stamp-test]");
-  if (!opener.length || !STAMPS.length) return;
+  const demos = $$("[data-stamp-demo]");
+  if ((!opener.length && !demos.length) || !STAMPS.length) return;
 
   const INKS = [["Noir", "#26231F"], ["Bleu", "#23408E"], ["Rouge", "#B02A23"], ["Vert", "#2D6A3E"], ["Violet", "#5B2C83"]];
   const cm = s => parseFloat(s.label.match(/[\d,.]+/)[0].replace(",", "."));
@@ -90,14 +91,15 @@
   const D = () => cm(st.size) * pxcm;
 
   // ------------------------------------------------------------ dessin du motif (noir sur transparent)
-  function design(size) {
+  function design(size, spec) {
+    const S = spec || st;
     const c = document.createElement("canvas"); c.width = c.height = Math.max(8, Math.ceil(size));
     const x = c.getContext("2d"), R = c.width / 2;
     x.translate(R, R); x.fillStyle = x.strokeStyle = "#000"; x.textAlign = "center"; x.textBaseline = "middle";
     const lw = Math.max(1.6, size * 0.035);
     x.lineWidth = lw; x.beginPath(); x.arc(0, 0, R - lw / 2 - 0.5, 0, Math.PI * 2); x.stroke();
     let inner = R - lw - size * 0.025;
-    const around = st.around.trim();
+    const around = S.around.trim();
     if (around) {
       const band = size * 0.15;
       let fs = band * 0.62, r = inner - band / 2;
@@ -117,23 +119,23 @@
       inner -= band;
     }
     x.lineWidth = Math.max(1, size * 0.012); x.beginPath(); x.arc(0, 0, inner, 0, Math.PI * 2); x.stroke();
-    const text = st.text.trim(), box = inner * 1.45;
+    const text = S.text.trim(), box = inner * 1.45, logo = S.logo;
     let ty = 0;
-    if (st.logo) {
+    if (logo) {
       const hBox = text ? inner * 0.95 : inner * 1.3;
-      const k = Math.min(box / st.logo.width, hBox / st.logo.height);
-      const lw2 = st.logo.width * k, lh2 = st.logo.height * k;
+      const k = Math.min(box / logo.width, hBox / logo.height);
+      const lw2 = logo.width * k, lh2 = logo.height * k;
       const ly = text ? -inner * 0.18 : 0;
-      x.drawImage(st.logo, -lw2 / 2, ly - lh2 / 2, lw2, lh2);
+      x.drawImage(logo, -lw2 / 2, ly - lh2 / 2, lw2, lh2);
       ty = ly + lh2 / 2 + inner * 0.22;
     }
     if (text) {
       const lines = text.length > 13 && text.includes(" ") ? split2(text) : [text];
-      let fs = (st.logo ? inner * 0.26 : inner * (lines.length > 1 ? 0.34 : 0.42));
+      let fs = (logo ? inner * 0.26 : inner * (lines.length > 1 ? 0.34 : 0.42));
       x.font = `800 ${fs}px Archivo, sans-serif`;
       const widest = () => Math.max(...lines.map(l => x.measureText(l).width));
       while (widest() > box && fs > 4) { fs *= 0.93; x.font = `800 ${fs}px Archivo, sans-serif`; }
-      const lh = fs * 1.05, y0 = (st.logo ? ty : 0) - (lines.length - 1) * lh / 2;
+      const lh = fs * 1.05, y0 = (logo ? ty : 0) - (lines.length - 1) * lh / 2;
       lines.forEach((l, i) => x.fillText(l, 0, y0 + i * lh));
     }
     return c;
@@ -152,8 +154,8 @@
     return c;
   })();
   let motif = null; // motif à la taille courante
-  function inked(color) {
-    const m = motif, s = m.width, c = document.createElement("canvas"); c.width = c.height = s;
+  function inked(color, src) {
+    const m = src || motif, s = m.width, c = document.createElement("canvas"); c.width = c.height = s;
     const x = c.getContext("2d");
     x.drawImage(m, 0, 0); x.globalCompositeOperation = "source-in"; x.fillStyle = color; x.fillRect(0, 0, s, s);
     x.globalCompositeOperation = "destination-out";
@@ -426,6 +428,38 @@
   $("[data-st-close]", dlg).addEventListener("click", close);
   opener.forEach(b => b.addEventListener("click", open));
   window.addEventListener("resize", () => { if (dlg.open) resize(); });
+  // l'adresse …/decoupe-laser#tester ouvre directement le testeur
+  if (opener.length && location.hash === "#tester") setTimeout(open, 300);
+
+  // ------------------------------------------------------------ démonstration : trois empreintes posées une à une
+  const SAMPLES = [
+    { text: "Atelier Colin", around: "Fait main à Strasbourg", ink: "#23408E", cm: 10, x: 0.34, y: 0.42, r: -0.06 },
+    { text: "Bon pour accord", around: "", ink: "#B02A23", cm: 6, x: 0.74, y: 0.3, r: 0.08 },
+    { text: "Merci !", around: "Votre boutique · votre ville", ink: "#2D6A3E", cm: 8, x: 0.66, y: 0.74, r: 0.03 }
+  ];
+  function runDemo(box) {
+    const r = box.getBoundingClientRect(), dpr = Math.min(2, window.devicePixelRatio || 1);
+    const unit = Math.min(r.width, r.height) * 0.052;
+    box.querySelectorAll(".st-demo-imp").forEach(c => c.remove());
+    SAMPLES.forEach((sp, i) => {
+      const d = sp.cm * unit, c = document.createElement("canvas");
+      c.className = "st-demo-imp"; c.width = c.height = Math.ceil(d * dpr);
+      c.style.cssText = `width:${d}px;height:${d}px;left:${sp.x * r.width - d / 2}px;top:${sp.y * r.height - d / 2}px;--r:${sp.r}rad;animation-delay:${still ? 0 : 250 + i * 420}ms`;
+      const im = inked(sp.ink, design(d * dpr, { text: sp.text, around: sp.around, logo: null }));
+      c.getContext("2d").drawImage(im, 0, 0);
+      box.appendChild(c);
+    });
+  }
+  if (demos.length) {
+    const go = () => demos.forEach(b => { if (b.dataset.done) return; b.dataset.done = "1"; runDemo(b); });
+    const ready = document.fonts && document.fonts.load ? document.fonts.load("800 20px Archivo").catch(() => {}) : Promise.resolve();
+    if ("IntersectionObserver" in window) {
+      const io = new IntersectionObserver(es => es.forEach(e => { if (e.isIntersecting) { io.unobserve(e.target); ready.then(() => { e.target.dataset.done = "1"; runDemo(e.target); }); } }), { threshold: 0.35 });
+      demos.forEach(b => io.observe(b));
+    } else ready.then(go);
+  }
+  if (!opener.length) return;
+
   // les polices du site servent aussi pour le motif : on redessine une fois chargées
   if (document.fonts && document.fonts.load) document.fonts.load("800 20px Archivo").then(() => { if (dlg.open) refresh(); }).catch(() => {});
 })();

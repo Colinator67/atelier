@@ -146,6 +146,10 @@
   }
   updateS();
   document.addEventListener("stampdeal", updateS);
+  // « Commander directement » et l'adresse …#tampon ouvrent l'onglet Tampon du devis
+  const toStampTab = () => { const t = $("#lm-stamp"); if (t) t.click(); };
+  $$("[data-stamp-direct]").forEach(a => a.addEventListener("click", toStampTab));
+  if (location.hash === "#tester" || location.hash === "#tampon") toStampTab();
 
   $("#askL").addEventListener("click", () => {
     if (sl.raster) {
