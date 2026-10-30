@@ -98,6 +98,22 @@
     nav.addEventListener("click", e => { if (e.target.closest("a")) setOpen(false); });
   }
 
+  // ---------------------------------------------------------- Logo qui se transforme entre les deux ateliers
+  // 3D → laser : le logo est gravé au laser ; laser → 3D : il est imprimé couche par couche.
+  document.addEventListener("click", e => {
+    const a = e.target.closest("a[href]"); if (!a) return;
+    const href = a.getAttribute("href");
+    let fx = null;
+    if (document.body.classList.contains("theme-3d") && /decoupe-laser\.html/.test(href)) fx = "engrave";
+    if (document.body.classList.contains("theme-laser") && /impression-3d\.html/.test(href)) fx = "print";
+    try { if (fx) sessionStorage.setItem("morph", fx); } catch (err) {}
+  });
+  $$(".logo-morph").forEach(el => el.addEventListener("click", () => {
+    const root = document.documentElement;
+    delete root.dataset.morph; void el.offsetWidth;
+    root.dataset.morph = el.dataset.fx;
+  }));
+
   // Nom affiché (réglable dans config.js)
   $$("[data-brand]").forEach(el => el.textContent = C.brand);
   // Délais et email affichés (réglables dans config.js)

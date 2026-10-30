@@ -28,8 +28,11 @@ window.SITE_CONFIG = {
   machines: [
     { name: "Bambu Lab X1-Carbon", kind: "Impression 3D FDM", detail: "Pièces multicolores jusqu'à 256 × 256 × 256 mm" },
     { name: "Bambu Lab A1 mini", kind: "Impression 3D FDM", detail: "Petites pièces et séries rapides" },
-    { name: "Snapmaker U1", kind: "Impression 3D FDM", detail: "Multimatière à changement d'outil" },
-    { name: "xTool M1 Ultra", kind: "Découpe et gravure laser", detail: "Bois, MDF, carton jusqu'à 300 × 300 mm" }
+    { name: "Snapmaker U1", kind: "Impression 3D FDM", detail: "Changeur d'outils : plusieurs couleurs ou matières dans la même pièce" },
+    { name: "WonderMaker ZR Ultra", kind: "Impression 3D FDM", detail: "4 têtes à changement d'outil en 5 s : multicolore et multimatière sans purge" },
+    { name: "Elegoo OrangeStorm Giga", kind: "Impression 3D grand format", detail: "Pièces jusqu'à 800 × 800 × 1000 mm d'un seul tenant" },
+    { name: "xTool M1 Ultra", kind: "Découpe et gravure laser", detail: "Bois, MDF, carton jusqu'à 300 × 300 mm" },
+    { name: "eufyMake E1", kind: "Impression UV", detail: "Couleurs et relief jusqu'à 5 mm sur bois, acrylique, métal ou pièces imprimées, format A3" }
   ],
 
   // ---- Questions fréquentes (page « L'atelier ») -------------------------
@@ -50,7 +53,7 @@ window.SITE_CONFIG = {
     pricePerHour: 7,         // €/h machine (calé sur tes prix de référence : magnet 5 €, coq 25 €, trophée train 40 €)
     setupFee: 2.5,           // € de frais de préparation, une fois par commande
     // Volume utile max (mm) : au-delà, le site prévient que la pièce devra être découpée
-    maxSize: [256, 256, 256],
+    maxSize: [800, 800, 1000],   // Elegoo OrangeStorm Giga
     // Coefficients d'estimation — à recaler avec tes résultats Orca (voir README)
     estimate: {
       wallThickness: 0.9,    // mm : 2 périmètres de 0,45 mm, appliqué sur toute la surface

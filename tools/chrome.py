@@ -57,6 +57,7 @@ def head(file, title, desc):
 <link rel="preload" href="fonts/archivo-var.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="fonts/plex-sans-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="css/style.css">
+<script>try{{var m=sessionStorage.getItem("morph");if(m){{document.documentElement.dataset.morph=m;sessionStorage.removeItem("morph")}}}}catch(e){{}}</script>
 </head>"""
 
 

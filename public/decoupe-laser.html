@@ -23,6 +23,7 @@
 <link rel="preload" href="fonts/archivo-var.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="fonts/plex-sans-400.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="css/style.css">
+<script>try{var m=sessionStorage.getItem("morph");if(m){document.documentElement.dataset.morph=m;sessionStorage.removeItem("morph")}}catch(e){}</script>
 </head>
 <body class="theme-laser">
 
@@ -50,7 +51,13 @@
 <main id="contenu">
   <section class="page-hero">
     <div class="wrap page-hero-in">
-      <img src="img/logo-laser.png" alt="" width="140" height="140">
+      <div class="logo-morph" data-fx="engrave" aria-hidden="true" title="Rejouer l'animation">
+        <img class="lm-from" src="img/logo-3d.png" alt="" width="140" height="140">
+        <img class="lm-to" src="img/logo-laser.png" alt="" width="140" height="140">
+        <span class="lm-layers"></span>
+        <span class="lm-tool"><i></i></span>
+        <span class="lm-smoke"><i></i><i></i><i></i><i></i><i></i></span>
+      </div>
       <div data-reveal>
         <h1>Découpe &amp; gravure laser</h1>
         <p>Découpes multicouches, signalétique, décoration, tampons. Je dessine votre fichier de découpe à partir d'une idée, d'un logo ou d'une photo, ou je découpe directement le vôtre.</p>

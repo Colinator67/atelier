@@ -171,6 +171,7 @@ body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-a
 .page-hero { background: var(--hero-bg); color: var(--hero-fg); }
 .page-hero-in { display: grid; grid-template-columns: auto minmax(0, 1.1fr) minmax(0, 1fr); gap: clamp(20px, 4vw, 48px); align-items: center; padding-block: clamp(32px, 5vw, 64px); }
 .page-hero-in > img { width: clamp(72px, 9vw, 120px); height: auto; border-radius: 50%; align-self: start; }
+.page-hero-in > .logo-morph { align-self: start; }
 .page-hero h1 { font-size: clamp(2rem, 3.8vw, 3.4rem); line-height: 1; letter-spacing: -0.02em; }
 .page-hero-photo { margin: 0; }
 .page-hero-photo img { width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; border-radius: var(--r); }
@@ -635,3 +636,50 @@ input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--pick-bg)
 .nf-ant img { width: clamp(110px, 16vw, 180px); height: auto; border-radius: 50%; animation: wander 3.2s var(--ease-in-out) infinite alternate; }
 @keyframes wander { 0% { transform: translateX(-10px) rotate(-6deg); } 100% { transform: translateX(10px) rotate(6deg); } }
 @media (max-width: 640px) { .nf { grid-template-columns: 1fr; } }
+
+/* ---------- Transition entre les pages ---------- */
+@view-transition { navigation: auto; }
+::view-transition-old(root), ::view-transition-new(root) { animation-duration: 280ms; animation-timing-function: var(--ease-out); }
+@media (prefers-reduced-motion: reduce) { @view-transition { navigation: none; } }
+
+/* ---------- Logo qui se transforme entre les ateliers ----------
+   html[data-morph="engrave"] : arrivée sur la découpe laser depuis l'impression 3D
+   html[data-morph="print"]   : arrivée sur l'impression 3D depuis la découpe laser
+   --p = avancement de 0 % à 100 % (gravure de haut en bas, impression de bas en haut) */
+@property --p { syntax: "<percentage>"; inherits: true; initial-value: 100%; }
+.logo-morph { position: relative; width: clamp(72px, 9vw, 120px); aspect-ratio: 1; border-radius: 50%; overflow: hidden; isolation: isolate; cursor: pointer; view-transition-name: workshop-logo; --p: 100%; }
+.logo-morph img { position: absolute; inset: 0; width: 100%; height: 100%; border-radius: 50%; }
+.lm-from, .lm-tool, .lm-smoke, .lm-layers { display: none; }
+::view-transition-group(workshop-logo) { animation-duration: 280ms; }
+
+/* Gravure laser */
+html[data-morph="engrave"] .logo-morph[data-fx="engrave"] { animation: lmRun 1.9s linear .35s both; }
+html[data-morph="engrave"] [data-fx="engrave"] .lm-from { display: block; }
+html[data-morph="engrave"] [data-fx="engrave"] .lm-to { clip-path: inset(0 0 calc(100% - var(--p)) 0); }
+html[data-morph="engrave"] [data-fx="engrave"] .lm-tool { display: block; position: absolute; left: 0; right: 0; top: var(--p); height: 2px; margin-top: -1px; background: #FFB27A; box-shadow: 0 0 6px 1px rgba(255, 140, 70, .9), 0 0 18px 4px rgba(255, 110, 40, .45); animation: lmOut 250ms ease 2.2s both; z-index: 2; }
+html[data-morph="engrave"] [data-fx="engrave"] .lm-tool i { position: absolute; top: -4px; left: 0; width: 10px; height: 10px; margin-left: -5px; border-radius: 50%; background: #FFF6EC; box-shadow: 0 0 8px 3px rgba(255, 170, 90, .95), 0 0 22px 8px rgba(255, 120, 40, .5); animation: lmRaster 130ms linear infinite alternate; }
+html[data-morph="engrave"] [data-fx="engrave"] .lm-smoke { display: block; position: absolute; inset: 0; z-index: 3; pointer-events: none; animation: lmOut 400ms ease 2.25s both; }
+.lm-smoke i { position: absolute; top: var(--p); width: 14%; aspect-ratio: 1; border-radius: 50%; background: rgba(200, 196, 190, .55); filter: blur(4px); opacity: 0; animation: lmSmoke 900ms ease-out infinite; }
+.lm-smoke i:nth-child(1) { left: 18%; animation-delay: .35s; }
+.lm-smoke i:nth-child(2) { left: 38%; animation-delay: .55s; }
+.lm-smoke i:nth-child(3) { left: 58%; animation-delay: .45s; }
+.lm-smoke i:nth-child(4) { left: 74%; animation-delay: .7s; }
+.lm-smoke i:nth-child(5) { left: 46%; animation-delay: .9s; }
+
+/* Impression 3D couche par couche */
+html[data-morph="print"] .logo-morph[data-fx="print"] { animation: lmRun 2.3s steps(24, end) .35s both; }
+html[data-morph="print"] [data-fx="print"] .lm-from { display: block; animation: lmGhost 2.65s ease both; }
+html[data-morph="print"] [data-fx="print"] .lm-to { clip-path: inset(calc(100% - var(--p)) 0 0 0); }
+html[data-morph="print"] [data-fx="print"] .lm-layers { display: block; position: absolute; inset: 0; border-radius: 50%; clip-path: inset(calc(100% - var(--p)) 0 0 0); background: repeating-linear-gradient(0deg, rgba(0, 0, 0, .10) 0 1px, transparent 1px 4px); animation: lmOut 500ms ease 2.7s both; z-index: 1; }
+html[data-morph="print"] [data-fx="print"] .lm-tool { display: block; position: absolute; top: calc(100% - var(--p)); left: 20%; width: 16%; height: 14%; margin-top: -14%; z-index: 2; animation: lmTravel 260ms var(--ease-in-out) infinite alternate, lmOut 250ms ease 2.6s both; }
+html[data-morph="print"] [data-fx="print"] .lm-tool i { position: absolute; inset: 0; background: #2A2928; clip-path: polygon(0 0, 100% 0, 100% 52%, 68% 52%, 56% 100%, 44% 100%, 32% 52%, 0 52%); }
+html[data-morph="print"] [data-fx="print"] .lm-tool::after { content: ""; position: absolute; left: 50%; bottom: -2px; width: 3px; height: 3px; margin-left: -1.5px; border-radius: 50%; background: #FF8A3D; box-shadow: 0 0 6px 2px rgba(255, 120, 40, .7); }
+
+@media (prefers-reduced-motion: reduce) { .logo-morph .lm-from, .logo-morph .lm-tool, .logo-morph .lm-smoke, .logo-morph .lm-layers { display: none !important; } .logo-morph .lm-to { clip-path: none !important; } }
+
+@keyframes lmRun { from { --p: 0%; } to { --p: 100%; } }
+@keyframes lmRaster { from { left: 4%; } to { left: 96%; } }
+@keyframes lmSmoke { 0% { opacity: 0; transform: translateY(0) scale(.6); } 25% { opacity: .9; } 100% { opacity: 0; transform: translateY(-140%) scale(1.6); } }
+@keyframes lmTravel { from { left: 14%; } to { left: 70%; } }
+@keyframes lmGhost { 0% { opacity: 1; } 20% { opacity: .35; } 85% { opacity: .2; } 100% { opacity: 0; } }
+@keyframes lmOut { to { opacity: 0; visibility: hidden; } }
