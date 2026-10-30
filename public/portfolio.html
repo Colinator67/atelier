@@ -48,41 +48,19 @@
   </div>
 </header>
 
-<main id="contenu">
-  <section class="wrap pf-hero" aria-labelledby="pf-title">
-    <div>
-      <h1 id="pf-title">Imaginé, modélisé, fabriqué</h1>
-      <p class="lede">Photos, impressions et modélisations entièrement réalisées par Colin Ehret : mécanismes imprimés d'un seul tenant, commandes sur mesure et objets paramétriques.</p>
-    </div>
-    <div class="pf-strip"><img src="portfolio/img/let-it-snow-1-800.webp" srcset="portfolio/img/let-it-snow-1-800.webp 800w, portfolio/img/let-it-snow-1.webp 1400w" sizes="(max-width: 860px) 100vw, 50vw" alt="Sapin de Noël mécanique imprimé en 3D"></div>
+<main id="contenu" class="pf-page">
+  <h1 class="sr-only">Portfolio de Colin Ehret</h1>
+  <section class="book-stage" id="bookStage" aria-label="Portfolio en forme de livre" aria-roledescription="livre">
+    <div class="book" id="book"></div>
   </section>
-
-  <section class="section" aria-labelledby="projets-title">
-    <div class="wrap">
-      <div class="section-head">
-        <div>
-          
-          <h2 id="projets-title">Réalisations <span class="h-count" id="pf-count"></span></h2>
-        </div>
-        <div class="chips" id="pf-filters" role="tablist" aria-label="Filtrer les projets"></div>
-      </div>
-      <div class="pf-grid" id="pf-grid" aria-live="polite"></div>
-    </div>
-  </section>
-
-  <section class="section" aria-labelledby="about-title">
-    <div class="wrap about">
-      <img src="portfolio/img/colin-1-800.webp" srcset="portfolio/img/colin-1-800.webp 800w, portfolio/img/colin-1.webp 1400w" sizes="(max-width: 700px) 50vw, 25vw" alt="Portrait de Colin Ehret" loading="lazy">
-      <div>
-        <h3 id="about-title">À propos</h3>
-        <p>Étudiant ingénieur en plasturgie à l'INSA Strasbourg, je suis passionné par l'impression 3D depuis près de 8 ans. Les modèles présentés ici viennent de projets personnels, d'études ou de commandes. Je les vois comme un entraînement permanent : je veux maîtriser parfaitement la modélisation 3D pour devenir chef de projet en fabrication additive, ou contribuer à faire progresser cette technologie par la recherche.</p>
-      </div>
-      <div>
-        <h3>Mes règles de design</h3>
-        <p>Quand je dessine une pièce, elle doit pouvoir être imprimée par n'importe qui, sur n'importe quelle imprimante. Je limite au maximum les supports et j'évite les éléments extérieurs comme les vis, l'adhésif ou les aimants. Pour moi, un objet réussi se fabrique de A à Z par une imprimante 3D : deux personnes, à deux endroits différents, peuvent produire exactement le même objet.</p>
-      </div>
-    </div>
-  </section>
+  <nav class="book-ctrl" aria-label="Pages du livre">
+    <button type="button" class="book-btn" id="bookPrev" aria-label="Page précédente"><span aria-hidden="true">←</span></button>
+    <button type="button" class="book-toc" id="bookToc">Sommaire</button>
+    <p class="book-count" id="bookCount" aria-live="polite">Couverture</p>
+    <button type="button" class="book-btn" id="bookNext" aria-label="Page suivante"><span aria-hidden="true">→</span></button>
+  </nav>
+  <p class="book-hint" id="bookHint">Tournez les pages avec les flèches, le clavier ou en balayant.</p>
+  <noscript><p class="wrap">Le portfolio s'affiche en livre grâce à JavaScript. Activez-le, ou écrivez-moi à impression.ant.laser@gmail.com.</p></noscript>
 
   <dialog class="lightbox" id="lightbox" aria-labelledby="lb-title">
     <div class="lb-in">
@@ -123,6 +101,6 @@
 <script src="js/config.js"></script>
 <script src="js/layout.js"></script>
 <script src="js/motion.js"></script>
-<script src="js/portfolio.js"></script>
+<script src="js/book.js"></script>
 </body>
 </html>

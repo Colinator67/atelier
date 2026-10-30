@@ -12,7 +12,7 @@ public/impression-3d.html         impression 3D (parcours + simulateur)
 public/decoupe-laser.html         découpe laser (parcours + simulateur + tampons)
 public/demande.html               « Décrire mon projet » : formulaire en 5 étapes
 public/atelier.html               « L'atelier » : méthode, engagements, machines, avis, FAQ
-public/portfolio.html             portfolio
+public/portfolio.html             portfolio en forme de livre (js/book.js)
 public/404.html                   page introuvable
 public/css/style.css              charte graphique
 public/fonts/                     polices hébergées sur le site
@@ -81,7 +81,9 @@ Dépose les photos dans `public/portfolio/img/` (JPG, 1400 px de large suffisent
 }
 ```
 
-`themes` reprend les identifiants de la liste `filtres` (mecanisme, commande, deco, parametrique, laser). Un filtre n'apparaît que s'il contient au moins un projet : le filtre « Découpe laser » s'affichera dès ton premier projet laser.
+`themes` reprend les identifiants de la liste `filtres` (mecanisme, commande, deco, parametrique, laser).
+
+Le portfolio s'affiche comme un livre (`public/js/book.js`) : couverture, avant-propos, sommaire, un chapitre par catégorie, puis « Prêt à écrire un nouveau chapitre ? ». Un projet va dans le chapitre « Découpe laser » s'il a le thème `laser` (son texte se grave à l'ouverture de la page), sinon dans le chapitre de son **premier** thème. L'ordre des chapitres et leur phrase d'introduction se règlent dans le bloc `livre` de `portfolio.json`. Les numéros de page et le sommaire se recalculent tout seuls.
 
 ## 4. Recaler l'estimation sur Orca Slicer
 

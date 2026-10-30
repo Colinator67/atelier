@@ -299,5 +299,32 @@
         "portfolio/img/ville-parametrique-1.jpg"
       ]
     }
-  ]
+  ],
+  "livre": {
+    "parties": [
+      {
+        "titre": "Impression 3D",
+        "chapitres": [
+          "mecanisme",
+          "commande",
+          "deco",
+          "parametrique"
+        ]
+      },
+      {
+        "titre": "Découpe laser",
+        "chapitres": [
+          "laser"
+        ]
+      }
+    ],
+    "intros": {
+      "mecanisme": "Des objets qui bougent, imprimés d'un seul tenant, sans vis ni colle.",
+      "commande": "Des pièces conçues pour un client, un événement ou un lieu précis.",
+      "deco": "Des objets du quotidien et de décoration, pensés pour être imprimés.",
+      "parametrique": "Des formes générées par des règles plutôt que dessinées à la main.",
+      "laser": "Du bois découpé, gravé et superposé couche par couche."
+    },
+    "_aide": "Un projet est rangé dans le chapitre « laser » s'il a ce thème, sinon dans son premier thème."
+  }
 }
