@@ -26,14 +26,30 @@ window.SITE_CONFIG = {
   // ---- Machines de l'atelier (page « L'atelier ») -----------------------
   // photo facultative : "img/atelier/x1c.jpg"
   machines: [
-    { name: "Bambu Lab X1-Carbon", kind: "Impression 3D FDM", detail: "Pièces multicolores jusqu'à 256 × 256 × 256 mm" },
-    { name: "Bambu Lab A1 mini", kind: "Impression 3D FDM", detail: "Petites pièces et séries rapides" },
-    { name: "Snapmaker U1", kind: "Impression 3D FDM", detail: "Changeur d'outils : plusieurs couleurs ou matières dans la même pièce" },
-    { name: "WonderMaker ZR Ultra", kind: "Impression 3D FDM", detail: "4 têtes à changement d'outil en 5 s : multicolore et multimatière sans purge" },
-    { name: "Elegoo OrangeStorm Giga", kind: "Impression 3D grand format", detail: "Pièces jusqu'à 800 × 800 × 1000 mm d'un seul tenant" },
-    { name: "xTool M1 Ultra", kind: "Découpe et gravure laser", detail: "Bois, MDF, carton jusqu'à 300 × 300 mm" },
-    { name: "eufyMake E1", kind: "Impression UV", detail: "Couleurs et relief jusqu'à 5 mm sur bois, acrylique, métal ou pièces imprimées, format A3" }
+    // art = illustration dessinée (x1c, a1mini, u1, zr, giga, laser, uv) ; photo = ta photo, qui la remplace si tu en ajoutes une
+    { name: "Bambu Lab X1-Carbon", kind: "Impression 3D", art: "x1c",
+      tech: "FDM fermée, multicolore", materials: "PLA, PETG, TPU", size: "256 × 256 × 256 mm",
+      use: "Objets déco multicolores, figurines, pièces fonctionnelles" },
+    { name: "Bambu Lab A1 mini", kind: "Impression 3D", art: "a1mini",
+      tech: "FDM compacte", materials: "PLA, PETG, TPU", size: "180 × 180 × 180 mm",
+      use: "Petites pièces, porte-clés, séries rapides" },
+    { name: "Snapmaker U1", kind: "Impression 3D", art: "u1",
+      tech: "FDM à changeur d'outils, 4 têtes", materials: "PLA, PETG, TPU, mélangeables dans une même pièce", size: "270 × 270 × 270 mm",
+      use: "Pièces rigides et souples à la fois, multicolore sans purge" },
+    { name: "WonderMaker ZR Ultra", kind: "Impression 3D", art: "zr",
+      tech: "FDM à changeur d'outils, 4 têtes en 5 s", materials: "PLA, PETG, TPU", size: "300 × 270 × 290 mm",
+      use: "Multicolore à couleurs franches, multimatière" },
+    { name: "Elegoo OrangeStorm Giga", kind: "Impression 3D grand format", art: "giga",
+      tech: "FDM grand format, plateau en 4 zones", materials: "PLA, PETG", size: "800 × 800 × 1000 mm",
+      use: "Grandes pièces d'un seul tenant : décors, maquettes, prototypes" },
+    { name: "xTool M1 Ultra", kind: "Découpe et gravure laser", art: "laser",
+      tech: "Laser à diode, découpe et gravure", materials: "MDF, contreplaqué, carton", size: "300 × 300 mm",
+      use: "Tableaux multicouches, tampons, signalétique, boîtes" },
+    { name: "eufyMake E1", kind: "Impression UV", art: "uv",
+      tech: "Jet d'encre UV, couleurs et relief", materials: "Bois, acrylique, métal, pièces imprimées", size: "330 × 420 mm (A3), relief jusqu'à 5 mm",
+      use: "Mettre en couleur une découpe laser ou une impression 3D" }
   ],
+
 
   // ---- Questions fréquentes (page « L'atelier ») -------------------------
   faq: [

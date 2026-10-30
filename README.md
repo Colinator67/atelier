@@ -19,7 +19,8 @@ public/fonts/                     polices hébergées sur le site
 public/js/config.js               ← TOUT ce qui se règle : prix, matières, délais affichés, avis, machines, FAQ, mentions
 public/js/onboarding.js           formulaire en étapes (brouillon gardé sur l'appareil)
 public/js/price.js                total animé + barre de prix fixe sur téléphone
-public/js/content.js              affiche machines, avis et FAQ depuis config.js
+public/js/content.js              affiche avis et FAQ depuis config.js
+public/js/machines.js             machines dessinées de « L'atelier » : la porte s'ouvre sur la fiche
 public/js/motion.js               apparition des blocs au défilement (attribut data-reveal)
 public/js/geometry.js, vector.js  lecture des fichiers 3D et 2D, calculs
 public/portfolio/portfolio.json   ← la liste de tes projets
@@ -33,7 +34,7 @@ Les pages se modifient directement. Pour changer le menu ou le pied de page part
 
 ## Avis clients, délais, machines, FAQ
 
-Tout est dans `public/js/config.js` : `delays`, `reviews` (la section avis reste cachée tant que la liste est vide — n'y mets que de vrais avis), `machines` (photo facultative) et `faq`. Pour une photo d'échantillon de couleur, ajoute `photo: "img/couleurs/rouge.jpg"` à la couleur voulue.
+Tout est dans `public/js/config.js` : `delays`, `reviews` (la section avis reste cachée tant que la liste est vide — n'y mets que de vrais avis), `machines` : nom, technologie, matières, taille max, usage, et `art` = le dessin utilisé (x1c, a1mini, u1, zr, giga, laser, uv). Ajoute `photo: "img/atelier/x1c.jpg"` pour remplacer un dessin par ta photo (la fiche s'ouvre alors par-dessus la photo) et `faq`. Pour une photo d'échantillon de couleur, ajoute `photo: "img/couleurs/rouge.jpg"` à la couleur voulue.
 
 ## 1. Mise en ligne
 

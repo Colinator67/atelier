@@ -818,3 +818,47 @@ html[data-morph="print"] .logo-morph[data-fx="print"] .lm-tool::after, .logo-mor
 .book-hint.is-faded { opacity: 0; }
 @media (max-width: 899px) { .book-count { min-width: 7em; font-size: 0.85rem; } .book-toc { padding: 12px 14px; } }
 @media (prefers-reduced-motion: reduce) { .leaf, .book { transition: none !important; } }
+
+/* ---------- L'atelier : machines dessinées, porte qui s'ouvre sur la fiche ---------- */
+.machines-intro { color: var(--muted); margin: 10px 0 28px; }
+.machines-art { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 28px 20px; }
+.mc { position: relative; display: grid; gap: 4px; align-content: start; }
+.mc-art { position: relative; display: block; aspect-ratio: 1; border-radius: 14px; background: var(--surface); perspective: 900px; }
+.mc-body, .mc-photo { position: absolute; inset: 6%; width: 88%; height: 88%; }
+.mc-photo { object-fit: cover; border-radius: 10px; }
+/* la porte est posée sur l'intérieur de la machine (coordonnées du dessin, recalées dans la marge de 6 %) */
+.mc-door { position: absolute; margin: 0; transform-style: preserve-3d; transition: transform 420ms var(--ease-in-out) 140ms; z-index: 2; }
+.mc-art .mc-door { left: calc(6% + var(--cx) * .88) !important; top: calc(6% + var(--cy) * .88) !important; right: calc(6% + var(--cr) * .88); bottom: calc(6% + var(--cb) * .88); width: auto !important; height: auto !important; }
+.mc-door svg { display: block; width: 100%; height: 100%; }
+.mc-door.is-side { transform-origin: left center; }
+.mc-door.is-lid { transform-origin: center top; z-index: 2; } /* le capot passe derrière la fiche une fois sortie */
+/* la fiche sort de l'intérieur de la machine et s'agrandit sur toute la carte */
+.mc-sheet { position: absolute; inset: 3%; z-index: 3; display: grid; align-content: start; gap: 8px; padding: 14px 14px 12px; border-radius: 10px; background: #FBF8F2; color: #2A2928; box-shadow: 0 14px 30px -14px rgba(30, 24, 18, .5);
+  clip-path: inset(calc(2% + var(--cy) * .88) calc(2% + var(--cr) * .88) calc(2% + var(--cb) * .88) calc(2% + var(--cx) * .88) round 4px); opacity: 0; pointer-events: none;
+  transition: clip-path 200ms var(--ease-in-out), opacity 160ms ease; }
+.mc-sheet-k { display: none; }
+.mc-sheet-n { font: 800 1rem/1.15 var(--f-display); font-stretch: 112%; margin-bottom: 2px; }
+.mc-sheet dl { margin: 0; display: grid; gap: 8px; }
+.mc-sheet dl div { display: grid; grid-template-columns: 5.4em minmax(0, 1fr); gap: 8px; align-items: baseline; }
+.mc-sheet dt { font-size: 0.72rem; color: #8C7458; font-weight: 600; }
+.mc-sheet dd { margin: 0; font-size: 0.84rem; line-height: 1.3; font-weight: 500; }
+.mc-name { font-size: 1.15rem; margin-top: 10px; }
+.mc-btn { all: unset; cursor: pointer; }
+.mc-btn::after { content: ""; position: absolute; inset: 0; border-radius: 14px; }
+.mc-btn:focus-visible::after { outline: 3px solid var(--sand); outline-offset: 3px; }
+.mc-kind { color: var(--muted); font-size: 0.9rem; }
+.mc-hint { opacity: .7; }
+
+/* ouverte : au survol (souris), au clic, au toucher ou au clavier.
+   La porte s'ouvre d'abord, puis la fiche sort de la machine ; à la fermeture, l'inverse. */
+.mc.is-open .mc-door.is-side { transform: rotateY(-102deg); transition-delay: 0ms; }
+.mc.is-open .mc-door.is-lid { transform: rotateX(108deg); transition-delay: 0ms; }
+.mc.is-open .mc-sheet { clip-path: inset(0 0 0 0 round 10px); opacity: 1; transition: clip-path 440ms var(--ease-out) 320ms, opacity 140ms ease 320ms; }
+.mc.has-photo.is-open .mc-sheet { transition-delay: 0ms; }
+@media (hover: hover) and (pointer: fine) {
+  .mc:hover .mc-door.is-side { transform: rotateY(-102deg); transition-delay: 0ms; }
+  .mc:hover .mc-door.is-lid { transform: rotateX(108deg); transition-delay: 0ms; }
+  .mc:hover .mc-sheet { clip-path: inset(0 0 0 0 round 10px); opacity: 1; transition: clip-path 440ms var(--ease-out) 320ms, opacity 140ms ease 320ms; }
+  .mc:hover .mc-hint { opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) { .mc-door { display: none; } }
