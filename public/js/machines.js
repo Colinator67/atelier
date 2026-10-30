@@ -198,7 +198,10 @@
       visual = `<div class="mcp" style="aspect-ratio:${FW} / ${FH}">
           <img class="mcp-closed" src="${esc(ph.closed)}" alt="" loading="lazy">
           <img class="mcp-inside" src="${esc(ph.inside)}" alt="" loading="lazy" style="left:${P(dx, FW)};top:${P(dy, FH)};width:${P(dw, FW)};height:${P(dh, FH)}">
-          <div class="mcp-door" style="left:${P(dx, FW)};top:${P(dy, FH)};width:${P(dw, FW)};height:${P(dh, FH)}"><img src="${esc(ph.door)}" alt=""></div>
+          <div class="mcp-door" style="left:${P(dx, FW)};top:${P(dy, FH)};width:${P(dw, FW)};height:${P(dh, FH)};--glass:${ph.glass || "rgba(40,40,40,.6)"};--frame:${ph.frameColor || "#222"}">
+            <span class="mcp-glass"></span>
+            ${ph.handle ? `<img class="mcp-handle" src="${esc(ph.handle.src)}" alt="" style="left:${P(ph.handle.rect[0] - dx, dw)};top:${P(ph.handle.rect[1] - dy, dh)};width:${P(ph.handle.rect[2], dw)};height:${P(ph.handle.rect[3], dh)}">` : ""}
+          </div>
           <img class="mcp-open" src="${esc(ph.open)}" alt="" loading="lazy">
         </div>`;
     }

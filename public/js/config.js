@@ -29,7 +29,9 @@ window.SITE_CONFIG = {
     // art = illustration dessinée (x1c, a1mini, u1, zr, giga, laser, uv) ; photo = ta photo, qui la remplace si tu en ajoutes une
     { name: "Bambu Lab X1-Carbon", kind: "Impression 3D", art: "x1c",
       // tes visuels : fermé, ouvert, et la porte découpée (frame = taille du cadrage, doorRect = porte en px dans ce cadrage)
-      photos: { closed: "img/atelier/x1c-ferme.webp", open: "img/atelier/x1c-ouvert.webp", door: "img/atelier/x1c-porte.webp", inside: "img/atelier/x1c-interieur.webp", frame: [820, 842], doorRect: [259, 310, 460, 453], openAngle: 119 },
+      photos: { closed: "img/atelier/x1c-ferme.webp", open: "img/atelier/x1c-ouvert.webp", inside: "img/atelier/x1c-interieur.webp", frame: [820, 842], doorRect: [259, 310, 460, 453], openAngle: 118,
+        // porte reconstruite : vitre mesurée sur tes images (teinte et opacité), cadre, et ta poignée découpée (position en px dans le cadrage)
+        glass: "rgba(55, 55, 55, .62)", frameColor: "#2A2A29", handle: { src: "img/atelier/x1c-poignee.webp", rect: [676, 486, 44, 48] } },
       tech: "FDM fermée, multicolore", materials: "PLA, PETG, TPU", size: "256 × 256 × 256 mm",
       use: "Objets déco multicolores, figurines, pièces fonctionnelles" },
     { name: "Bambu Lab A1 mini", kind: "Impression 3D", art: "a1mini",

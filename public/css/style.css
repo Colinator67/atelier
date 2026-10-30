@@ -870,24 +870,26 @@ html[data-morph="print"] .logo-morph[data-fx="print"] .lm-tool::after, .logo-mor
 @media (prefers-reduced-motion: reduce) { .mc-door { display: none; } }
 
 /* Machine avec tes visuels (fermé / ouvert) :
-   1. la porte découpée dans la vue fermée pivote sur sa charnière et dévoile l'intérieur de la vue ouverte ;
-   2. la vue ouverte complète apparaît en fondu (porte réelle à sa place) ;
-   3. la fiche sort de l'intérieur de la machine. À la fermeture, l'ordre s'inverse. */
-.has-photos .mc-art { background: #FFFFFF; perspective: 1400px; }
+   la porte est une vraie vitre teintée (transparente), posée sur l'intérieur de la vue ouverte : fermée, elle
+   reproduit ta vue fermée ; elle pivote sur sa charnière, la vue ouverte prend le relais juste avant la fin
+   du mouvement, puis la fiche sort. À la fermeture, l'ordre s'inverse. */
+.has-photos .mc-art { background: #FFFFFF; perspective: 1300px; }
 .mcp { position: absolute; top: 4%; left: 50%; height: 92%; transform: translateX(-50%); transform-style: preserve-3d; }
 .mcp > img, .mcp-door { position: absolute; }
 .mcp-closed, .mcp-open { inset: 0; width: 100%; height: 100%; }
 .mcp-inside { z-index: 1; }
-.mcp-door { z-index: 2; transform-origin: left center; transform-style: preserve-3d; transition: transform 620ms var(--ease-in-out) 220ms; }
-.mcp-door img { display: block; width: 100%; height: 100%; backface-visibility: visible; }
-.mcp-open { z-index: 3; opacity: 0; transition: opacity 220ms ease 0ms; }
-.has-photos .mc-sheet { clip-path: inset(var(--st) var(--sr) var(--sb) var(--sl) round 4px); transition: clip-path 200ms var(--ease-in-out), opacity 160ms ease; }
-.mc.has-photos.is-open .mcp-door { transform: rotateY(var(--open)); transition-delay: 0ms; }
-.mc.has-photos.is-open .mcp-open { opacity: 1; transition-delay: 560ms; }
-.mc.has-photos.is-open .mc-sheet { clip-path: inset(0 0 0 0 round 10px); opacity: 1; transition: clip-path 460ms var(--ease-out) 1050ms, opacity 160ms ease 1050ms; }
+.mcp-door { z-index: 2; transform-origin: left center; transform-style: preserve-3d; transition: transform 480ms var(--ease-in-out) 140ms; }
+.mcp-glass { position: absolute; inset: 0; background: var(--glass); box-shadow: inset 0 0 0 3px var(--frame), inset 0 0 0 4px rgba(255, 255, 255, .06); border-radius: 2px; }
+.mcp-glass::after { content: ""; position: absolute; inset: 3px; background: linear-gradient(115deg, transparent 30%, rgba(255, 255, 255, .07) 42%, transparent 54%); }
+.mcp-handle { position: absolute; display: block; }
+.mcp-open { z-index: 3; opacity: 0; transition: opacity 140ms ease 0ms; }
+.has-photos .mc-sheet { clip-path: inset(var(--st) var(--sr) var(--sb) var(--sl) round 4px); transition: clip-path 180ms var(--ease-in-out), opacity 140ms ease; }
+.mc.has-photos.is-open .mcp-door { transform: rotateY(var(--open)); transition: transform 520ms var(--ease-out) 0ms; }
+.mc.has-photos.is-open .mcp-open { opacity: 1; transition: opacity 160ms ease 400ms; }
+.mc.has-photos.is-open .mc-sheet { clip-path: inset(0 0 0 0 round 10px); opacity: 1; transition: clip-path 420ms var(--ease-out) 560ms, opacity 140ms ease 560ms; }
 @media (hover: hover) and (pointer: fine) {
-  .mc.has-photos:hover .mcp-door { transform: rotateY(var(--open)); transition-delay: 0ms; }
-  .mc.has-photos:hover .mcp-open { opacity: 1; transition-delay: 560ms; }
-  .mc.has-photos:hover .mc-sheet { clip-path: inset(0 0 0 0 round 10px); opacity: 1; transition: clip-path 460ms var(--ease-out) 1050ms, opacity 160ms ease 1050ms; }
+  .mc.has-photos:hover .mcp-door { transform: rotateY(var(--open)); transition: transform 520ms var(--ease-out) 0ms; }
+  .mc.has-photos:hover .mcp-open { opacity: 1; transition: opacity 160ms ease 400ms; }
+  .mc.has-photos:hover .mc-sheet { clip-path: inset(0 0 0 0 round 10px); opacity: 1; transition: clip-path 420ms var(--ease-out) 560ms, opacity 140ms ease 560ms; }
 }
 @media (prefers-reduced-motion: reduce) { .mcp-door { display: none; } }
