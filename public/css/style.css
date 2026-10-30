@@ -979,7 +979,14 @@ html.st-lock { overflow: hidden; }
 .st-side input[type="text"], .st-side input:not([type]) { width: 100%; font: inherit; padding: 10px 12px; border-radius: 10px; border: 1px solid rgba(255,255,255,.16); background: rgba(255,255,255,.07); color: inherit; }
 .st-side input:focus-visible { outline: 2px solid #C1A88A; outline-offset: 1px; }
 .st-side .opt-label { font-weight: 400; color: rgba(243,239,233,.6); }
-.st-logo { display: block; padding: 10px 12px; border: 1.5px dashed rgba(255,255,255,.25); border-radius: 10px; cursor: pointer; font-weight: 400 !important; color: rgba(243,239,233,.8); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.st-logo { display: grid; gap: 4px; padding: 16px 14px; border: 1.5px dashed rgba(255,255,255,.3); border-radius: 12px; cursor: pointer; font-weight: 400 !important; color: rgba(243,239,233,.75); transition: border-color 150ms ease, background-color 150ms ease; }
+.st-logo strong { color: #F3EFE9; font-size: 1rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.st-logo span { font-size: .85rem; line-height: 1.4; }
+@media (hover: hover) and (pointer: fine) { .st-logo:hover { border-color: #C1A88A; background: rgba(193,168,138,.08); } }
+.st-dlg.is-over .st-logo, .st-logo.is-ask { border-color: #C1A88A; background: rgba(193,168,138,.16); }
+.st-logo.is-ask { animation: stAsk 300ms var(--ease-out) 2; }
+@keyframes stAsk { 50% { transform: translateX(4px); } }
+.st-dlg.has-img .st-logo span { display: none; }
 .st-side .link-btn { color: #D2BA9C; justify-self: start; }
 .st-set { border: 0; margin: 0; padding: 0; display: grid; gap: 8px; }
 .st-sizes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
@@ -1036,7 +1043,7 @@ html.st-lock { overflow: hidden; }
 @media (max-width: 760px) {
   .st-shell { grid-template-columns: 1fr; grid-template-rows: auto auto minmax(0, 1fr) auto; }
   .st-side { padding: 0 14px 10px; gap: 10px; grid-template-columns: 1fr 1fr; max-height: 36dvh; }
-  .st-side .field:nth-of-type(3), .st-set { grid-column: 1 / -1; }
+  .st-side .field, .st-set { grid-column: 1 / -1; }
   .st-desk { grid-column: 1; grid-row: 3; padding: 0 10px 8px; }
   .st-foot { grid-column: 1; grid-row: 4; padding: 0 10px calc(10px + env(safe-area-inset-bottom, 0px)); gap: 6px; }
   .st-actions { grid-template-columns: 1fr auto; }

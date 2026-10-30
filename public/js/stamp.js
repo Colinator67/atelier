@@ -29,7 +29,7 @@
   const INKS = [["Noir", "#26231F"], ["Bleu", "#23408E"], ["Rouge", "#B02A23"], ["Vert", "#2D6A3E"], ["Violet", "#5B2C83"]];
   const cm = s => parseFloat(s.label.match(/[\d,.]+/)[0].replace(",", "."));
   const still = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  const st = { size: STAMPS[1] || STAMPS[0], ink: INKS[0][1], text: "Votre texte", around: "Votre nom · votre ville", logo: null };
+  const st = { size: STAMPS[1] || STAMPS[0], ink: INKS[0][1], logo: null };
 
   // ------------------------------------------------------------ fenêtre
   const dlg = document.createElement("dialog");
@@ -42,12 +42,10 @@
       <button type="button" class="icon-btn st-x" data-st-close aria-label="Fermer">×</button>
     </header>
     <aside class="st-side">
-      <div class="field"><label for="stText">Texte au centre</label><input id="stText" maxlength="28" autocomplete="off"></div>
-      <div class="field"><label for="stAround">Texte autour <span class="opt-label">(facultatif)</span></label><input id="stAround" maxlength="40" autocomplete="off"></div>
-      <div class="field">
-        <span class="st-lbl">Logo <span class="opt-label">(facultatif)</span></span>
-        <label class="st-logo" for="stLogo"><input type="file" id="stLogo" accept="image/*,.svg" hidden><span id="stLogoTxt">Ajouter une image</span></label>
-        <button type="button" class="link-btn" id="stLogoRm" hidden>Retirer le logo</button>
+      <div class="field st-field-img">
+        <span class="st-lbl">Votre image</span>
+        <label class="st-logo" for="stLogo"><input type="file" id="stLogo" accept="image/*,.svg" hidden><strong id="stLogoTxt">Importer mon image</strong><span>Logo, dessin ou signature : PNG, JPG ou SVG. Les zones foncées font l'encre.</span></label>
+        <button type="button" class="link-btn" id="stLogoRm" hidden>Changer d'image</button>
       </div>
       <fieldset class="st-set"><legend>Taille</legend><div class="st-sizes">${STAMPS.map(s => `<button type="button" data-size="${s.id}" aria-pressed="false">Ø ${cm(s)} cm<small>${eur(s.price)}</small></button>`).join("")}</div></fieldset>
       <fieldset class="st-set"><legend>Encre</legend><div class="st-inks">${INKS.map(([n, c]) => `<button type="button" data-ink="${c}" aria-pressed="false" aria-label="${n}" title="${n}" style="--ink:${c}"></button>`).join("")}</div></fieldset>
@@ -62,7 +60,7 @@
     <div class="st-desk">
       <div class="st-paper" id="stPaper" tabindex="0" aria-label="Feuille de test : cliquez ou appuyez sur Entrée pour tamponner">
         <canvas class="st-ink" id="stInk"></canvas>
-        <p class="st-hint" id="stHint">${window.matchMedia("(pointer: coarse)").matches ? "Touchez la feuille pour tamponner" : "Cliquez sur la feuille pour tamponner"}</p>
+        <p class="st-hint" id="stHint">${window.matchMedia("(pointer: coarse)").matches ? "Importez votre image, puis touchez la feuille pour tamponner" : "Importez votre image, puis cliquez sur la feuille pour tamponner"}</p>
         <div class="st-tool" id="stTool" aria-hidden="true"><div class="st-tool-in"><span class="st-shadow"></span><span class="st-handle"></span><span class="st-base"><img alt="" id="stGhost"></span></div></div>
         <div class="st-hud" id="stHud" hidden></div>
         <div class="st-panel" id="stPanel" hidden></div>
@@ -91,60 +89,51 @@
   const D = () => cm(st.size) * pxcm;
 
   // ------------------------------------------------------------ dessin du motif (noir sur transparent)
+  // Le tampon reprend uniquement l'image du client, sans cadre ni texte ajoutés.
+  // Elle est mise à l'échelle pour tenir entièrement dans le cercle découpé.
   function design(size, spec) {
-    const S = spec || st;
+    const S = spec || st, img = S.logo || SAMPLES_ART[0];
     const c = document.createElement("canvas"); c.width = c.height = Math.max(8, Math.ceil(size));
     const x = c.getContext("2d"), R = c.width / 2;
-    x.translate(R, R); x.fillStyle = x.strokeStyle = "#000"; x.textAlign = "center"; x.textBaseline = "middle";
-    const lw = Math.max(1.6, size * 0.035);
-    x.lineWidth = lw; x.beginPath(); x.arc(0, 0, R - lw / 2 - 0.5, 0, Math.PI * 2); x.stroke();
-    let inner = R - lw - size * 0.025;
-    const around = S.around.trim();
-    if (around) {
-      const band = size * 0.15;
-      let fs = band * 0.62, r = inner - band / 2;
-      const word = around.toUpperCase();
-      const total = f => { x.font = `700 ${f}px Archivo, sans-serif`; return [...word].reduce((s, ch) => s + x.measureText(ch).width + f * 0.08, 0); };
-      while (total(fs) > r * Math.PI * 1.55 && fs > 4) fs *= 0.92;
-      const t = total(fs); let a = -Math.PI / 2 - t / r / 2;
-      x.font = `700 ${fs}px Archivo, sans-serif`;
-      for (const ch of word) {
-        const w = x.measureText(ch).width + fs * 0.08, th = a + w / r / 2;
-        x.save(); x.rotate(th); x.translate(r, 0); x.rotate(Math.PI / 2); x.fillText(ch, 0, 0); x.restore();
-        a += w / r;
-      }
-      // petites étoiles en bas, entre les deux anneaux
-      x.font = `700 ${fs * 0.9}px Archivo, sans-serif`;
-      [-0.18, 0, 0.18].forEach(d => { x.save(); x.rotate(Math.PI / 2 + d); x.translate(r, 0); x.rotate(-Math.PI / 2); x.fillText("✦", 0, 0); x.restore(); });
-      inner -= band;
-    }
-    x.lineWidth = Math.max(1, size * 0.012); x.beginPath(); x.arc(0, 0, inner, 0, Math.PI * 2); x.stroke();
-    const text = S.text.trim(), box = inner * 1.45, logo = S.logo;
-    let ty = 0;
-    if (logo) {
-      const hBox = text ? inner * 0.95 : inner * 1.3;
-      const k = Math.min(box / logo.width, hBox / logo.height);
-      const lw2 = logo.width * k, lh2 = logo.height * k;
-      const ly = text ? -inner * 0.18 : 0;
-      x.drawImage(logo, -lw2 / 2, ly - lh2 / 2, lw2, lh2);
-      ty = ly + lh2 / 2 + inner * 0.22;
-    }
-    if (text) {
-      const lines = text.length > 13 && text.includes(" ") ? split2(text) : [text];
-      let fs = (logo ? inner * 0.26 : inner * (lines.length > 1 ? 0.34 : 0.42));
-      x.font = `800 ${fs}px Archivo, sans-serif`;
-      const widest = () => Math.max(...lines.map(l => x.measureText(l).width));
-      while (widest() > box && fs > 4) { fs *= 0.93; x.font = `800 ${fs}px Archivo, sans-serif`; }
-      const lh = fs * 1.05, y0 = (logo ? ty : 0) - (lines.length - 1) * lh / 2;
-      lines.forEach((l, i) => x.fillText(l, 0, y0 + i * lh));
-    }
+    const k = (size * 0.47) / reach(img);   // le point d'encre le plus éloigné du centre touche presque le bord
+    const w = img.width * k, h = img.height * k;
+    x.drawImage(img, R - w / 2, R - h / 2, w, h);
     return c;
   }
-  function split2(s) {
-    const m = s.length / 2; let best = -1;
-    for (let i = 0; i < s.length; i++) if (s[i] === " " && (best < 0 || Math.abs(i - m) < Math.abs(best - m))) best = i;
-    return best < 0 ? [s] : [s.slice(0, best), s.slice(best + 1)];
+  // rayon utile d'une image : distance du centre au pixel d'encre le plus éloigné (un logo rond remplit le tampon)
+  function reach(img) {
+    if (img._reach) return img._reach;
+    const w = img.width, h = img.height, d = img.getContext("2d").getImageData(0, 0, w, h).data;
+    let r2 = 0;
+    for (let y = 0; y < h; y += 2) for (let x = 0; x < w; x += 2) if (d[(y * w + x) * 4 + 3] > 100) { const q = (x - w / 2) ** 2 + (y - h / 2) ** 2; if (q > r2) r2 = q; }
+    img._reach = Math.max(4, Math.sqrt(r2) + 2);
+    return img._reach;
   }
+  // motifs d'exemple (dessinés ici), utilisés tant que le client n'a pas importé son image
+  const SAMPLES_ART = (() => {
+    const mk = (draw) => { const c = document.createElement("canvas"); c.width = c.height = 400; const x = c.getContext("2d"); x.fillStyle = x.strokeStyle = "#000"; x.lineCap = x.lineJoin = "round"; draw(x); return c; };
+    const flower = mk(x => {
+      x.translate(200, 200);
+      for (let i = 0; i < 8; i++) { x.save(); x.rotate(i * Math.PI / 4); x.beginPath(); x.ellipse(0, -105, 42, 78, 0, 0, 7); x.fill(); x.restore(); }
+      x.globalCompositeOperation = "destination-out"; x.beginPath(); x.arc(0, 0, 62, 0, 7); x.fill();
+      x.globalCompositeOperation = "source-over"; x.beginPath(); x.arc(0, 0, 42, 0, 7); x.fill();
+    });
+    const peaks = mk(x => {
+      x.beginPath(); x.moveTo(20, 330); x.lineTo(150, 120); x.lineTo(215, 215); x.lineTo(265, 160); x.lineTo(380, 330); x.closePath(); x.fill();
+      x.globalCompositeOperation = "destination-out";
+      x.beginPath(); x.moveTo(150, 120); x.lineTo(118, 172); x.lineTo(140, 162); x.lineTo(156, 182); x.lineTo(176, 160); x.lineTo(186, 172); x.closePath(); x.fill();
+      x.globalCompositeOperation = "source-over"; x.beginPath(); x.arc(300, 85, 40, 0, 7); x.fill();
+      x.lineWidth = 14; x.beginPath(); x.moveTo(30, 365); x.lineTo(370, 365); x.stroke();
+    });
+    const leaf = mk(x => {
+      x.translate(200, 200); x.rotate(-0.6);
+      x.beginPath(); x.moveTo(0, -175); x.bezierCurveTo(120, -110, 120, 90, 0, 165); x.bezierCurveTo(-120, 90, -120, -110, 0, -175); x.fill();
+      x.globalCompositeOperation = "destination-out"; x.lineWidth = 10;
+      x.beginPath(); x.moveTo(0, -150); x.lineTo(0, 175); x.stroke();
+      [-100, -45, 10, 65].forEach(y => { x.beginPath(); x.moveTo(0, y + 40); x.lineTo(62, y); x.moveTo(0, y + 40); x.lineTo(-62, y); x.stroke(); });
+    });
+    return [flower, peaks, leaf];
+  })();
 
   // grain de l'encre : points et petites taches retirés de l'empreinte
   const NOISE = (() => {
@@ -192,13 +181,14 @@
   }
 
   // ------------------------------------------------------------ réglages
-  $("#stText", dlg).value = st.text; $("#stAround", dlg).value = st.around;
-  $("#stText", dlg).addEventListener("input", e => { st.text = e.target.value; refresh(); });
-  $("#stAround", dlg).addEventListener("input", e => { st.around = e.target.value; refresh(); });
+  // l'image peut aussi être glissée n'importe où sur la fenêtre
+  ["dragenter", "dragover"].forEach(ev => dlg.addEventListener(ev, e => { e.preventDefault(); dlg.classList.add("is-over"); }));
+  ["dragleave", "drop"].forEach(ev => dlg.addEventListener(ev, e => { e.preventDefault(); if (ev === "drop" || e.target === dlg) dlg.classList.remove("is-over"); }));
+  dlg.addEventListener("drop", e => { const f = e.dataTransfer && e.dataTransfer.files[0]; if (f) loadLogo(f); });
   $(".st-sizes", dlg).addEventListener("click", e => { const b = e.target.closest("[data-size]"); if (!b) return; st.size = STAMPS.find(s => s.id === b.dataset.size); refresh(); });
   $(".st-inks", dlg).addEventListener("click", e => { const b = e.target.closest("[data-ink]"); if (!b) return; st.ink = b.dataset.ink; refresh(); });
   $("#stLogo", dlg).addEventListener("change", e => { const f = e.target.files[0]; e.target.value = ""; if (f) loadLogo(f); });
-  $("#stLogoRm", dlg).addEventListener("click", () => { st.logo = null; $("#stLogoTxt", dlg).textContent = "Ajouter une image"; $("#stLogoRm", dlg).hidden = true; refresh(); });
+  $("#stLogoRm", dlg).addEventListener("click", () => $("#stLogo", dlg).click());
   $("#stClear", dlg).addEventListener("click", () => { g.save(); g.setTransform(1, 0, 0, 1, 0, 0); g.clearRect(0, 0, ink.width, ink.height); g.restore(); });
 
   // logo : les zones sombres (ou opaques, pour un PNG détouré) deviennent l'encre
@@ -227,7 +217,8 @@
       const out = document.createElement("canvas"); out.width = x1 - x0 + 1; out.height = y1 - y0 + 1;
       out.getContext("2d").drawImage(c, x0, y0, out.width, out.height, 0, 0, out.width, out.height);
       st.logo = out; st.logoFile = file;
-      $("#stLogoTxt", dlg).textContent = file.name; $("#stLogoRm", dlg).hidden = false;
+      $("#stLogoTxt", dlg).textContent = file.name; $("#stLogoRm", dlg).hidden = false; dlg.classList.add("has-img");
+      track("tampon_test", "Image importée");
       refresh();
     };
     img.onerror = () => { URL.revokeObjectURL(url); toast("Cette image ne peut pas être lue ici : essayez un PNG ou un JPG"); };
@@ -407,7 +398,7 @@
     const t = s2 => String(s2).replace(/[<&>"]/g, ch => ({ "<": "&lt;", "&": "&amp;", ">": "&gt;", '"': "&quot;" }[ch]));
     return `<?xml version="1.0" encoding="UTF-8"?>
 <svg xmlns="http://www.w3.org/2000/svg" width="${S}mm" height="${S}mm" viewBox="0 0 ${S} ${S}">
-  <title>Tampon Ø ${diamCm} cm · ${t(spec.text)} · motif en miroir, prêt à graver</title>
+  <title>Tampon Ø ${diamCm} cm · ${t(spec.name || "image du client")} · motif en miroir, prêt à graver</title>
   <desc>Noir : gravure (zones en creux). Rouge : découpe du cercle Ø ${(mmD + 0.8).toFixed(1)} mm. Motif inversé pour une empreinte à l'endroit.</desc>
   <path id="gravure" fill="#000000" fill-rule="evenodd" d="${d}"/>
   <circle id="decoupe" cx="${S / 2}" cy="${S / 2}" r="${(mmD / 2 + 0.4).toFixed(2)}" fill="none" stroke="#FF0000" stroke-width="0.1"/>
@@ -461,13 +452,14 @@
 
   // ------------------------------------------------------------ commande
   function order() {
+    if (!st.logo) { toast("Importez d'abord votre image"); $(".st-logo", dlg).classList.add("is-ask"); setTimeout(() => $(".st-logo", dlg).classList.remove("is-ask"), 900); $("#stLogo", dlg).click(); return; }
     const big = document.createElement("canvas"); big.width = big.height = 1200;
     const x = big.getContext("2d"); x.fillStyle = "#fff"; x.fillRect(0, 0, 1200, 1200);
     const m = design(1100); x.drawImage(m, 50, 50);
     big.toBlob(blob => {
       const file = new File([blob], "apercu-tampon.png", { type: "image/png" });
       let svg = null;
-      try { svg = new File([engraveSVG({ text: st.text, around: st.around, logo: st.logo }, cm(st.size))], `tampon-${cm(st.size)}cm-a-graver.svg`, { type: "image/svg+xml" }); } catch (e) { /* l'aperçu suffit */ }
+      try { svg = new File([engraveSVG({ logo: st.logo, name: st.logoFile && st.logoFile.name }, cm(st.size))], `tampon-${cm(st.size)}cm-a-graver.svg`, { type: "image/svg+xml" }); } catch (e) { /* l'aperçu suffit */ }
       const qtyIn = document.getElementById("qtyS");
       const qty = qtyIn ? Math.max(1, Math.round(+qtyIn.value || 1)) : 1;
       const unit = deal.price(st.size.price);
@@ -477,13 +469,11 @@
       track("tampon_commande", st.size.label);
       window.AskModal.open({
         kind: "Tampon",
-        files: svg ? [file, svg] : [file],
+        files: [file, ...(svg ? [svg] : []), ...(st.logoFile && st.logoFile.size < 6e6 ? [st.logoFile] : [])],
         summary: [
           `Tampon — ${st.size.label} (motif créé avec le testeur)`,
-          `Pièces jointes : aperçu PNG${svg ? " + SVG prêt à graver (miroir, gravure en noir, découpe du cercle en rouge)" : ""}`,
-          `Texte au centre : ${st.text.trim() || "aucun"}`,
-          `Texte autour : ${st.around.trim() || "aucun"}`,
-          st.logo ? `Logo : ${st.logoFile ? st.logoFile.name : "oui"} (à m'envoyer en bonne qualité si possible)` : null,
+          `Pièces jointes : aperçu PNG${svg ? " + SVG prêt à graver (miroir, gravure en noir, découpe du cercle en rouge)" : ""} + image originale`,
+          `Image du client : ${st.logoFile ? st.logoFile.name : "oui"} (originale en pièce jointe)`,
           `Quantité : ${qty}`,
           deal.active() ? `Remise défi : ${CODE} (-${PCT} %)` : null,
           `Total : ${eur(unit * qty)} hors frais de port${deal.active() ? ` (au lieu de ${eur(st.size.price * qty)})` : ""}`
@@ -512,9 +502,9 @@
 
   // ------------------------------------------------------------ démonstration : trois empreintes posées une à une
   const SAMPLES = [
-    { text: "Atelier Colin", around: "Fait main à Strasbourg", ink: "#23408E", cm: 10, x: 0.34, y: 0.42, r: -0.06 },
-    { text: "Bon pour accord", around: "", ink: "#B02A23", cm: 6, x: 0.74, y: 0.3, r: 0.08 },
-    { text: "Merci !", around: "Votre boutique · votre ville", ink: "#2D6A3E", cm: 8, x: 0.66, y: 0.74, r: 0.03 }
+    { art: 1, ink: "#23408E", cm: 10, x: 0.34, y: 0.44, r: -0.06 },
+    { art: 0, ink: "#B02A23", cm: 6, x: 0.75, y: 0.3, r: 0.08 },
+    { art: 2, ink: "#2D6A3E", cm: 7.5, x: 0.68, y: 0.73, r: 0.03 }
   ];
   function runDemo(box) {
     const r = box.getBoundingClientRect(), dpr = Math.min(2, window.devicePixelRatio || 1);
@@ -524,7 +514,7 @@
       const d = sp.cm * unit, c = document.createElement("canvas");
       c.className = "st-demo-imp"; c.width = c.height = Math.ceil(d * dpr);
       c.style.cssText = `width:${d}px;height:${d}px;left:${sp.x * r.width - d / 2}px;top:${sp.y * r.height - d / 2}px;--r:${sp.r}rad;animation-delay:${still ? 0 : 250 + i * 420}ms`;
-      const im = inked(sp.ink, design(d * dpr, { text: sp.text, around: sp.around, logo: null }));
+      const im = inked(sp.ink, design(d * dpr, { logo: SAMPLES_ART[sp.art] }));
       c.getContext("2d").drawImage(im, 0, 0);
       box.appendChild(c);
     });
