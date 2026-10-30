@@ -44,7 +44,7 @@
     <aside class="st-side">
       <div class="field st-field-img">
         <span class="st-lbl">Votre image</span>
-        <label class="st-logo" for="stLogo"><input type="file" id="stLogo" accept="image/*,.svg" hidden><strong id="stLogoTxt">Importer mon image</strong><span>Logo, dessin ou signature : PNG, JPG ou SVG. Les zones foncées font l'encre.</span></label>
+        <label class="st-logo" for="stLogo"><input type="file" id="stLogo" accept="image/*,.svg" hidden><strong id="stLogoTxt">Importer mon image</strong><span>Logo, dessin ou signature : PNG, JPG ou SVG. Tout ce qui n'est pas blanc fait l'encre.</span></label>
         <button type="button" class="link-btn" id="stLogoRm" hidden>Changer d'image</button>
       </div>
       <fieldset class="st-set"><legend>Taille</legend><div class="st-sizes">${STAMPS.map(s => `<button type="button" data-size="${s.id}" aria-pressed="false">Ø ${cm(s)} cm<small>${eur(s.price)}</small></button>`).join("")}</div></fieldset>
@@ -200,15 +200,16 @@
       const c = document.createElement("canvas"); c.width = w; c.height = h; const x = c.getContext("2d");
       x.drawImage(img, 0, 0, w, h); URL.revokeObjectURL(url);
       const d = x.getImageData(0, 0, w, h), p = d.data;
-      let sum = 0, n = 0, transparent = 0, dark = 0;
-      for (let i = 0; i < p.length; i += 4) { if (p[i + 3] < 128) { transparent++; continue; } const l = 0.299 * p[i] + 0.587 * p[i + 1] + 0.114 * p[i + 2]; sum += l; n++; if (l < 128) dark++; }
-      // PNG détouré d'une seule couleur : la silhouette fait l'encre ; sinon, ce sont les zones sombres
-      const contrast = n && dark / n > 0.08 && dark / n < 0.92;
-      const useAlpha = transparent > p.length / 4 * 0.15 && !contrast, thr = n ? Math.min(200, sum / n) : 128;
+      // Encre = tout ce qui n'est pas du blanc (ou presque) : les zones noires ET colorées sont remplies.
+      // Seul le fond blanc / transparent reste vide. Exception : un logo blanc sur fond transparent garde sa silhouette.
+      const paperish = i => { const mx = Math.max(p[i], p[i + 1], p[i + 2]), mn = Math.min(p[i], p[i + 1], p[i + 2]); return 0.299 * p[i] + 0.587 * p[i + 1] + 0.114 * p[i + 2] > 215 && mx - mn < 40; };
+      let n = 0, white = 0;
+      for (let i = 0; i < p.length; i += 4) { if (p[i + 3] < 128) continue; n++; if (paperish(i)) white++; }
+      const useAlpha = n > 0 && white / n > 0.97 && n < p.length / 4 * 0.9;
       let x0 = w, y0 = h, x1 = 0, y1 = 0;
       for (let y = 0; y < h; y++) for (let xx = 0; xx < w; xx++) {
-        const i = (y * w + xx) * 4, lum = 0.299 * p[i] + 0.587 * p[i + 1] + 0.114 * p[i + 2];
-        const on = useAlpha ? p[i + 3] > 110 : (p[i + 3] > 110 && lum < thr);
+        const i = (y * w + xx) * 4;
+        const on = p[i + 3] > 110 && (useAlpha || !paperish(i));
         p[i] = p[i + 1] = p[i + 2] = 0; p[i + 3] = on ? 255 : 0;
         if (on) { x0 = Math.min(x0, xx); y0 = Math.min(y0, y); x1 = Math.max(x1, xx); y1 = Math.max(y1, y); }
       }
