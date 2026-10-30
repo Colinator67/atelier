@@ -190,25 +190,30 @@
     if (ph) {
       const [FW, FH] = ph.frame, [dx, dy, dw, dh] = ph.arm ? ph.arm.rect : ph.doorRect;
       const P = (v, t) => (v / t * 100).toFixed(3) + "%";
-      // le cadrage occupe 92 % de la hauteur de la carte, centré
-      const bh = 0.92, bw = bh * FW / FH, bl = (1 - bw) / 2, bt = 0.04;
+      // le cadrage tient dans 92 % de la carte, centré (images hautes ou larges)
+      const fit = FW / FH > 1 ? [0.92, 0.92 * FH / FW] : [0.92 * FW / FH, 0.92];
+      const bw = fit[0], bh = fit[1], bl = (1 - bw) / 2, bt = (1 - bh) / 2;
+      const mcpBox = `left:${(bl * 100).toFixed(3)}%;top:${(bt * 100).toFixed(3)}%;width:${(bw * 100).toFixed(3)}%;height:${(bh * 100).toFixed(3)}%`;
       const L = bl + bw * dx / FW, T = bt + bh * dy / FH, R = 1 - (L + bw * dw / FW), B = 1 - (T + bh * dh / FH);
       const toSheet = (v) => (Math.max(0, (v - 0.03) / 0.94) * 100).toFixed(3) + "%";
-      artVars = `--st:${toSheet(T)};--sr:${toSheet(R)};--sb:${toSheet(B)};--sl:${toSheet(L)};--open:${-(ph.openAngle || 110)}deg`;
+      // ouverture selon la charnière : gauche (porte), haut (capot qui se lève), bas (porte qui se rabat)
+      const hinge = ph.hinge || "left", ang = ph.openAngle || 110;
+      const openT = hinge === "top" ? `rotateX(${ang}deg)` : hinge === "bottom" ? `rotateX(${-ang}deg)` : `rotateY(${-ang}deg)`;
+      artVars = `--st:${toSheet(T)};--sr:${toSheet(R)};--sb:${toSheet(B)};--sl:${toSheet(L)};--open-t:${openT}`;
       const box = `left:${P(dx, FW)};top:${P(dy, FH)};width:${P(dw, FW)};height:${P(dh, FH)}`;
       if (ph.arm) {
         // pas de porte : le bras découpé monte au-dessus de la machine sans bras, puis la vue « bras en haut » prend le relais
         artVars += `;--lift:${-(ph.arm.lift / dh * 100).toFixed(2)}%`;
-        visual = `<div class="mcp" style="aspect-ratio:${FW} / ${FH}">
+        visual = `<div class="mcp" style="${mcpBox}">
           <img class="mcp-closed" src="${esc(ph.closed)}" alt="" loading="lazy">
           <img class="mcp-arm" src="${esc(ph.arm.src)}" alt="" loading="lazy" style="${box}">
           <img class="mcp-open" src="${esc(ph.open)}" alt="" loading="lazy">
         </div>`;
-      } else visual = `<div class="mcp" style="aspect-ratio:${FW} / ${FH}">
+      } else visual = `<div class="mcp" style="${mcpBox}">
           <img class="mcp-closed" src="${esc(ph.closed)}" alt="" loading="lazy">
           <img class="mcp-inside" src="${esc(ph.inside)}" alt="" loading="lazy" style="left:${P(dx, FW)};top:${P(dy, FH)};width:${P(dw, FW)};height:${P(dh, FH)}">
-          <div class="mcp-door" style="left:${P(dx, FW)};top:${P(dy, FH)};width:${P(dw, FW)};height:${P(dh, FH)};--glass:${ph.glass || "rgba(40,40,40,.6)"};--frame:${ph.frameColor || "#222"}">
-            <span class="mcp-glass"></span>
+          <div class="mcp-door is-hinge-${hinge}" style="left:${P(dx, FW)};top:${P(dy, FH)};width:${P(dw, FW)};height:${P(dh, FH)};--glass:${ph.glass || "rgba(40,40,40,.6)"};--frame:${ph.frameColor || "#222"}">
+            ${ph.doorImg ? `<img class="mcp-door-img" src="${esc(ph.doorImg)}" alt="">` : `<span class="mcp-glass"></span>`}
             ${ph.handle ? `<img class="mcp-handle" src="${esc(ph.handle.src)}" alt="" style="left:${P(ph.handle.rect[0] - dx, dw)};top:${P(ph.handle.rect[1] - dy, dh)};width:${P(ph.handle.rect[2], dw)};height:${P(ph.handle.rect[3], dh)}">` : ""}
           </div>
           <img class="mcp-open" src="${esc(ph.open)}" alt="" loading="lazy">
