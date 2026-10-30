@@ -181,11 +181,29 @@
     } else {
       moving = `<div class="mc-door is-${a.door}" style="--dx:${pct(x)};--dy:${pct(y)};--dw:${pct(w)};--dh:${pct(h)}">${doorSVG(w, h, a.door, (m.art || "m") + i)}</div>`;
     }
-    const visual = m.photo
+    let visual = m.photo
       ? `<img class="mc-photo" src="${esc(m.photo)}" alt="" loading="lazy">`
       : `<svg class="mc-body" viewBox="0 0 300 300" aria-hidden="true">${a.svg}</svg>${moving}`;
-    return `<article class="mc${m.photo ? " has-photo" : ""}" data-reveal>
-      <div class="mc-art" style="--cx:${pct(x)};--cy:${pct(y)};--cr:${pct(300 - x - w)};--cb:${pct(300 - y - h)}">
+    let artVars = `--cx:${pct(x)};--cy:${pct(y)};--cr:${pct(300 - x - w)};--cb:${pct(300 - y - h)}`;
+    // tes visuels (fermé / ouvert) : la porte découpée pivote, puis la vue ouverte prend le relais
+    const ph = m.photos;
+    if (ph) {
+      const [FW, FH] = ph.frame, [dx, dy, dw, dh] = ph.doorRect;
+      const P = (v, t) => (v / t * 100).toFixed(3) + "%";
+      // le cadrage occupe 92 % de la hauteur de la carte, centré
+      const bh = 0.92, bw = bh * FW / FH, bl = (1 - bw) / 2, bt = 0.04;
+      const L = bl + bw * dx / FW, T = bt + bh * dy / FH, R = 1 - (L + bw * dw / FW), B = 1 - (T + bh * dh / FH);
+      const toSheet = (v) => (Math.max(0, (v - 0.03) / 0.94) * 100).toFixed(3) + "%";
+      artVars = `--st:${toSheet(T)};--sr:${toSheet(R)};--sb:${toSheet(B)};--sl:${toSheet(L)};--open:${-(ph.openAngle || 110)}deg`;
+      visual = `<div class="mcp" style="aspect-ratio:${FW} / ${FH}">
+          <img class="mcp-closed" src="${esc(ph.closed)}" alt="" loading="lazy">
+          <img class="mcp-inside" src="${esc(ph.inside)}" alt="" loading="lazy" style="left:${P(dx, FW)};top:${P(dy, FH)};width:${P(dw, FW)};height:${P(dh, FH)}">
+          <div class="mcp-door" style="left:${P(dx, FW)};top:${P(dy, FH)};width:${P(dw, FW)};height:${P(dh, FH)}"><img src="${esc(ph.door)}" alt=""></div>
+          <img class="mcp-open" src="${esc(ph.open)}" alt="" loading="lazy">
+        </div>`;
+    }
+    return `<article class="mc${m.photo ? " has-photo" : ""}${ph ? " has-photos" : ""}" data-reveal>
+      <div class="mc-art" style="${artVars}">
         ${visual}
         <div class="mc-sheet" id="${id}">
           <p class="mc-sheet-k">${esc(m.kind || "")}</p>
