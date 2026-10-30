@@ -893,3 +893,8 @@ html[data-morph="print"] .logo-morph[data-fx="print"] .lm-tool::after, .logo-mor
   .mc.has-photos:hover .mc-sheet { clip-path: inset(0 0 0 0 round 10px); opacity: 1; transition: clip-path 420ms var(--ease-out) 560ms, opacity 140ms ease 560ms; }
 }
 @media (prefers-reduced-motion: reduce) { .mcp-door { display: none; } }
+
+/* Machine sans porte avec tes visuels (A1 mini) : le bras monte, puis la vue « bras en haut » prend le relais */
+.mcp-arm { z-index: 2; transition: transform 480ms var(--ease-in-out) 140ms; }
+.mc.has-photos.is-open .mcp-arm { transform: translateY(var(--lift)); transition: transform 520ms var(--ease-in-out) 0ms; }
+@media (hover: hover) and (pointer: fine) { .mc.has-photos:hover .mcp-arm { transform: translateY(var(--lift)); transition: transform 520ms var(--ease-in-out) 0ms; } }

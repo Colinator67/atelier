@@ -35,6 +35,9 @@ window.SITE_CONFIG = {
       tech: "FDM fermée, multicolore", materials: "PLA, PETG, TPU", size: "256 × 256 × 256 mm",
       use: "Objets déco multicolores, figurines, pièces fonctionnelles" },
     { name: "Bambu Lab A1 mini", kind: "Impression 3D", art: "a1mini",
+      // tes visuels : machine sans le bras (fond), bras découpé dans la vue « bras en bas » (rect en px dans le cadrage), vue « bras en haut »
+      photos: { closed: "img/atelier/a1mini-sans-bras.webp", open: "img/atelier/a1mini-haut.webp", frame: [720, 800],
+        arm: { src: "img/atelier/a1mini-bras.webp", rect: [15, 347, 542, 277], lift: 240 } },
       tech: "FDM compacte", materials: "PLA, PETG, TPU", size: "180 × 180 × 180 mm",
       use: "Petites pièces, porte-clés, séries rapides" },
     { name: "Snapmaker U1", kind: "Impression 3D", art: "u1",

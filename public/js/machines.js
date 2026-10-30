@@ -188,14 +188,23 @@
     // tes visuels (fermé / ouvert) : la porte découpée pivote, puis la vue ouverte prend le relais
     const ph = m.photos;
     if (ph) {
-      const [FW, FH] = ph.frame, [dx, dy, dw, dh] = ph.doorRect;
+      const [FW, FH] = ph.frame, [dx, dy, dw, dh] = ph.arm ? ph.arm.rect : ph.doorRect;
       const P = (v, t) => (v / t * 100).toFixed(3) + "%";
       // le cadrage occupe 92 % de la hauteur de la carte, centré
       const bh = 0.92, bw = bh * FW / FH, bl = (1 - bw) / 2, bt = 0.04;
       const L = bl + bw * dx / FW, T = bt + bh * dy / FH, R = 1 - (L + bw * dw / FW), B = 1 - (T + bh * dh / FH);
       const toSheet = (v) => (Math.max(0, (v - 0.03) / 0.94) * 100).toFixed(3) + "%";
       artVars = `--st:${toSheet(T)};--sr:${toSheet(R)};--sb:${toSheet(B)};--sl:${toSheet(L)};--open:${-(ph.openAngle || 110)}deg`;
-      visual = `<div class="mcp" style="aspect-ratio:${FW} / ${FH}">
+      const box = `left:${P(dx, FW)};top:${P(dy, FH)};width:${P(dw, FW)};height:${P(dh, FH)}`;
+      if (ph.arm) {
+        // pas de porte : le bras découpé monte au-dessus de la machine sans bras, puis la vue « bras en haut » prend le relais
+        artVars += `;--lift:${-(ph.arm.lift / dh * 100).toFixed(2)}%`;
+        visual = `<div class="mcp" style="aspect-ratio:${FW} / ${FH}">
+          <img class="mcp-closed" src="${esc(ph.closed)}" alt="" loading="lazy">
+          <img class="mcp-arm" src="${esc(ph.arm.src)}" alt="" loading="lazy" style="${box}">
+          <img class="mcp-open" src="${esc(ph.open)}" alt="" loading="lazy">
+        </div>`;
+      } else visual = `<div class="mcp" style="aspect-ratio:${FW} / ${FH}">
           <img class="mcp-closed" src="${esc(ph.closed)}" alt="" loading="lazy">
           <img class="mcp-inside" src="${esc(ph.inside)}" alt="" loading="lazy" style="left:${P(dx, FW)};top:${P(dy, FH)};width:${P(dw, FW)};height:${P(dh, FH)}">
           <div class="mcp-door" style="left:${P(dx, FW)};top:${P(dy, FH)};width:${P(dw, FW)};height:${P(dh, FH)};--glass:${ph.glass || "rgba(40,40,40,.6)"};--frame:${ph.frameColor || "#222"}">
