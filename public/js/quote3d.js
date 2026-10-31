@@ -50,7 +50,7 @@
     const all = (P.colors[s3.material] || []).flatMap(g => g.items);
     s3.color = all.find(c => c.id === b.dataset.id);
     $$(".swatch", $("#colors3d")).forEach(x => x.setAttribute("aria-pressed", x === b ? "true" : "false"));
-    tintMesh(); showColorPhoto();
+    tintMesh(); showColorPhoto(); update3d();
   });
   function showColorPhoto() {
     const box = $("#colorPhoto3d"); if (!box) return;
@@ -84,18 +84,16 @@
       showMsg(msg, err.message || "Ce fichier n'a pas pu être lu.", "error");
     }
   });
-  $("#reset3d").addEventListener("click", () => {
-    s3.metrics = null; s3.file = null; s3.estimate = null;
-    $("#viewer3d").hidden = true; $("#drop3d").hidden = false;
-    update3d();
-  });
+  function clearPart() {
+    s3.metrics = null; s3.file = null; s3.estimate = null; s3.tris = null;
+    $("#viewer3d").hidden = true; $("#drop3d").hidden = false; $("#file3d").value = "";
+  }
+  $("#reset3d").addEventListener("click", () => { clearPart(); update3d(); });
 
   function update3d() {
     const m = s3.metrics, lines = $("#lines3d"), warn = $("#warn3d");
-    if (!m) {
-      setLines(lines, { size: "—", vol: "—", grams: "—", time: "—", unit: "—", setup: "—" });
-      $("#total3d").textContent = "—"; warn.hidden = true; $("#ask3d").disabled = true; return;
-    }
+    $("[data-dv=detail]", ticket).hidden = !m;
+    if (!m) { warn.hidden = true; dv.refresh(); return; }
     const qty = clampQty($("#qty3d"));
     const infill = P.infillOptions.find(o => o.id === $("#infill3d").value).value;
     const e = Geometry.estimatePrint(m, P, s3.material, infill, $("#sup3d").checked);
@@ -108,7 +106,7 @@
       unit: eur(e.unitPrice),
       setup: eur(P.setupFee || 0)
     });
-    $("#total3d").textContent = eur(e.unitPrice * qty + (P.setupFee || 0));
+
     const sortD = a => [...a].sort((x, y) => y - x);
     const tooBig = sortD(m.size).some((v, i) => v > sortD(P.maxSize)[i]);
     const notes = [];
@@ -128,7 +126,7 @@
     warn.innerHTML = notes.map(n => `<span>${esc(n)}</span>`).join(" ") + (fixes.length ? `<span class="warn-actions">${fixes.map(([k, l]) => `<button type="button" class="btn btn-small btn-ghost" data-scale="${k}">${esc(l)}</button>`).join("")}</span>` : "");
     warn.hidden = !notes.length;
     const dims = $("#dims3d"); if (dims) dims.textContent = fmtSize(m.size);
-    $("#ask3d").disabled = false;
+    dv.refresh();
   }
 
   // Aperçu 3D (three.js)
@@ -218,25 +216,29 @@
       <tr><th scope="row">Idéal pour</th>${P.materials.map(m => `<td>${esc(m.best || "")}</td>`).join("")}</tr></tbody></table>`;
   }
 
-  renderColors();
-  update3d();
-  window.UI.pickUpPendingFile($("#file3d"));
-
-  $("#ask3d").addEventListener("click", () => {
-    const m = s3.metrics, e = s3.estimate;
+  // la pièce en cours, telle qu'elle rejoint le devis
+  function current() {
+    const m = s3.metrics, e = s3.estimate; if (!m || !e) return null;
     const mat = P.materials.find(x => x.id === s3.material);
-    openRequest({
-      kind: "Impression 3D",
-      file: s3.file,
+    return {
+      name: s3.file.name, file: s3.file, unit: Math.round(e.unitPrice * 100) / 100, qty: e.qty,
+      meta: `${mat.label} · ${s3.color.label} · ${e.infillLabel}`,
       summary: [
         `Impression 3D — ${s3.file.name}`,
         `Matière : ${mat.label} · ${s3.color.label}`,
         `Solidité : ${e.infillLabel} · supports : ${e.supports ? "oui" : "non"}`,
         `Dimensions : ${fmtSize(m.size)} · volume ${nf(1).format(m.volume / 1000)} cm³`,
         `Estimation : ${nf(0).format(e.grams)} g · ${fmtDuration(e.hours)} par pièce`,
-        `Quantité : ${e.qty}`,
-        `Total estimé : ${eur(e.unitPrice * e.qty + (P.setupFee || 0))} hors frais de port (${eur(e.unitPrice)} / pièce + ${eur(P.setupFee || 0)} de préparation)`
-      ].join("\n")
-    });
+        `Quantité : ${e.qty} × ${eur(e.unitPrice)} = ${eur(Math.round(e.unitPrice * 100) / 100 * e.qty)}`
+      ]
+    };
+  }
+  const ticket = $("#ticket3d");
+  const dv = window.Devis.create({
+    root: ticket, key: "3d", kind: "Impression 3D", partLabel: "Pièce", setupFee: P.setupFee || 0,
+    current, reset: () => { clearPart(); $("#qty3d").value = 1; update3d(); }, dropEl: () => $("#drop3d")
   });
+  renderColors();
+  update3d();
+  window.UI.pickUpPendingFile($("#file3d"));
 })();

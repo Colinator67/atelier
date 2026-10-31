@@ -1105,3 +1105,47 @@ html.st-lock { overflow: hidden; }
 .sv-note { padding: 14px 16px; border-radius: 12px; background: var(--surface-2); }
 .sv-note p { margin: 4px 0 0; white-space: pre-line; }
 .sv-help { margin: 0; color: var(--muted); font-size: .92rem; }
+
+/* ── Encadré de devis commun (js/devis.js) ── */
+.dv-head { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; padding-bottom: 12px; border-bottom: 1px dashed var(--line); }
+.dv-head h3 { padding: 0; border: 0; }
+.dv-count { color: var(--muted); font-size: .88rem; font-variant-numeric: tabular-nums; }
+.dv-items { list-style: none; margin: 0; padding: 0; display: grid; gap: 2px; }
+.dv-item { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; gap: 4px 10px; align-items: center; padding: 8px 0; }
+.dv-items:not(.dv-cur) .dv-item { border-bottom: 1px dashed var(--line); }
+.dv-item-t { display: grid; gap: 1px; min-width: 0; }
+.dv-item-t strong { font-weight: 600; font-size: .95rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.dv-item-t span { color: var(--muted); font-size: .82rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.dv-item-p { font-weight: 600; font-variant-numeric: tabular-nums; }
+.dv-cur .dv-item { grid-template-columns: minmax(0, 1fr) auto; }
+.dv-rm { min-width: 32px; min-height: 32px; font-size: 1.3rem; padding: 0; }
+.dv-empty { margin: 0; color: var(--muted); font-size: .92rem; padding: 6px 0; }
+.dv-add { justify-self: start; display: inline-flex; align-items: center; gap: 8px; padding: 9px 14px; border-radius: 999px; border: 1.5px dashed var(--line); background: transparent; color: var(--fg); font: 600 .9rem/1.2 var(--f-body); cursor: pointer; transition: border-color 150ms ease, background-color 150ms ease, transform 160ms var(--ease-out); }
+.dv-add span { font-size: 1.1rem; line-height: 1; }
+.dv-add:active { transform: scale(.97); }
+@media (hover: hover) and (pointer: fine) { .dv-add:hover { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 8%, transparent); } }
+.dv-detail summary { cursor: pointer; font-size: .88rem; font-weight: 600; color: var(--muted); }
+.dv-detail[open] summary { margin-bottom: 10px; }
+.dv-ship { border: 0; margin: 0; padding: 0; display: grid; gap: 6px; }
+.dv-ship legend { font-weight: 600; font-size: .92rem; margin-bottom: 6px; padding: 0; }
+.dv-opt { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 10px; align-items: center; padding: 10px 12px; border: 1.5px solid var(--line); border-radius: 10px; cursor: pointer; transition: border-color 150ms ease, background-color 150ms ease; }
+.dv-opt input { accent-color: var(--fg); margin: 0; width: 16px; height: 16px; }
+.dv-opt span { display: grid; gap: 1px; min-width: 0; }
+.dv-opt strong { font-weight: 600; font-size: .92rem; }
+.dv-opt small { color: var(--muted); font-size: .8rem; }
+.dv-opt em { font-style: normal; font-weight: 600; font-size: .9rem; font-variant-numeric: tabular-nums; }
+.dv-opt:has(input:checked) { border-color: var(--fg); background: color-mix(in srgb, var(--fg) 4%, transparent); }
+.dv-opt:has(input:focus-visible) { outline: 2px solid var(--accent); outline-offset: 2px; }
+.dv-sum { gap: 6px; }
+.dv-date { margin: -4px 0 0; font-size: .88rem; color: var(--muted); }
+.dv-date:empty { display: none; }
+.dv-date strong { color: var(--fg); font-weight: 600; }
+.dv-trust { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; font-size: .85rem; }
+.dv-trust li { position: relative; padding-left: 22px; }
+.dv-trust li::before { content: ""; position: absolute; left: 2px; top: .38em; width: 11px; height: 6px; border-left: 2px solid #2D6A3E; border-bottom: 2px solid #2D6A3E; transform: rotate(-45deg); }
+body.theme-laser .dv-trust li::before { border-color: #8FC79C; }
+.dv-conf { display: flex; gap: 8px; align-items: center; margin: 2px 0 0; color: var(--muted); font-size: .85rem; }
+.dv-conf svg { flex: none; opacity: .75; }
+.dv-step { display: flex; align-items: center; gap: 10px; font-size: 1.05rem; margin: 6px 0 -2px; }
+.dv-step span { display: inline-grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; background: var(--fg); color: var(--bg); font: 800 .85rem/1 var(--f-display); }
+.quote-main > .dv-step:first-child { margin-top: 0; }

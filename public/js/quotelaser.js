@@ -51,12 +51,12 @@
       showMsg(msg, err.message || "Ce fichier n'a pas pu être lu.", "error");
     }
   });
-  $("#resetL").addEventListener("click", () => {
+  function clearPart() {
     sl.result = null; sl.file = null; sl.raster = false; sl.estimate = null;
-    $("#previewL").hidden = true; $("#dropL").hidden = false; $("#imgL").innerHTML = "";
+    $("#previewL").hidden = true; $("#dropL").hidden = false; $("#imgL").innerHTML = ""; $("#fileL").value = "";
     showMsg($("#msgL"), "");
-    updateL();
-  });
+  }
+  $("#resetL").addEventListener("click", () => { clearPart(); updateL(); });
 
   async function preview2d(file, r) {
     const box = $("#imgL");
@@ -83,15 +83,12 @@
   }
 
   function updateL() {
-    const lines = $("#linesL"), warn = $("#warnL"), btn = $("#askL");
+    const lines = $("#linesL"), warn = $("#warnL");
     const blank = { size: "—", cut: "—", engr: "—", cutmin: "—", engrmin: "—", unit: "—" };
-    if (sl.raster) {
-      setLines(lines, blank); $("#totalL").textContent = "Sur devis";
-      warn.hidden = true; btn.disabled = false; btn.textContent = "Me contacter avec ce fichier"; return;
-    }
-    btn.textContent = "Demander ce devis";
+    $("[data-dv=detail]", ticketL).hidden = !sl.result;
+    if (sl.raster) { setLines(lines, blank); warn.hidden = true; dvL.refresh(); return; }
     const r = sl.result;
-    if (!r) { setLines(lines, blank); $("#totalL").textContent = "—"; warn.hidden = true; btn.disabled = true; return; }
+    if (!r) { setLines(lines, blank); warn.hidden = true; dvL.refresh(); return; }
     const qty = clampQty($("#qtyL"));
     const e = Vector.estimateLaser(r, L, sl.material);
     sl.estimate = { ...e, qty };
@@ -103,7 +100,6 @@
       engrmin: r.engraveArea ? fmtMinutes(e.engraveMin) : "—",
       unit: eur(e.unitPrice)
     });
-    $("#totalL").textContent = eur(e.unitPrice * qty);
     const notes = [];
     if (r.size[0] > L.maxSize[0] || r.size[1] > L.maxSize[1]) {
       const fitsRotated = r.size[1] <= L.maxSize[0] && r.size[0] <= L.maxSize[1];
@@ -114,8 +110,29 @@
     if (!r.cutLength && !r.engraveArea) notes.push("Aucun tracé de coupe ni zone de gravure détecté. Vérifiez que les traits de coupe sont des contours sans remplissage.");
     if (Math.max(...r.size) < 5) notes.push("Le dessin est minuscule : vérifiez qu'il est bien à l'échelle réelle, en millimètres.");
     warn.textContent = notes.join(" "); warn.hidden = !notes.length;
-    btn.disabled = false;
+    dvL.refresh();
   }
+  function currentL() {
+    if (!sl.file) return null;
+    const mat = L.materials.find(m => m.id === sl.material), qty = clampQty($("#qtyL"));
+    if (sl.raster) return { name: sl.file.name, file: sl.file, unit: null, qty, meta: `${mat.label} · image : prix sur devis`,
+      summary: [`Découpe / gravure laser — ${sl.file.name}`, "Fichier image : devis personnalisé demandé", `Matériau souhaité : ${mat.label}`, `Quantité : ${qty}`] };
+    const r = sl.result, e = sl.estimate; if (!r || !e) return null;
+    return { name: sl.file.name, file: sl.file, unit: Math.round(e.unitPrice * 100) / 100, qty: e.qty, meta: `${e.material.label} · ${fmtSize(r.size)}`,
+      summary: [
+        `Découpe laser — ${sl.file.name}`,
+        `Matériau : ${e.material.label}`,
+        `Dimensions : ${fmtSize(r.size)}`,
+        `Coupe : ${nf(0).format(r.cutLength)} mm · gravure : ${nf(1).format(r.engraveArea / 100)} cm²`,
+        `Temps estimé : ${fmtMinutes(e.minutes)} par pièce`,
+        `Quantité : ${e.qty} × ${eur(e.unitPrice)} = ${eur(Math.round(e.unitPrice * 100) / 100 * e.qty)}`
+      ] };
+  }
+  const ticketL = $("#ticketL");
+  const dvL = window.Devis.create({
+    root: ticketL, key: "L", kind: "Découpe laser", partLabel: "Pièce",
+    current: currentL, reset: () => { clearPart(); $("#qtyL").value = 1; updateL(); }, dropEl: () => $("#dropL")
+  });
   updateL();
 
   // ---------------------------------------------------------- Tampons
@@ -135,51 +152,29 @@
     updateS();
   });
   $("#qtyS").addEventListener("input", updateS);
-  bindDrop($("#dropS"), $("#fileS"), file => { sS.file = file; $("#fnameS").textContent = "Fichier joint : " + file.name; });
+  bindDrop($("#dropS"), $("#fileS"), file => { sS.file = file; $("#fnameS").textContent = "Fichier joint : " + file.name; updateS(); });
   function updateS() {
-    const qty = clampQty($("#qtyS"));
-    const D = window.StampDeal, on = !!(D && D.active()), unit = on ? D.price(sS.stamp.price) : sS.stamp.price;
-    setLines($("#linesS"), { label: sS.stamp.label, unit: eur(unit) });
-    $("#totalS").textContent = eur(unit * qty);
+    const D = window.StampDeal, on = !!(D && D.active());
     $("#dealS").hidden = !on;
-    if (on) $("#dealS").innerHTML = `Code <strong>${D.code}</strong> : -${D.pct} % appliqués (au lieu de ${eur(sS.stamp.price * qty)}). Une fois par commande, non cumulable.`;
+    if (on) $("#dealS").innerHTML = `Code <strong>${D.code}</strong> : -${D.pct} % sur les tampons. Une fois par commande, non cumulable.`;
+    if (dvS) dvS.refresh();
   }
+  function currentS() {
+    const D = window.StampDeal, on = !!(D && D.active()), qty = clampQty($("#qtyS"));
+    const unit = on ? D.price(sS.stamp.price) : sS.stamp.price;
+    return { name: sS.stamp.label, file: sS.file, unit, qty, meta: (on ? `Remise ${D.code} (-${D.pct} %) · ` : "Prix fixe · ") + (sS.file ? sS.file.name : "motif à envoyer"),
+      summary: [`${sS.stamp.label}`, `Motif : ${sS.file ? sS.file.name : "à décrire / envoyer"}`, on ? `Remise défi : ${D.code} (-${D.pct} %)` : null, `Quantité : ${qty} × ${eur(unit)} = ${eur(unit * qty)}`].filter(Boolean) };
+  }
+  const dvS = window.Devis.create({
+    root: $("#ticketS"), key: "S", kind: "Tampon", partLabel: "Tampon", addText: "Ajouter un autre tampon au devis", nextText: "Un autre tampon ? Choisissez sa taille ci-contre.",
+    current: currentS, reset: () => { sS.file = null; $("#fileS").value = ""; $("#fnameS").textContent = "SVG, PDF, AI ou image · vous pourrez aussi le décrire"; $("#qtyS").value = 1; }, dropEl: () => $("#stamps")
+  });
   updateS();
   document.addEventListener("stampdeal", updateS);
   // « Commander directement » et l'adresse …#tampon ouvrent l'onglet Tampon du devis
   const toStampTab = () => { const t = $("#lm-stamp"); if (t) t.click(); };
   $$("[data-stamp-direct]").forEach(a => a.addEventListener("click", toStampTab));
   if (location.hash === "#tester" || location.hash === "#tampon") toStampTab();
-
-  $("#askL").addEventListener("click", () => {
-    if (sl.raster) {
-      openRequest({ kind: "Laser (image)", file: sl.file, summary: `Découpe / gravure laser — ${sl.file.name}\nFichier image : devis personnalisé demandé\nQuantité : ${clampQty($("#qtyL"))}` });
-      return;
-    }
-    const r = sl.result, e = sl.estimate;
-    openRequest({
-      kind: "Découpe laser",
-      file: sl.file,
-      summary: [
-        `Découpe laser — ${sl.file.name}`,
-        `Matériau : ${e.material.label}`,
-        `Dimensions : ${fmtSize(r.size)}`,
-        `Coupe : ${nf(0).format(r.cutLength)} mm · gravure : ${nf(1).format(r.engraveArea / 100)} cm²`,
-        `Temps estimé : ${fmtMinutes(e.minutes)} par pièce`,
-        `Quantité : ${e.qty}`,
-        `Total estimé : ${eur(e.unitPrice * e.qty)} hors frais de port (${eur(e.unitPrice)} / pièce)`
-      ].join("\n")
-    });
-  });
-  $("#askS").addEventListener("click", () => {
-    const qty = clampQty($("#qtyS"));
-    openRequest({
-      kind: "Tampon",
-      file: sS.file,
-      summary: (() => { const D = window.StampDeal, on = !!(D && D.active()), unit = on ? D.price(sS.stamp.price) : sS.stamp.price;
-        return [`Tampon — ${sS.stamp.label}`, `Quantité : ${qty}`, on ? `Remise défi : ${D.code} (-${D.pct} %)` : null, `Total : ${eur(unit * qty)} hors frais de port`, `Motif : ${sS.file ? sS.file.name : "à décrire / envoyer"}`].filter(Boolean).join("\n"); })()
-    });
-  });
 
   // fichier déposé depuis l'accueil
   window.UI.pickUpPendingFile($("#fileL"));

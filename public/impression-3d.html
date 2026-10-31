@@ -119,6 +119,7 @@
 
       <div class="quote">
         <div class="quote-main">
+          <h3 class="dv-step"><span aria-hidden="true">1</span>Votre fichier</h3>
           <label class="drop" id="drop3d" for="file3d">
             <input type="file" id="file3d" accept=".stl,.3mf,.step,.stp" hidden>
             <span class="drop-title">Déposez votre fichier 3D</span>
@@ -133,8 +134,10 @@
             </div>
           </div>
           <p class="msg" id="msg3d" role="status" hidden></p>
+          <p class="dv-conf"><svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M4.5 7V5a3.5 3.5 0 0 1 7 0v2" fill="none" stroke="currentColor" stroke-width="1.6"/><rect x="2.5" y="7" width="11" height="7.5" rx="1.6" fill="currentColor"/></svg>Vos fichiers restent confidentiels : ils servent uniquement à votre devis et ne sont jamais partagés ni réutilisés.</p>
 
           <div class="options">
+            <h3 class="dv-step"><span aria-hidden="true">2</span>Matière et couleur</h3>
             <fieldset class="opt">
               <legend>Matière</legend>
               <div class="seg" id="mat3d"></div>
@@ -149,6 +152,7 @@
               <div id="colors3d"></div>
               <figure class="color-photo" id="colorPhoto3d" hidden></figure>
             </fieldset>
+            <h3 class="dv-step"><span aria-hidden="true">3</span>Options et quantité</h3>
             <div class="opt-row">
               <div class="opt">
                 <label for="infill3d">Solidité</label>
@@ -166,20 +170,34 @@
           </div>
         </div>
 
-        <aside class="ticket" aria-labelledby="t3-title">
-          <h3 id="t3-title">Estimation</h3>
-          <dl class="lines" id="lines3d">
+        <aside class="ticket dv" aria-labelledby="t3-title" id="ticket3d">
+          <div class="dv-head"><h3 id="t3-title">Votre devis</h3><span class="dv-count" data-dv="count"></span></div>
+          <ul class="dv-items" data-dv="items" hidden></ul>
+          <div class="dv-current" data-dv="current"></div>
+          <p class="warn" id="warn3d" hidden></p>
+          <button type="button" class="dv-add" data-dv="add" hidden><span aria-hidden="true">+</span> Ajouter une autre pièce au devis</button>
+          <details class="dv-detail" data-dv="detail" hidden><summary>Détail du calcul</summary><dl class="lines" id="lines3d">
             <div><dt>Dimensions</dt><dd class="mono" data-k="size">—</dd></div>
             <div><dt>Volume de la pièce</dt><dd class="mono" data-k="vol">—</dd></div>
             <div><dt>Matière estimée</dt><dd class="mono" data-k="grams">—</dd></div>
             <div><dt>Temps d'impression</dt><dd class="mono" data-k="time">—</dd></div>
-            <div class="sep"><dt>Prix unitaire</dt><dd class="mono" data-k="unit">—</dd></div>
+            <div><dt>Prix unitaire</dt><dd class="mono" data-k="unit">—</dd></div>
             <div><dt>Frais de préparation</dt><dd class="mono" data-k="setup">—</dd></div>
-          </dl>
-          <div class="total"><span>Total estimé</span><strong class="mono" id="total3d">—</strong></div>
-          <p class="warn" id="warn3d" hidden></p>
-          <button class="btn" type="button" id="ask3d" disabled>Demander ce devis</button>
-          <p class="fine">Prix hors frais de port. Estimation indicative, sans valeur contractuelle : je confirme le prix exact après vérification du fichier.</p>
+          </dl></details>
+          <fieldset class="dv-ship"><legend>Réception</legend>
+            <label class="dv-opt"><input type="radio" name="ship-3d" value="retrait"><span><strong>Retrait à Strasbourg</strong><small>Quartier Aristide-Briand, sur rendez-vous</small></span><em>Gratuit</em></label>
+            <label class="dv-opt"><input type="radio" name="ship-3d" value="colissimo"><span><strong>Colissimo</strong><small>Livraison partout en France</small></span><em data-dv="shipprice">5,00 €</em></label>
+          </fieldset>
+          <dl class="lines dv-sum" data-dv="sum" hidden></dl>
+          <div class="total"><span data-dv="totalLabel">Total estimé</span><strong class="mono" id="total3d" data-dv="total">—</strong></div>
+          <p class="dv-date" data-dv="date"></p>
+          <button class="btn" type="button" id="ask3d" data-dv="ask" disabled>Demander ce devis</button>
+          <ul class="dv-trust">
+            <li>Fichier vérifié par moi avant toute fabrication</li>
+            <li>Rien à payer avant d'avoir validé le devis</li>
+            <li>En cas de défaut : réparation, remplacement ou remboursement</li>
+          </ul>
+          <p class="fine">TVA non applicable, art. 293 B du CGI. Estimation indicative, sans valeur contractuelle : je confirme le prix exact après vérification de vos fichiers.</p>
         </aside>
       </div>
     </div>
@@ -262,6 +280,7 @@
 <script src="js/motion.js"></script>
 <script src="js/geometry.js"></script>
 <script src="js/request.js"></script>
+<script src="js/devis.js"></script>
 <script src="js/price.js"></script>
 <script src="js/quote3d.js"></script>
 </body>

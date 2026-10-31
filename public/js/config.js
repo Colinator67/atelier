@@ -15,7 +15,10 @@ window.SITE_CONFIG = {
   // ---- Engagements affichés sur le site (à ajuster) ---------------------
   delays: {
     reply: "24 à 48 h",                 // délai de première réponse
-    make: "3 à 7 jours",                // délai de fabrication habituel après validation
+    make: "4 jours ou moins",           // délai de fabrication habituel après validation
+    prepDays: 4,                        // jours ouvrés max pour qu'une pièce soit prête (date estimée du devis)
+    shipDays: 2,                        // jours ouvrés de transport Colissimo ajoutés pour la date de livraison
+    shippingPrice: 5,                   // € Colissimo standard, une fois par commande
     shipping: "Colissimo ou retrait gratuit à Strasbourg (quartier Aristide-Briand)"
   },
 

@@ -167,6 +167,7 @@
 
       <div class="quote" id="laser-cut">
         <div class="quote-main">
+          <h3 class="dv-step"><span aria-hidden="true">1</span>Votre fichier</h3>
           <label class="drop" id="dropL" for="fileL">
             <input type="file" id="fileL" accept=".svg,.dxf,.pdf,.ai,.png,.jpg,.jpeg,.webp,.bmp" hidden>
             <span class="drop-title">Déposez votre fichier de découpe</span>
@@ -180,15 +181,18 @@
             </div>
           </div>
           <p class="msg" id="msgL" role="status" hidden></p>
+          <p class="dv-conf"><svg viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path d="M4.5 7V5a3.5 3.5 0 0 1 7 0v2" fill="none" stroke="currentColor" stroke-width="1.6"/><rect x="2.5" y="7" width="11" height="7.5" rx="1.6" fill="currentColor"/></svg>Vos fichiers restent confidentiels : ils servent uniquement à votre devis et ne sont jamais partagés ni réutilisés.</p>
 
           <div class="options">
+            <h3 class="dv-step"><span aria-hidden="true">2</span>Matériau</h3>
             <fieldset class="opt">
-              <legend>Matériau</legend>
+              <legend class="sr-only">Matériau</legend>
               <div class="seg" id="matL"></div>
             </fieldset>
+            <h3 class="dv-step"><span aria-hidden="true">3</span>Quantité</h3>
             <div class="opt-row">
               <div class="opt">
-                <label for="qtyL">Quantité</label>
+                <label for="qtyL" class="sr-only">Quantité</label>
                 <input type="number" id="qtyL" min="1" max="500" value="1" inputmode="numeric">
               </div>
             </div>
@@ -204,20 +208,34 @@
           </div>
         </div>
 
-        <aside class="ticket" aria-labelledby="tl-title">
-          <h3 id="tl-title">Estimation</h3>
-          <dl class="lines" id="linesL">
+        <aside class="ticket dv" aria-labelledby="tl-title" id="ticketL">
+          <div class="dv-head"><h3 id="tl-title">Votre devis</h3><span class="dv-count" data-dv="count"></span></div>
+          <ul class="dv-items" data-dv="items" hidden></ul>
+          <div class="dv-current" data-dv="current"></div>
+          <p class="warn" id="warnL" hidden></p>
+          <button type="button" class="dv-add" data-dv="add" hidden><span aria-hidden="true">+</span> Ajouter une autre pièce au devis</button>
+          <details class="dv-detail" data-dv="detail" hidden><summary>Détail du calcul</summary><dl class="lines" id="linesL">
             <div><dt>Dimensions</dt><dd class="mono" data-k="size">—</dd></div>
             <div><dt>Longueur de coupe</dt><dd class="mono" data-k="cut">—</dd></div>
             <div><dt>Surface gravée</dt><dd class="mono" data-k="engr">—</dd></div>
-            <div class="sep"><dt>Temps de coupe</dt><dd class="mono" data-k="cutmin">—</dd></div>
+            <div><dt>Temps de coupe</dt><dd class="mono" data-k="cutmin">—</dd></div>
             <div><dt>Temps de gravure</dt><dd class="mono" data-k="engrmin">—</dd></div>
             <div><dt>Prix unitaire</dt><dd class="mono" data-k="unit">—</dd></div>
-          </dl>
-          <div class="total"><span>Total estimé</span><strong class="mono" id="totalL">—</strong></div>
-          <p class="warn" id="warnL" hidden></p>
-          <button class="btn" type="button" id="askL" disabled>Demander ce devis</button>
-          <p class="fine">Prix hors frais de port. Estimation indicative basée sur le temps machine : je confirme le prix exact après vérification du fichier.</p>
+          </dl></details>
+          <fieldset class="dv-ship"><legend>Réception</legend>
+            <label class="dv-opt"><input type="radio" name="ship-L" value="retrait"><span><strong>Retrait à Strasbourg</strong><small>Quartier Aristide-Briand, sur rendez-vous</small></span><em>Gratuit</em></label>
+            <label class="dv-opt"><input type="radio" name="ship-L" value="colissimo"><span><strong>Colissimo</strong><small>Livraison partout en France</small></span><em data-dv="shipprice">5,00 €</em></label>
+          </fieldset>
+          <dl class="lines dv-sum" data-dv="sum" hidden></dl>
+          <div class="total"><span data-dv="totalLabel">Total estimé</span><strong class="mono" id="totalL" data-dv="total">—</strong></div>
+          <p class="dv-date" data-dv="date"></p>
+          <button class="btn" type="button" id="askL" data-dv="ask" disabled>Demander ce devis</button>
+          <ul class="dv-trust">
+            <li>Fichier vérifié par moi avant toute fabrication</li>
+            <li>Rien à payer avant d'avoir validé le devis</li>
+            <li>En cas de défaut : réparation, remplacement ou remboursement</li>
+          </ul>
+          <p class="fine">TVA non applicable, art. 293 B du CGI. Estimation indicative, sans valeur contractuelle : je confirme le prix exact après vérification de vos fichiers.</p>
         </aside>
       </div>
 
@@ -243,16 +261,26 @@
             <span class="drop-sub" id="fnameS">SVG, PDF, AI ou image · vous pourrez aussi le décrire</span>
           </label>
         </div>
-        <aside class="ticket" aria-labelledby="ts-title">
-          <h3 id="ts-title">Prix</h3>
-          <dl class="lines" id="linesS">
-            <div><dt>Tampon</dt><dd class="mono" data-k="label">—</dd></div>
-            <div><dt>Prix unitaire</dt><dd class="mono" data-k="unit">—</dd></div>
-          </dl>
-          <div class="total"><span>Total</span><strong class="mono" id="totalS">—</strong></div>
-          <button class="btn" type="button" id="askS">Demander ce tampon</button>
+        <aside class="ticket dv" aria-labelledby="ts-title" id="ticketS">
+          <div class="dv-head"><h3 id="ts-title">Votre devis</h3><span class="dv-count" data-dv="count"></span></div>
+          <ul class="dv-items" data-dv="items" hidden></ul>
+          <div class="dv-current" data-dv="current"></div>
+          <button type="button" class="dv-add" data-dv="add" hidden><span aria-hidden="true">+</span> Ajouter une autre pièce au devis</button>
+          <fieldset class="dv-ship"><legend>Réception</legend>
+            <label class="dv-opt"><input type="radio" name="ship-S" value="retrait"><span><strong>Retrait à Strasbourg</strong><small>Quartier Aristide-Briand, sur rendez-vous</small></span><em>Gratuit</em></label>
+            <label class="dv-opt"><input type="radio" name="ship-S" value="colissimo"><span><strong>Colissimo</strong><small>Livraison partout en France</small></span><em data-dv="shipprice">5,00 €</em></label>
+          </fieldset>
+          <dl class="lines dv-sum" data-dv="sum" hidden></dl>
+          <div class="total"><span data-dv="totalLabel">Total estimé</span><strong class="mono" id="totalS" data-dv="total">—</strong></div>
+          <p class="dv-date" data-dv="date"></p>
           <p class="st-deal" id="dealS" hidden></p>
-          <p class="fine">Prix fixe par tampon, hors frais de port. Je vous recontacte pour valider le motif.</p>
+          <button class="btn" type="button" id="askS" data-dv="ask" disabled>Demander ce devis</button>
+          <ul class="dv-trust">
+            <li>Fichier vérifié par moi avant toute fabrication</li>
+            <li>Rien à payer avant d'avoir validé le devis</li>
+            <li>En cas de défaut : réparation, remplacement ou remboursement</li>
+          </ul>
+          <p class="fine">TVA non applicable, art. 293 B du CGI. Estimation indicative, sans valeur contractuelle : je confirme le prix exact après vérification de vos fichiers.</p>
         </aside>
       </div>
     </div>
@@ -333,6 +361,7 @@
 <script src="js/geometry.js"></script>
 <script src="js/vector.js"></script>
 <script src="js/request.js"></script>
+<script src="js/devis.js"></script>
 <script src="js/price.js"></script>
 <script src="js/stamp.js"></script>
 <script src="js/quotelaser.js"></script>
